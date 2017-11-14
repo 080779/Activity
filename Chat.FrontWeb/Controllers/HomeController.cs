@@ -23,7 +23,7 @@ namespace Chat.FrontWeb.Controllers
             return View();
         }
 
-        public ActionResult Award()
+        public ActionResult Prize()
         {
             return View();
         }

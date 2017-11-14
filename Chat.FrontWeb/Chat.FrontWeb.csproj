@@ -160,7 +160,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Answer.cshtml" />
     <Content Include="Views\Home\Topic.cshtml" />
-    <Content Include="Views\Home\Award.cshtml" />
+    <Content Include="Views\Home\Prize.cshtml" />
     <Content Include="Views\Home\Result.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

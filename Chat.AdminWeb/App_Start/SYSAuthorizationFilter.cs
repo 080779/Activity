@@ -23,11 +23,11 @@ namespace Chat.AdminWeb.App_Start
             {
                 if (filterContext.HttpContext.Request.IsAjaxRequest())//判断是否是ajax请求
                 {
-                    filterContext.Result = new JsonNetResult { Data = new AjaxResult { Status = "redirect", Data = "/Main/Login" } };
+                    filterContext.Result = new JsonNetResult { Data = new AjaxResult { Status = "redirect", Data = "/Home/Login" } };
                 }
                 else
                 {
-                    filterContext.Result = new RedirectResult("/Main/Login");
+                    filterContext.Result = new RedirectResult("/Home/Login");
                 }
                 return;
             }

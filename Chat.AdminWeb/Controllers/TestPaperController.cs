@@ -6,9 +6,14 @@ using System.Web.Mvc;
 
 namespace Chat.AdminWeb.Controllers
 {
-    public class PermissionController : Controller
+    public class TestPaperController : Controller
     {
         public ActionResult List()
+        {
+            return View();
+        }
+
+        public ActionResult Add()
         {
             return View();
         }
