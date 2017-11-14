@@ -12,5 +12,17 @@ namespace Chat.AdminWeb.Controllers
         {
             return View();
         }
+        public ActionResult Add()
+        {
+            return View();
+        }
+        public ActionResult Edit()
+        {
+            return View();
+        }
+        public ActionResult Prize()
+        {
+            return View();
+        }
     }
 }
