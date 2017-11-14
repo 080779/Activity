@@ -12,5 +12,6 @@ namespace Chat.Service.Entities
     public class TestPaperEntity:BaseEntity
     {
         public string TestTitle { get; set; }
+        public long ExercisesCount { get; set; }
     }
 }

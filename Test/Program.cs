@@ -13,10 +13,26 @@ namespace Test
         static void Main(string[] args)
         {
             IAdminUserService adminService = new AdminUserService();
-            ICityService cityService = new CityService();
-            //long i = 1;
-            //long id= adminService.AddAdminUser("aaa", "18318318383", "123456", "edfe@qq.com", i);
-            long id = cityService.AddNew("南宁");
+            IRoleService roleService = new RoleService();
+            IPermissionService permissionService = new PermissionService();
+
+            long[] ids = { 1, 2 };
+            long[] roleids = { 1 };
+            long[] addIds = { 2 };
+
+            permissionService.AddNew("manager", "管理员权限");
+            permissionService.AddNew("list", "查看列表权限");
+
+            long roleId= roleService.AddNew("系统管理员", "拥有所有权限");
+            long roleId1= roleService.AddNew("普通账户", "拥有查看列表权限");
+
+            permissionService.AddPermissionIds(roleId, ids);
+            permissionService.AddPermissionIds(roleId1, addIds);
+
+            long id= adminService.AddAdminUser("system", "18318318383",true, "edfe@qq.com", "123456");
+            
+            roleService.AddRoleIds(id,roleids);
+
             Console.WriteLine(id);
             Console.ReadKey();
         }

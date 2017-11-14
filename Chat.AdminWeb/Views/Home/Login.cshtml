@@ -56,8 +56,33 @@
     <script src="~/Scripts/pace.min.js"></script>
     <script src="~/Scripts/retina.min.js"></script>
     <script src="~/Scripts/jquery.cookies.js"></script>
-
     <script src="~/Scripts/custom.js"></script>
 
+    <script type="text/javascript">
+        $(function () {
+            $("#btnLogin").click(function () {
+                var name = $("#name").val();
+                var password = $("#password").val();
+                $.ajax({
+                    url: "/home/login", type: "post", data: { name: name, password: password },
+                    success: function (result) {
+                        if(result.status=="error")
+                        {
+                            alert(result.errorMsg);
+                        }
+                        else if(result.status=="redirect")
+                        {
+                            window.location.href = result.data;
+                        }
+                        else
+                        {
+                            alert("未知错误！");
+                        }
+                    },
+                    error: function () { alert("网络错误！"); }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

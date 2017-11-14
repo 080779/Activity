@@ -32,7 +32,24 @@ namespace Chat.Service.Service
 
         public void AddRoleIds(long adminUserId, long[] roleIds)
         {
-            throw new NotImplementedException();
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<AdminUserEntity> cs = new CommonService<AdminUserEntity>(dbc);
+                //不能有.AsNoTracking()，加了的数据不能修改
+                var user = cs.GetAll().Include(u => u.Roles).SingleOrDefault(u => u.Id == adminUserId);
+                //var user = cs.GetById(adminUserId);
+                if (user == null)
+                {
+                    throw new ArgumentException("adminUserId=" + adminUserId + "的数据已经存在");
+                }
+                CommonService<RoleEntity> roleCs = new CommonService<RoleEntity>(dbc);
+                var roles = roleCs.GetAll().Where(r => roleIds.Contains(r.Id)).ToArray();
+                foreach (var role in roles)
+                {
+                    user.Roles.Add(role);
+                }
+                dbc.SaveChanges();
+            }
         }
 
         public RoleDTO[] GetAll()

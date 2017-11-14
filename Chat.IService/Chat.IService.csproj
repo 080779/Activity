@@ -50,6 +50,7 @@
     <Compile Include="Interface\IPermissionService.cs" />
     <Compile Include="Interface\IRoleService.cs" />
     <Compile Include="Interface\ISettingService.cs" />
+    <Compile Include="Interface\ITestPaperService.cs" />
     <Compile Include="Interface\IUserService.cs" />
     <Compile Include="IServiceSupport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

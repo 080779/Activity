@@ -39,6 +39,7 @@ namespace Chat.Service
         public DbSet<PermissionEntity> Permissions { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<SettingEntity> Settings { get; set; }
+        public DbSet<TestPaperEntity> TestPapers { get; set; }
         public DbSet<UserEntity> Users { get; set; }        
     }
 }

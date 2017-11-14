@@ -179,7 +179,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\AdminUserLoginModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -190,13 +190,14 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\weathericons-regular-webfont.woff" />
     <Content Include="Views\TestPaper\List.cshtml" />
-    <Content Include="Views\TestPaper\Add.cshtml" />
+    <Content Include="Views\TestPaper\AddPaper.cshtml" />
     <Content Include="Views\Activity\List.cshtml" />
     <Content Include="Views\Activity\Add.cshtml" />
     <Content Include="Views\User\List.cshtml" />
     <Content Include="Views\Activity\Edit.cshtml" />
     <Content Include="Views\TestPaper\Edit.cshtml" />
     <Content Include="Views\Activity\Prize.cshtml" />
+    <Content Include="Views\TestPaper\Add.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

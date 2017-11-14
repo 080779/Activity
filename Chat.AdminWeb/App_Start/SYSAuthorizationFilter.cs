@@ -11,6 +11,7 @@ namespace Chat.AdminWeb.App_Start
     public class SYSAuthorizationFilter : IAuthorizationFilter
     {
         public IAdminUserService adminUserService = DependencyResolver.Current.GetService<IAdminUserService>();
+        public IPermissionService permissionService = DependencyResolver.Current.GetService<IPermissionService>();
         public void OnAuthorization(AuthorizationContext filterContext)
         {
             PermissionAttribute[] attributes = (PermissionAttribute[])filterContext.ActionDescriptor.GetCustomAttributes(typeof(PermissionAttribute), false);
@@ -37,11 +38,11 @@ namespace Chat.AdminWeb.App_Start
                 {
                     if (filterContext.HttpContext.Request.IsAjaxRequest())
                     {
-                        filterContext.Result = new JsonNetResult { Data = new AjaxResult { Status = "error", ErrorMsg = "没有" + attr.Permission + "这个权限" } };
+                        filterContext.Result = new JsonNetResult { Data = new AjaxResult { Status = "error", ErrorMsg = "没有" + permissionService.GetByName(attr.Permission).Description + "这个权限" } };
                     }
                     else
                     {
-                        filterContext.Result = new ContentResult() { Content = "没有" + attr.Permission + "这个权限" };
+                        filterContext.Result = new ContentResult() { Content = "没有" + permissionService.GetByName(attr.Permission).Description + "这个权限" };
                     }
                     return;
                 }

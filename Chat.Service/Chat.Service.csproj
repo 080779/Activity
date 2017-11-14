@@ -91,6 +91,7 @@
     <Compile Include="Service\IdNameService.cs" />
     <Compile Include="Service\SettingService.cs" />
     <Compile Include="Service\RoleService.cs" />
+    <Compile Include="Service\TestPaperService.cs" />
     <Compile Include="Service\UserService.cs" />
   </ItemGroup>
   <ItemGroup>

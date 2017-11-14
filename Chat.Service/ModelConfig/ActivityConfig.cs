@@ -16,7 +16,8 @@ namespace Chat.Service.ModelConfig
 
             Property(a => a.Name).HasMaxLength(30).IsRequired();
             Property(a => a.Description).IsRequired();
-            Property(a => a.Status).HasMaxLength(10).IsRequired();
+            Property(a => a.WeChatUrl).HasMaxLength(256).IsUnicode(false);
+            HasRequired(a => a.Status).WithMany().HasForeignKey(a => a.StatusId).WillCascadeOnDelete(false);
         }
     }
 }

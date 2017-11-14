@@ -8,27 +8,28 @@ using Chat.DTO.DTO;
 using Chat.Service;
 using Chat.Service.Entities;
 using Chat.WebCommon;
+using System.Data.Entity;
 
 namespace Chat.Service.Service
 {
     public class AdminUserService : IAdminUserService
     {
-        public long AddAdminUser(string name, string mobile, string password, string email)
+        public long AddAdminUser(string name, string mobile, bool gender, string email, string password)
         {
             AdminUserEntity user = new AdminUserEntity();
             user.Name = name;
             user.Mobile = mobile;
-            user.PasswordHash = password;
-            user.PasswordSalt = password;
+            user.Gender = gender;
+            string salt = CommonHelper.GetCaptcha(5);
+            user.PasswordSalt = salt;
+            user.PasswordHash = CommonHelper.GetMD5(salt + password);
             user.LoginErrorTimes = 0;
-            //user.LastLoginErrorTime = DateTime.Now;
             user.Email = email;
-            //user.CityId = cityId;
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<AdminUserEntity> cs = new CommonService<AdminUserEntity>(dbc);
-                bool exists= cs.GetAll().Any(a => a.Mobile == mobile);
-                if(exists)
+                bool exists = cs.GetAll().Any(a => a.Mobile == mobile);
+                if (exists)
                 {
                     return -1;
                 }
@@ -111,7 +112,16 @@ namespace Chat.Service.Service
 
         public bool HasPermission(long adminUserId, string permissionName)
         {
-            throw new NotImplementedException();
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<AdminUserEntity> cs = new CommonService<AdminUserEntity>(dbc);
+                var user = cs.GetAll().Include(u => u.Roles).AsNoTracking().SingleOrDefault(u => u.Id == adminUserId);
+                if (user == null)
+                {
+                    return false;
+                }
+                return user.Roles.SelectMany(r => r.Permissions).Any(p => p.Name == permissionName);
+            }
         }
 
         public bool MarkDeleted(long adminUserId)

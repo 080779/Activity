@@ -12,7 +12,7 @@ namespace Chat.IService.Interface
     /// </summary>
     public interface IAdminUserService : IServiceSupport
     {
-        long AddAdminUser(string name, string phoneNum, string password, string email);
+        long AddAdminUser(string name, string mobile, bool gender, string email, string password);
         //void UpdateAdminUser(AdminUserDTO user);
         void UpdateAdminUser(long id, String name, String email, long? cityId);
         //获取 cityId 这个城市下的管理员
