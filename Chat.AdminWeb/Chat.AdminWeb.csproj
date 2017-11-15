@@ -199,7 +199,8 @@
     <Content Include="Views\Activity\Edit.cshtml" />
     <Content Include="Views\TestPaper\Edit.cshtml" />
     <Content Include="Views\Activity\Prize.cshtml" />
-    <Content Include="Views\TestPaper\AddExe.cshtml" />
+    <Content Include="Views\TestPaper\AddEditExe.cshtml" />
+    <Content Include="Views\TestPaper\EditPaper.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

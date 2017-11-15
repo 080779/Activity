@@ -31,7 +31,7 @@ namespace Chat.Service.Service
             {
                 CommonService<TestPaperEntity> cs = new CommonService<TestPaperEntity>(dbc);
                 
-                return cs.GetAll().Select(r => new TestPaperDTO { Id = r.Id, TestTitle = r.TestTitle, ExercisesCount = r.ExercisesCount, CreateDateTime = r.CreateDateTime }).ToArray();
+                return cs.GetAll().OrderByDescending(t=>t.CreateDateTime).Select(r => new TestPaperDTO { Id = r.Id, TestTitle = r.TestTitle, ExercisesCount = r.ExercisesCount, CreateDateTime = r.CreateDateTime }).ToArray();
             }
         }
 
@@ -46,6 +46,22 @@ namespace Chat.Service.Service
                     return null;
                 }
                 return new TestPaperDTO { Id = paper.Id, TestTitle = paper.TestTitle, ExercisesCount = paper.ExercisesCount, CreateDateTime = paper.CreateDateTime };
+            }
+        }
+
+        public bool Update(long id,string title)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<TestPaperEntity> cs = new CommonService<TestPaperEntity>(dbc);
+                var paper= cs.GetAll().SingleOrDefault(t=>t.Id==id);
+                if(paper==null)
+                {
+                    return false;
+                }
+                paper.TestTitle = title;
+                dbc.SaveChanges();
+                return true;
             }
         }
     }

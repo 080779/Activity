@@ -22,8 +22,9 @@ namespace Chat.AdminWeb.Controllers
             TestPaperDTO[] dtos = testPaperService.GetAll();
             return View(dtos);
         }
+
         [Permission("manager")]
-        public ActionResult AddExe(long testPaperId)
+        public ActionResult AddEditExe(long testPaperId)
         {
             LoadAddExeModel model = new Models.LoadAddExeModel();
             model.TestPaper= testPaperService.GetById(testPaperId);
@@ -31,9 +32,15 @@ namespace Chat.AdminWeb.Controllers
             model.Exercises = exercisesService.GetExercisesByPaperId(testPaperId);
             return View(model);
         }
+
+        /// <summary>
+        /// 添加考题
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Permission("manager")]
-        public ActionResult AddExe(AddExercisesModel model)
+        public ActionResult AddEditExe(AddExercisesModel model)
         {
             if (string.IsNullOrEmpty(model.Title))
             {
@@ -59,6 +66,11 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "success", Data=loadmodel });
         }
 
+        /// <summary>
+        /// 加载考题
+        /// </summary>
+        /// <param name="exeId"></param>
+        /// <returns></returns>
         [Permission("manager")]
         public ActionResult LoadExe(long exeId)
         {
@@ -70,6 +82,12 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "success", Data = dto });
         }
 
+        /// <summary>
+        /// 删除考题
+        /// </summary>
+        /// <param name="paperId"></param>
+        /// <param name="exeId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Permission("manager")]
         public ActionResult DelExe(long paperId,long exeId)
@@ -104,12 +122,27 @@ namespace Chat.AdminWeb.Controllers
                 return Json(new AjaxResult { Status = "error", ErrorMsg="标题不能为空" });
             }
             long id = testPaperService.AddNew(testTitle,0);
-            return Json(new AjaxResult { Status="success",Data=id});
+            return Json(new AjaxResult { Status="success"});
         }
         [Permission("manager")]
-        public ActionResult Edit()
+        public ActionResult EditPaper(long id)
         {
-            return View();
+            TestPaperDTO dto = testPaperService.GetById(id);
+            return View(dto);
+        }
+        [HttpPost]
+        [Permission("manager")]
+        public ActionResult EditPaper(long id,string title)
+        {
+            if (string.IsNullOrEmpty(title))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "标题不能为空" });
+            }
+            if(!testPaperService.Update(id, title))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "编辑失败" });
+            }
+            return Json(new AjaxResult { Status = "success"});
         }
     }
 }

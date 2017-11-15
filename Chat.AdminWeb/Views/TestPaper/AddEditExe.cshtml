@@ -234,7 +234,7 @@
             $("#saveExe").click(function () {
                 var data = $("#exForm").serializeArray();
                 $.ajax({
-                    url: "/testpaper/addexe", type: "post", data: data,
+                    url: "/testpaper/addeditexe", type: "post", data: data,
                     success: function (result) {
                         if (result.status == "error") {
                             alert(result.errorMsg);

@@ -12,5 +12,6 @@ namespace Chat.IService.Interface
         long AddNew(string testTitle,long exercisesCount);
         TestPaperDTO GetById(long paperId);
         TestPaperDTO[] GetAll();
+        bool Update(long id,string title);
     }
 }

@@ -80,7 +80,7 @@
                                     <div class="col-sm-1">
                                         <input type="button" id="btnSavePaper" placeholder="" class="form-control" value="保存试卷" />
                                     </div>
-                                </div>
+                                </div>                                
                             </form>
                         </div>
                     </div>                   
@@ -114,6 +114,9 @@
     <script src="~/Scripts/jquery-ui-1.10.3.min.js"></script>
     <script type="text/javascript">
         $(function () {
+
+            $("#btnBack").click(function () { window.location.href = "/testpaper/list";});
+
             $("#btnSavePaper").click(function () {
                 var txtPaper = $("#txtPaper").val();
                 $.ajax({
@@ -125,7 +128,8 @@
                         }
                         else if (result.status == "success")
                         {
-                            window.location.href = "/testpaper/add?testpaperid=" + result.data;
+                            alert("添加成功！");
+                            window.location.href = "/testpaper/list";
                         }
                         else {
                             alert("未知错误");
