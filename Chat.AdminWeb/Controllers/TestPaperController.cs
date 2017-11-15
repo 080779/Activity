@@ -1,4 +1,5 @@
 ﻿using Chat.AdminWeb.App_Start;
+using Chat.AdminWeb.Models;
 using Chat.DTO.DTO;
 using Chat.IService.Interface;
 using Chat.WebCommon;
@@ -13,6 +14,7 @@ namespace Chat.AdminWeb.Controllers
     public class TestPaperController : Controller
     {
         public ITestPaperService testPaperService { get; set; }
+        public IExercisesService exercisesService { get; set; }
 
         [Permission("list")]
         public ActionResult List()
@@ -21,11 +23,73 @@ namespace Chat.AdminWeb.Controllers
             return View(dtos);
         }
         [Permission("manager")]
-        public ActionResult Add(long testPaperId)
+        public ActionResult AddExe(long testPaperId)
         {
-            TestPaperDTO dto= testPaperService.GetById(testPaperId);
-            return View(dto);
+            LoadAddExeModel model = new Models.LoadAddExeModel();
+            model.TestPaper= testPaperService.GetById(testPaperId);
+            model.PaperExeCount = exercisesService.GetPaperExercisesCount(testPaperId);
+            model.Exercises = exercisesService.GetExercisesByPaperId(testPaperId);
+            return View(model);
         }
+        [HttpPost]
+        [Permission("manager")]
+        public ActionResult AddExe(AddExercisesModel model)
+        {
+            if (string.IsNullOrEmpty(model.Title))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "考题题目不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.OptionA) || string.IsNullOrEmpty(model.OptionB) || string.IsNullOrEmpty(model.OptionC) || string.IsNullOrEmpty(model.OptionD))
+            {
+                return Json(new AjaxResult { Status="error",ErrorMsg="选项内容不能为空"});
+            }            
+            if(model.RightKeyId<=0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请选择正确答案" });
+            }
+            if(model.ExeId>=1)
+            {
+                return Json(new AjaxResult { Status = "clear", ErrorMsg = "考题已经添加过，请点击清空内容添加" });
+            }
+            LoadAddExeModel loadmodel = new LoadAddExeModel();
+            long exId= exercisesService.AddNew(model.Title, model.TestPaperId, model.OptionA, model.OptionB, model.OptionC, model.OptionD, model.RightKeyId);
+            loadmodel.Exercises = exercisesService.GetExercisesByPaperId(model.TestPaperId);
+            loadmodel.PaperExeCount = exercisesService.GetPaperExercisesCount(model.TestPaperId);
+            loadmodel.TestPaper = testPaperService.GetById(model.TestPaperId);
+            return Json(new AjaxResult { Status = "success", Data=loadmodel });
+        }
+
+        [Permission("manager")]
+        public ActionResult LoadExe(long exeId)
+        {
+            ExercisesDTO dto = exercisesService.GetById(exeId);
+            if(dto==null)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg="考题不存在" });
+            }
+            return Json(new AjaxResult { Status = "success", Data = dto });
+        }
+
+        [HttpPost]
+        [Permission("manager")]
+        public ActionResult DelExe(long paperId,long exeId)
+        {
+            if (exeId <= 0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "要删除的考题不存在" });
+            }
+            LoadAddExeModel loadmodel = new LoadAddExeModel();
+            bool b = exercisesService.DelExercisesById(exeId);
+            if(!b)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "删除失败" });
+            }
+            loadmodel.Exercises = exercisesService.GetExercisesByPaperId(paperId);
+            loadmodel.PaperExeCount = exercisesService.GetPaperExercisesCount(paperId);
+            loadmodel.TestPaper = testPaperService.GetById(paperId);
+            return Json(new AjaxResult { Status = "success", Data = loadmodel });
+        }
+
         [Permission("manager")]
         public ActionResult AddPaper()
         {

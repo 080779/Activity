@@ -179,7 +179,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AddExercisesModel.cs" />
     <Compile Include="Models\AdminUserLoginModel.cs" />
+    <Compile Include="Models\LoadAddExeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,7 +199,7 @@
     <Content Include="Views\Activity\Edit.cshtml" />
     <Content Include="Views\TestPaper\Edit.cshtml" />
     <Content Include="Views\Activity\Prize.cshtml" />
-    <Content Include="Views\TestPaper\Add.cshtml" />
+    <Content Include="Views\TestPaper\AddExe.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
