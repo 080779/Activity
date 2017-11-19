@@ -44,7 +44,7 @@ namespace Chat.FrontWeb.Controllers
                 lists.Add(exetip.Tip);
             }
             model.ExesTip = lists;
-            return View();
+            return View(model);
         }
 
         public ActionResult Prize()
@@ -68,8 +68,12 @@ namespace Chat.FrontWeb.Controllers
             return View(model);
         }
 
-        public ActionResult Result()
+        public ActionResult Result(string asks,long id)
         {
+            if(string.IsNullOrEmpty(asks))
+            {
+                return Json(new AjaxResult{Status="error",ErrorMsg="请答完题再提交" });
+            }
             return View();
         }
     }
