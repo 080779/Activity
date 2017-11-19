@@ -17,7 +17,7 @@
             <div class="anser-list">
                 @for(int i=1; i<=Model.Exercises.Count();i++)
                 {
-                    <div class="anserli jsQus">
+                    <div class="anserli jsQus" indexId="@Model.Exercises[i - 1].Id">
                         <div class="anserli-tit">
                             <span class="anserli-num num@(i)">@i</span>
                             <span class="anserli-qus">@Model.Exercises[i-1].Title</span>
