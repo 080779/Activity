@@ -56,14 +56,14 @@ namespace Chat.AdminWeb.Controllers
             }
             if(model.ExeId>=1)
             {
-                if(!exercisesService.Update(model.ExeId, model.Title, model.OptionA, model.OptionB, model.OptionC, model.OptionD, model.RightKeyId))
+                if(!exercisesService.Update(model.ExeId, model.Title, model.OptionA, model.OptionB, model.OptionC, model.OptionD, model.RightKeyId,""))
                 {
                     return Json(new AjaxResult { Status = "error", ErrorMsg = "考题编辑失败" });
                 }
                 return Json(new AjaxResult { Status = "ok"});
             }
             LoadAddExeModel loadmodel = new LoadAddExeModel();
-            long exId= exercisesService.AddNew(model.Title, model.TestPaperId, model.OptionA, model.OptionB, model.OptionC, model.OptionD, model.RightKeyId);
+            long exId= exercisesService.AddNew(model.Title, model.TestPaperId, model.OptionA, model.OptionB, model.OptionC, model.OptionD, model.RightKeyId,"");
             if(exId<=0)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "考题添加失败" });
@@ -180,6 +180,12 @@ namespace Chat.AdminWeb.Controllers
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "试卷删除失败" });
             }
             return Json(new AjaxResult { Status="success"});
+        }
+        [HttpPost]
+        [Permission("manager")]
+        public ActionResult Search(DateTime? startTime,DateTime? endTime,string keyWord)
+        {
+            return Json(new AjaxResult { Status="success",Data=testPaperService.Search(startTime,endTime,keyWord)});
         }
     }
 }

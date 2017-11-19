@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Chat.DTO.DTO;
+using Chat.FrontWeb.Models;
+using Chat.IService.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,14 +11,23 @@ namespace Chat.FrontWeb.Controllers
 {
     public class HomeController : Controller
     {
+        public IActivityService activityService { get; set; }
+        public IExercisesService exeService { get; set; }
+
         public ActionResult Index()
         {
-            return View();
+            ActivityViewModel model = new ActivityViewModel();
+            model.Activity= activityService.GetByStatus("答题进行中");
+            return View(model);
         }
 
         public ActionResult Answer()
         {
-            return View();
+            AnswerViewModel model = new AnswerViewModel();
+            ActivityDTO activity = activityService.GetByStatus("答题进行中");
+            model.ActivityName = activity.Name;
+            model.Exercises= exeService.GetExercisesByPaperId(activity.PaperId);
+            return View(model);
         }
 
         public ActionResult Topic()
@@ -25,7 +37,12 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult Prize()
         {
-            return View();
+            PrizeViewModel model = new PrizeViewModel();
+            ActivityDTO activity= activityService.GetByStatus("答题进行中");
+            model.ActivityName = activity.Name;
+            model.PrizeName = activity.PrizeName;
+            model.PrizeImgUrl = activity.PrizeImgUrl;
+            return View(model);
         }
 
         public ActionResult Result()
