@@ -1,5 +1,6 @@
 ﻿using Chat.DTO.DTO;
 using Chat.FrontWeb.Models;
+using Chat.FrontWeb.Models.user;
 using Chat.IService.Interface;
 using Chat.WebCommon;
 using System;
@@ -98,9 +99,19 @@ namespace Chat.FrontWeb.Controllers
             return View(model);
         }
 
-        public ActionResult SaveUser(string name,string mobile,bool gender,string address)
+        public ActionResult SaveUser(AddUser model)
         {
-            return Json("");
+            if(!ModelState.IsValid)
+            {
+                return Json(new AjaxResult { Status="error",ErrorMsg=MVCHelper.GetValidMsg(ModelState)});
+            }
+            long m;
+            if(!long.TryParse(model.Mobile,out m))
+            {
+                return Json(new AjaxResult { Status="error",ErrorMsg="手机号必须是数字"});
+            }
+            userService.AddNew(model.Name, "", "", model.Mobile, model.Gender, model.Address);
+            return Json(new AjaxResult { Status="success"});
         }
     }
 }
