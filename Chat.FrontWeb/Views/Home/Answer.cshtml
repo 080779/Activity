@@ -17,7 +17,7 @@
             <div class="anser-list">
                 @for(int i=1; i<=Model.Exercises.Count();i++)
                 {
-                    <div class="anserli jsQus" indexId="@Model.Exercises[i - 1].Id">
+                    <div class="anserli jsQus" data-id="@Model.Exercises[i - 1].Id">
                         <div class="anserli-tit">
                             <span class="anserli-num num@(i)">@i</span>
                             <span class="anserli-qus">@Model.Exercises[i-1].Title</span>
@@ -34,7 +34,7 @@
             </div>
             <div class="anser-btn">
                 <a href="~/home/index" class="btn-home">返回首页</a>
-                <a href="~/home/result" id="btnSave" class="btn-sub">提交答卷</a>
+                <a href="#" id="btnSave" class="btn-sub">提交答卷</a>@*~/home/result*@
             </div>
         </div>
     </div>
@@ -54,6 +54,35 @@
                 //回答正确
                 $(this).addClass('right').siblings().removeClass('wrong right');
             }            
+        })
+
+        $("#btnSave").click(function () {
+            var tid = '';
+            $('.anserli').each(function () {
+                tid += $(this).data('id');
+
+                asklist = $(this).find('.anserli-con');
+                ask = asklist.children().index(asklist.find('.right'))
+                if (ask == -1)
+                    ask = asklist.children().index(asklist.find('.wrong'))
+                ask += 1;
+                tid += ":";
+                tid += ask;
+                tid += ',';
+
+            });
+            if(tid == '')
+            {
+                alert('请答题');
+            }
+
+            $.post("/home/result",
+            {
+                asks: tid
+            },
+            function (data, status) {
+                window.location.href="/home/result";
+            });
         })
     </script>
 </body>
