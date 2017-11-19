@@ -1,6 +1,7 @@
 ﻿using Chat.DTO.DTO;
 using Chat.IService.Interface;
 using Chat.Service.Service;
+using Chat.WebCommon;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -16,6 +17,13 @@ namespace Test
     class Program
     {
         static void Main(string[] args)
+        {
+            string m= CommonHelper.FormatMoblie("15615615656");
+            Console.WriteLine(m);
+            Console.ReadKey();
+        }
+
+        static void Main2(string[] args)
         {
             IUserService userService = new UserService();
             UserDTO[] dtos = userService.GetAll();

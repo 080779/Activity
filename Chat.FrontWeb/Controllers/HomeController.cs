@@ -1,6 +1,7 @@
 ﻿using Chat.DTO.DTO;
 using Chat.FrontWeb.Models;
 using Chat.IService.Interface;
+using Chat.WebCommon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Chat.FrontWeb.Controllers
     {
         public IActivityService activityService { get; set; }
         public IExercisesService exeService { get; set; }
+        public IUserService userService { get; set; }
 
         public ActionResult Index()
         {
@@ -32,6 +34,7 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult Topic()
         {
+
             return View();
         }
 
@@ -42,6 +45,17 @@ namespace Chat.FrontWeb.Controllers
             model.ActivityName = activity.Name;
             model.PrizeName = activity.PrizeName;
             model.PrizeImgUrl = activity.PrizeImgUrl;
+            var users = userService.GetByActivityIdIsWon(activity.Id);
+            List<IsWonUser> winUsers = new List<IsWonUser>();            
+            foreach (var user in users)
+            {
+                IsWonUser winUser = new IsWonUser();
+                winUser.UserName = user.Name;
+                winUser.Mobile = CommonHelper.FormatMoblie(user.Mobile);
+                winUsers.Add(winUser);
+            }
+            model.Users = winUsers;
+            model.winCount = winUsers.Count();
             return View(model);
         }
 

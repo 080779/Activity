@@ -18,7 +18,7 @@
             <div class="prize-top-box">
                 <div class="prize-top-tit">活动奖品</div>
                 <div class="prize-top-name">@Model.PrizeName</div>
-                <div class="prize-top-dec">获奖人数：100</div>
+                <div class="prize-top-dec">获奖人数:@Model.winCount</div>
                 <div class="prize-top-ck">图片仅供产考请以实物为准</div>
                 <div class="prize-top-img"><img src="http://192.168.1.110:8060@(Model.PrizeImgUrl)" /></div>
             </div>
@@ -27,24 +27,15 @@
         <div class="prize-people">
             <div class="prize-people-tit">获奖用户名</div>
             <div class="prize-list">
+            @foreach (var user in Model.Users)
+            {
                 <div class="prize-li">
                     <div class="prize-li-header">
-                        <img src="~/pic/header1.jpg" /><span>赵奂训</span>
+                       <span>@user.UserName</span>
                     </div>
-                    <div class="prize-li-phone">134****142</div>
+                    <div class="prize-li-phone">@user.Mobile</div>
                 </div>
-                <div class="prize-li">
-                    <div class="prize-li-header">
-                        <img src="~/pic/header2.jpg" /><span>赵奂训</span>
-                    </div>
-                    <div class="prize-li-phone">134****142</div>
-                </div>
-                <div class="prize-li">
-                    <div class="prize-li-header">
-                        <img src="~/pic/header3.jpg" /><span>赵奂训</span>
-                    </div>
-                    <div class="prize-li-phone">134****142</div>
-                </div>
+            }
             </div>
         </div>
         <div class="prize-btn">

@@ -75,6 +75,23 @@ namespace Chat.WebCommon
             }
         }
 
+        public static string FormatMoblie(string moblie)
+        {
+            StringBuilder formatMoblie = new StringBuilder();
+            for(int i=0;i<moblie.Length;i++)
+            {
+                if(i>=3 && i<=6)
+                {
+                    formatMoblie.Append("*");
+                }
+                else
+                {
+                    formatMoblie.Append(moblie[i]);
+                }
+            }
+            return formatMoblie.ToString();
+        }
+
         public static void CopyDir(string fromDir, string toDir)
         {
             if (!Directory.Exists(fromDir))
