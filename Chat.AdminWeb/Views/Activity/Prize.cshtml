@@ -141,6 +141,7 @@
         	            url: "/activity/prizewon", type: "post", data: formData,
         	            success: function (result) {
         	                alert("设置成功");
+        	                window.location.reload();
         	            },
         	            error: function () { alert("网络错误");}
         	        });
