@@ -258,7 +258,7 @@ namespace Chat.Service.Service
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
-                return cs.GetAll().Any(a => a.PaperId == id);
+                return cs.GetAll().Any(a => a.StatusId == id);
             }
         }
 
@@ -304,6 +304,15 @@ namespace Chat.Service.Service
                 }
                 dbc.SaveChanges();
                 return true;
+            }
+        }
+
+        public bool CheckHaveStatusId(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                return cs.GetAll().Any(a => a.StatusId == id);
             }
         }
     }

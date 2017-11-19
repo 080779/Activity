@@ -25,6 +25,10 @@ namespace Chat.FrontWeb.Controllers
             {
                 model.Activity = activityService.GetNew();
             }
+            if(activityService.GetAll().Count()<=0)
+            {
+                return Content("当前没有活动！");
+            }
             activityService.UpdateCount(model.Activity.Id, true, false, false, false, false);
             return View(model);
         }
@@ -136,10 +140,12 @@ namespace Chat.FrontWeb.Controllers
             long userId= userService.AddNew(model.Name, "", "", model.Mobile, model.Gender, model.Address);
             if(userId==-1)
             {
-                userService.UpdateUser(model.Mobile, model.Name, model.Gender, model.Address);
+                return Json(new AjaxResult { Status = "error",ErrorMsg="你已参加本次活动，无法再次参与！" });
+                //userService.UpdateUser(model.Mobile, model.Name, model.Gender, model.Address);                
             }
             if(userId>0)
             {
+                activityService.UpdateCount(model.Id, false, false, true, false, false);
                 Session["Mobile"] = model.Mobile;
             }
             return Json(new AjaxResult { Status="success"});

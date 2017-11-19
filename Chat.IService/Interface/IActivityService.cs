@@ -22,6 +22,17 @@ namespace Chat.IService.Interface
         ActivityDTO[] GetByUserId(long id);
         long GetTotalCount();
         bool CheckByPaperId(long id);
+        /// <summary>
+        /// 更新访问次数等
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="setVisitCount">访问次数</param>
+        /// <param name="setForwardCount">转发次数</param>
+        /// <param name="setAnswerCount">答题人数</param>
+        /// <param name="setHavePrizeCount">获奖资格人数</param>
+        /// <param name="setPrizeCount">获奖人数</param>
+        /// <returns></returns>
         bool UpdateCount(long id, bool setVisitCount, bool setForwardCount, bool setAnswerCount, bool setHavePrizeCount, bool setPrizeCount);
+        bool CheckHaveStatusId(long id);
     }
 }

@@ -74,6 +74,11 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Content("活动状态必须选择");
             }
+            //statusId=6为活动正在进行中
+            if(activityService.CheckByPaperId(6))
+            {
+                return Content("有活动已经在进行中，请选择其他状态");
+            }
             if (model.imgUrl == null)
             {
                 return Content("活动背景图不能为空");
@@ -156,6 +161,11 @@ namespace Chat.AdminWeb.Controllers
             if (model.StatusId <= 0)
             {
                 return Content("活动状态必须选择");
+            }
+            //statusId=6为活动正在进行中
+            if (activityService.CheckByPaperId(6))
+            {
+                return Content("有活动已经在进行中，请选择其他状态");
             }
             //if (model.imgUrl == null)
             //{

@@ -8,6 +8,7 @@ namespace Chat.FrontWeb.Models.user
 {
     public class AddUser
     {
+        public long Id { get; set; }
         [Required(ErrorMessage ="用户名必须填")]
         [StringLength(60,MinimumLength =2,ErrorMessage ="姓名要在2到30个字之间")]
         public string Name { get; set; }
