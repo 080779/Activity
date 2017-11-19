@@ -34,7 +34,16 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult Topic()
         {
-
+            TopicModel model = new TopicModel();
+            ActivityDTO activity = activityService.GetByStatus("答题进行中");
+            model.ActivityName = activity.Name;
+            var exetips = exeService.GetExercisesByPaperId(activity.PaperId);
+            List<string> lists = new List<string>();
+            foreach(var exetip in exetips)
+            {
+                lists.Add(exetip.Tip);
+            }
+            model.ExesTip = lists;
             return View();
         }
 
