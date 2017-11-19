@@ -225,6 +225,21 @@ namespace Chat.Service.Service
                 return true;
             }
         }
+        public bool RetSetWon(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                var user = cs.GetAll().SingleOrDefault(u => u.Id == id);
+                if (user == null)
+                {
+                    return false;
+                }
+                user.IsWon = false;
+                dbc.SaveChanges();
+                return true;
+            }
+        }
 
         public bool UserIsWonByMobile(string mobile)
         {

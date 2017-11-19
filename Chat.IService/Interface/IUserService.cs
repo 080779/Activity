@@ -19,5 +19,6 @@ namespace Chat.IService.Interface
         UserDTO[] GetByActivityIdIsWon(long id);
         bool UserIsWonByMobile(string mobile);
         bool UpdateUser(string mobile, string name, bool gender, string address);
+        bool RetSetWon(long id);
     }
 }

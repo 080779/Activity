@@ -80,6 +80,7 @@ namespace Chat.FrontWeb.Controllers
             model.ActivityName = activity.Name;
             model.PrizeName = activity.PrizeName;
             model.PrizeImgUrl = activity.PrizeImgUrl;
+            model.PrizeTime = activity.RewardTime;
             var users = userService.GetByActivityIdIsWon(activity.Id);
             List<IsWonUser> winUsers = new List<IsWonUser>();            
             foreach (var user in users)
@@ -162,6 +163,7 @@ namespace Chat.FrontWeb.Controllers
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "地址长度在2-300之间" });
             }
             long userId= userService.AddNew(model.Name, "", "", model.Mobile, model.Gender, model.Address);
+            userService.RetSetWon(userId);
             if(userId==-1)
             {
                 return Json(new AjaxResult { Status = "error",ErrorMsg="你已参加本次活动，无法再次参与！" });

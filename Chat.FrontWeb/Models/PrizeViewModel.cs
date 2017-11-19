@@ -14,5 +14,6 @@ namespace Chat.FrontWeb.Models
         public int winCount { get; set; }
         public List<IsWonUser> Users { get; set; }
         public bool UserIsWon { get; set; }
+        public DateTime PrizeTime { get; set; }
     }
 }
