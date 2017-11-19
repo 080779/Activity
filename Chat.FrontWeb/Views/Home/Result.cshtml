@@ -13,10 +13,10 @@
         <div class="result-wrap">
             <div class="result-title font">@Model.ActivityName</div>
             <div class="result-qus clear">
-            @for (int i = 1; i <= Model.Result.Count; i++)
+            @for (int i = 0; i < Model.Result.Count; i++)
             {
                 <div class="result-qusli clear">
-                    <div class="result-qusli-t">第@(i)题</div>
+                    <div class="result-qusli-t">第@(i+1)题</div>
                     <div class="result-qusli-r @Model.Result[i]"></div>
                 </div>
             }
