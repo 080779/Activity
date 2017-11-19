@@ -74,7 +74,11 @@
 {
 <script type="text/javascript">
     $(function () {
-        jQuery('.datepicker').datepicker();
+        jQuery('.datepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'yyyy-mm-dd'
+        });
 
         //搜索
         $("#search").click(function () {
