@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Chat.DTO.DTO;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using Chat.WebCommon;
 
 namespace Chat.Service.Service
 {
@@ -152,10 +153,12 @@ namespace Chat.Service.Service
                 var items = cs.GetAll();
                 if(statusId!=null)
                 {
+                    startTime = DateTimeHelper.GetBeginDate((DateTime)startTime);
                     items = items.Where(p => p.StatusId == statusId);
                 }
                 if (startTime != null)
                 {
+                    endTime = DateTimeHelper.GetEndDate((DateTime)endTime);
                     items = items.Where(p => p.CreateDateTime >= startTime);
                 }
                 if (endTime != null)

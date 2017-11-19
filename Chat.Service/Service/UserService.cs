@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chat.DTO.DTO;
 using System.Data.SqlClient;
+using Chat.WebCommon;
 
 namespace Chat.Service.Service
 {
@@ -192,10 +193,12 @@ namespace Chat.Service.Service
                 }
                 if (startTime != null)
                 {
+                    startTime = DateTimeHelper.GetBeginDate((DateTime)startTime);
                     items = items.Where(u => u.ChangeTime >= startTime);
                 }
                 if (endTime != null)
                 {
+                    endTime = DateTimeHelper.GetEndDate((DateTime)endTime);
                     items = items.Where(u => u.ChangeTime <= endTime);
                 }
                 if (keyWord != null)
