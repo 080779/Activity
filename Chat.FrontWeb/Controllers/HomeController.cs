@@ -128,14 +128,38 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult SaveUser(AddUser model)
         {
-            if(!ModelState.IsValid)
+            //if(!ModelState.IsValid)
+            //{
+            //    return Json(new AjaxResult { Status="error",ErrorMsg=MVCHelper.GetValidMsg(ModelState)});
+            //}
+            if(string.IsNullOrEmpty(model.Name))
             {
-                return Json(new AjaxResult { Status="error",ErrorMsg=MVCHelper.GetValidMsg(ModelState)});
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "姓名不能为空" });
             }
+            if (string.IsNullOrEmpty(model.Mobile))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "手机号不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Address))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "地址不能为空" });
+            }
+            if (model.Name.Length<2 || model.Name.Length>20)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "姓名长度在2-20之间" });
+            }            
             long m;
             if(!long.TryParse(model.Mobile,out m))
             {
                 return Json(new AjaxResult { Status="error",ErrorMsg="手机号必须是数字"});
+            }
+            if (model.Mobile.Length != 11)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请输入11位手机号" });
+            }
+            if (model.Address.Length < 2 || model.Address.Length > 20)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "地址长度在2-300之间" });
             }
             long userId= userService.AddNew(model.Name, "", "", model.Mobile, model.Gender, model.Address);
             if(userId==-1)
