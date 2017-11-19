@@ -127,13 +127,15 @@ namespace Chat.Service.Service
                 }
                 activity.Name = name;
                 activity.Description = description;
-                activity.ImgUrl = imgUrl;
+                if(!string.IsNullOrWhiteSpace(imgUrl))
+                    activity.ImgUrl = imgUrl;
                 activity.StartTime = startTime;
                 activity.ExamEndTime = examEndTime;
                 activity.RewardTime = rewardTime;
                 activity.PaperId = paperId;
                 activity.PrizeName = prizeName;
-                activity.PrizeImgUrl = prizeImgUrl;
+                if (!string.IsNullOrWhiteSpace(prizeImgUrl))
+                    activity.PrizeImgUrl = prizeImgUrl;
                 activity.AnswerCount = 0;
                 activity.ForwardCount = 0;
                 activity.HavePrizeCount = 0;

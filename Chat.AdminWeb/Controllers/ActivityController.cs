@@ -138,7 +138,10 @@ namespace Chat.AdminWeb.Controllers
         [Permission("manager")]
         public ActionResult Edit(AtivityEditModel model)
         {
-            if(model.activityId<=0)
+            string sImgPath = string.Empty;
+            string sPrizeImgPath = string.Empty;
+
+            if (model.activityId<=0)
             {
                 return Content("该活动数据不存在");
             }
@@ -154,16 +157,22 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Content("活动状态必须选择");
             }
-            if (model.imgUrl == null)
-            {
-                return Content("活动背景图不能为空");
-            }
-            string ext = Path.GetExtension(model.imgUrl.FileName);
+            //if (model.imgUrl == null)
+            //{
+            //    return Content("活动背景图不能为空");
+            //}
             string[] imgs = { ".png", ".jpg", ".jpeg", ".bmp" };
-            if (!imgs.Contains(ext))
+            if (model.imgUrl != null)
             {
-                return Content("请上传背景图片文件，支持格式“png、jpg、jpeg、bmp”");
+                string ext = Path.GetExtension(model.imgUrl.FileName);
+                
+                if (!imgs.Contains(ext))
+                {
+                    return Content("请上传背景图片文件，支持格式“png、jpg、jpeg、bmp”");
+                }
+               
             }
+             
             if (model.StartTime == Convert.ToDateTime("0001-1-1 0:00:00"))
             {
                 return Content("活动开始时间不能为空");
@@ -184,16 +193,23 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Content("奖品名称不能为空");
             }
-            if (model.PrizeImgUrl == null)
+            //if (model.PrizeImgUrl == null)
+            //{
+            //    return Content("奖品图片不能为空");
+            //}
+            if (model.PrizeImgUrl != null)
             {
-                return Content("奖品图片不能为空");
+                string ext = Path.GetExtension(model.PrizeImgUrl.FileName);
+                if (!imgs.Contains(ext))
+                {
+                    return Content("请上传奖品图片文件，支持格式“png、jpg、jpeg、bmp”");
+                }
+                sPrizeImgPath = PicSave(model.PrizeImgUrl);
             }
-            ext = Path.GetExtension(model.PrizeImgUrl.FileName);
-            if (!imgs.Contains(ext))
-            {
-                return Content("请上传奖品图片文件，支持格式“png、jpg、jpeg、bmp”");
-            }
-            bool b = activityService.Update( model.activityId,model.Name, model.Description, model.StatusId, PicSave(model.imgUrl), model.StartTime, model.ExamEndTime, model.RewardTime, model.PaperId, model.PrizeName, PicSave(model.PrizeImgUrl));
+            if (model.imgUrl != null)
+                sImgPath = PicSave(model.imgUrl);
+            
+            bool b = activityService.Update( model.activityId,model.Name, model.Description, model.StatusId, sImgPath, model.StartTime, model.ExamEndTime, model.RewardTime, model.PaperId, model.PrizeName,sPrizeImgPath);
             if (!b)
             {
                 return Content("编辑失败");
