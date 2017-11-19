@@ -189,7 +189,7 @@ namespace Chat.Service.Service
                 }
                 if(isWon!=null)
                 {
-                    items = items.Where(u => u.Gender == gender);
+                    items = items.Where(u => u.IsWon == isWon);
                 }
                 if (startTime != null)
                 {
