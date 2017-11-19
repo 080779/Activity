@@ -208,7 +208,7 @@ namespace Chat.Service.Service
                 {
                     return false;
                 }
-                var count = dbc.Database.SqlQuery<long>("select UserId from t_useractivities where ActivityId=4 and UserId=1");
+                var count = dbc.Database.SqlQuery<long>("select UserId from t_useractivities where ActivityId=@activityId and UserId=@userId",new SqlParameter("@activityId", activityId), new SqlParameter("@userId", userId));
                 if (count.Count()>=1)
                 {
                     return false;
