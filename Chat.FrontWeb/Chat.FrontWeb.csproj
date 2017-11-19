@@ -155,6 +155,7 @@
     <Compile Include="Models\AnswerViewModel.cs" />
     <Compile Include="Models\IsWonUser.cs" />
     <Compile Include="Models\PrizeViewModel.cs" />
+    <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\TopicModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

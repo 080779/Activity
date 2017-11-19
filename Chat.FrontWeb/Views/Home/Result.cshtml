@@ -1,4 +1,4 @@
-﻿
+﻿@model Chat.FrontWeb.Models.ResultModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,39 +11,27 @@
 <body>
     <div class="result-bg">
         <div class="result-wrap">
-            <div class="result-title font">第68期有奖环保答题活动</div>
+            <div class="result-title font">@Model.ActivityName</div>
             <div class="result-qus clear">
+            @for (int i = 0; i < Model.Result.Count; i++)
+            {
                 <div class="result-qusli clear">
-                    <div class="result-qusli-t">第1题</div>
-                    <div class="result-qusli-r right"></div>
+                    <div class="result-qusli-t">第@(i)题</div>
+                    <div class="result-qusli-r @Model.Result[i]"></div>
                 </div>
-                <div class="result-qusli clear">
-                    <div class="result-qusli-t">第2题</div>
-                    <div class="result-qusli-r wrong"></div>
-                </div>
-                <div class="result-qusli clear">
-                    <div class="result-qusli-t">第3题</div>
-                    <div class="result-qusli-r right"></div>
-                </div>
-                <div class="result-qusli clear">
-                    <div class="result-qusli-t">第4题</div>
-                    <div class="result-qusli-r wrong"></div>
-                </div>
-                <div class="result-qusli clear">
-                    <div class="result-qusli-t">第5题</div>
-                    <div class="result-qusli-r right"></div>
-                </div>
-                <div class="result-qusli clear">
-                    <div class="result-qusli-t">第6题</div>
-                    <div class="result-qusli-r wrong"></div>
-                </div>
+            }
             </div>
-
-            <!--答题失败-->
-            <!--<div class="result-rs font">很遗憾，本次答题您未能通关。请再接再厉！</div>-->
-            <!--答题正确-->
-            <div class="result-rs font">恭喜您全部答对！</div>
-            <div class="result-qx"><a href="javascript:;" id="openForm">立刻完善我的信息，获取抽奖资格</a></div>
+            @if (!Model.IsAllRight)
+            {
+                <!--答题失败-->
+                <div class="result-rs font">很遗憾，本次答题您未能通关。请再接再厉！</div>
+            }
+            else
+            {
+                <!--答题正确-->
+                <div class="result-rs font">恭喜您全部答对！</div>
+                <div class="result-qx"><a href="javascript:;" id="openForm">立刻完善我的信息，获取抽奖资格</a></div>
+            }            
 
             <div class="result-code"><img src="~/img/code.png" /></div>
             <div class="result-codetxt font">关注官方公众号（广西环保）<br />了解更多相关资讯！</div>

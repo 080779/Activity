@@ -29,6 +29,7 @@ namespace Chat.FrontWeb.Controllers
             ActivityDTO activity = activityService.GetByStatus("答题进行中");
             model.ActivityName = activity.Name;
             model.Exercises= exeService.GetExercisesByPaperId(activity.PaperId);
+            model.Id = activity.Id;
             return View(model);
         }
 
@@ -70,11 +71,31 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult Result(string asks,long id)
         {
+
             if(string.IsNullOrEmpty(asks))
             {
-                return Json(new AjaxResult{Status="error",ErrorMsg="请答完题再提交" });
+                return Content("请答完题再提交");
             }
-            return View();
+            ResultModel model = new ResultModel();
+            ActivityDTO activity = activityService.GetById(id);
+            model.ActivityName = activity.Name;
+            long paperId = activity.PaperId;
+            string[] strs = asks.Trim(',').Split(',');
+            List<string> lists = new List<string>();
+            int count = 0;
+            foreach(string str in strs)
+            {
+                string[] results = str.Split(':');
+                bool b = exeService.IsRightOrWrong(paperId, Convert.ToInt64(results[0]), Convert.ToInt64(results[1]));
+                if(b)
+                {
+                    count++;
+                }
+                lists.Add(b ? "right" : "wrong");
+            }
+            model.IsAllRight = count == strs.Count();
+            model.Result = lists;
+            return View(model);
         }
     }
 }

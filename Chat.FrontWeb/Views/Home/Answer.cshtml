@@ -13,6 +13,7 @@
         <div class="answer-wrap">
             <div class="answer-title">
                 <span class="font answer-tit-txt">@Model.ActivityName</span>
+                <input type="hidden" id="activityId" value="@Model.Id"/>
             </div>
             <div class="anser-list">
                 @for(int i=1; i<=Model.Exercises.Count();i++)
@@ -57,10 +58,13 @@
         })
 
         $("#btnSave").click(function () {
+            var id= $("#activityId").val();
             var tid = '';
+            var vt=0;
             $('.anserli').each(function () {
                 tid += $(this).data('id');
-
+                k = $(this).data('ask');
+                if (k == 1) vt += 1;
                 asklist = $(this).find('.anserli-con');
                 ask = asklist.children().index(asklist.find('.right'))
                 if (ask == -1)
@@ -71,18 +75,22 @@
                 tid += ',';
 
             });
-            if(tid == '')
+            if($('.anserli').length != vt)
             {
-                alert('请答题');
+                alert('请答完全部题目再提交');
             }
-
-            $.post("/home/result",
+            else
             {
-                asks: tid
-            },
-            function (data, status) {
-                window.location.href="/home/result";
-            });
+                window.location.href = "/home/result?id=" + id + "&asks=" + tid;                
+            }
+            //$.post("/home/result",
+            //{
+            //    asks: tid
+            //},
+            //function (data, status) {
+            //    window.location.href="/home/result";
+            //});
+
         })
     </script>
 </body>

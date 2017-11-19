@@ -148,5 +148,19 @@ namespace Chat.Service.Service
                 return true;
             }
         }
+
+        public bool IsRightOrWrong(long paperId,long id,long rightKeyId)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ExercisesEntity> cs = new CommonService<ExercisesEntity>(dbc);
+                var entity= cs.GetAll().Include(e => e.TestPaper).SingleOrDefault(e => e.TestPaperId == paperId && e.Id==id);
+                if(entity==null)
+                {
+                    return false;
+                }
+                return entity.RightKeyId == rightKeyId;
+            }
+        }
     }
 }
