@@ -164,6 +164,7 @@ namespace Chat.FrontWeb.Controllers
             }
             long userId= userService.AddNew(model.Name, "", "", model.Mobile, model.Gender, model.Address);
             userService.RetSetWon(userId);
+            userService.IsHavePrizeChance(userId);
             if(userId==-1)
             {
                 return Json(new AjaxResult { Status = "error",ErrorMsg="你已参加本次活动，无法再次参与！" });

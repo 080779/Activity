@@ -263,6 +263,7 @@ namespace Chat.AdminWeb.Controllers
             for(int i=0;i<isWonIds.Length;i++)
             {
                 userService.SetWon(isWonIds[i]);
+                userService.ReSetPrizeChance(isWonIds[i]);
             }
             return Json("success");
         }

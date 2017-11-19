@@ -99,7 +99,7 @@ namespace Chat.Service.Service
                 {
                     return null;
                 }
-                return dbc.Database.SqlQuery<UserDTO>("select u.Id,u.Name,u.NickName,u.PhotoUrl,u.Mobile,u.Gender,u.Address,u.PasswordHash,u.PasswordSalt,u.LoginErrorTimes,u.LastLoginErrorDateTime,u.PassCount,u.WinCount,u.IsWon,u.IsDeleted,u.ChangeTime,u.CreateDateTime from T_Users as u, (select UserId from T_UserActivities where ActivityId=@id) as a where a.UserId=u.Id and u.IsWon=0 and u.IsDeleted=0", new SqlParameter("@id", id)).ToArray();
+                return dbc.Database.SqlQuery<UserDTO>("select u.Id,u.Name,u.NickName,u.PhotoUrl,u.Mobile,u.Gender,u.Address,u.PasswordHash,u.PasswordSalt,u.LoginErrorTimes,u.LastLoginErrorDateTime,u.PassCount,u.WinCount,u.IsWon,u.IsDeleted,u.ChangeTime,u.CreateDateTime from T_Users as u, (select UserId from T_UserActivities where ActivityId=@id) as a where a.UserId=u.Id and u.LoginErrorTimes=1 and u.IsDeleted=0", new SqlParameter("@id", id)).ToArray();
             }
         }
 
@@ -225,6 +225,7 @@ namespace Chat.Service.Service
                 return true;
             }
         }
+
         public bool RetSetWon(long id)
         {
             using (MyDbContext dbc = new MyDbContext())
@@ -272,6 +273,38 @@ namespace Chat.Service.Service
                 user.Name = name;
                 user.Gender = gender;
                 user.Address = address;
+                dbc.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool IsHavePrizeChance(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                UserEntity user= cs.GetAll().SingleOrDefault(u=>u.Id==id);
+                if(user==null)
+                {
+                    return false;
+                }
+                user.LoginErrorTimes = 1;
+                dbc.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool ReSetPrizeChance(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                UserEntity user = cs.GetAll().SingleOrDefault(u => u.Id == id);
+                if (user == null)
+                {
+                    return false;
+                }
+                user.LoginErrorTimes = 0;
                 dbc.SaveChanges();
                 return true;
             }
