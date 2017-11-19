@@ -16,7 +16,7 @@ namespace Test
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main3(string[] args)
         {
             string m= CommonHelper.FormatMoblie("15615615656");
             Console.WriteLine(m);
@@ -103,7 +103,7 @@ namespace Test
             Console.WriteLine("ok");
             Console.ReadKey();
         }
-        static void Main1(string[] args)
+        static void Main(string[] args)
         {
             IAdminUserService adminService = new AdminUserService();
             IRoleService roleService = new RoleService();
@@ -126,7 +126,7 @@ namespace Test
             //permissionService.AddPermissionIds(roleId, ids);
             //permissionService.AddPermissionIds(roleId1, addIds);
 
-            //long id = adminService.AddAdminUser("1", "15615615656", true, "edfe@qq.com", "1");
+            //long id = adminService.AddAdminUser("fsddf", "15615615656", true, "edfe@qq.com", "1");
 
             //roleService.AddRoleIds(id, roleids);
 

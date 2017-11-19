@@ -44,15 +44,15 @@
         </div>
     </div>
     <div class="menu">
-        <a href="~/home/topic" class="menu-li">
+        <a href="~/home/topic?id=@Model.Activity.Id" class="menu-li">
             <span class="menu-icon icon1"></span>
             <span class="menu-txt">本期知识</span>
         </a>
-        <a href="~/home/answer" class="menu-li">
+        <a href="~/home/answer?id=@Model.Activity.Id" class="menu-li">
             <span class="menu-icon icon2"></span>
             <span class="menu-txt">立即答题</span>
         </a>
-        <a href="~/home/prize" class="menu-li">
+        <a href="~/home/prize?id=@Model.Activity.Id" class="menu-li">
             <span class="menu-icon icon3"></span>
             <span class="menu-txt">获奖查询</span>
         </a>

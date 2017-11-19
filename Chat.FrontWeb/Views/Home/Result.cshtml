@@ -33,15 +33,15 @@
                 <div class="result-qx"><a href="javascript:;" id="openForm">立刻完善我的信息，获取抽奖资格</a></div>
             }            
 
-            <div class="result-code"><img src="~/img/code.png" /></div>
+            <div class="result-code"><img src="~/img/code.jpg" /></div>
             <div class="result-codetxt font">关注官方公众号（广西环保）<br />了解更多相关资讯！</div>
         </div>
     </div>
     <div class="result-fixed clear">
         <div class="result-fixed-wrap">
             <a href="~/home/index" class="btn-def"><b class="icon1"></b><span>返回首页</span></a>
-            <a href="~/home/topic" class="btn-def"><b class="icon2"></b><span>知识点回顾</span></a>
-            <a href="~/home/answer" class="btn-prm"><span>再试一次</span></a>
+            <a href="~/home/topic?id=@Model.Id" class="btn-def"><b class="icon2"></b><span>知识点回顾</span></a>
+            <a href="~/home/answer?id=@Model.Id" class="btn-prm"><span>再试一次</span></a>
         </div>
     </div>
     <div class="mask" id="mask" style="display: none;">
@@ -67,7 +67,7 @@
                         <textarea name="address" rows="" cols="" placeholder="请填写您的详细地址以便邮寄奖品"></textarea>
                     </div>
                 </div>
-                <input type="button" class="mask-btn" name="" id="btnSave" value="确认并保存" />
+                <input type="button" class="mask-btn" id="btnSave" value="确认并保存" />
             </form>
         </div>
     </div>
@@ -80,9 +80,9 @@
             $("#mask").css('display', 'none');
         })
 
-        $(function () {
-            var formData = $("#formUser").serializeArray();
+        $(function () {            
             $("#btnSave").click(function () {
+                var formData = $("#formUser").serializeArray();
                 $.ajax({
                     url: "/home/saveuser", type: "post", data: formData,
                     success: function (result) {
@@ -90,7 +90,8 @@
                             alert(result.errorMsg);
                         }
                         else if (result.status == "success") {
-                            alert("资料保存成功！")
+                            alert("资料保存成功！");
+                            $("#mask").css('display', 'none');
                         }
                         else {
                             alert("未知错误");

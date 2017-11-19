@@ -21,23 +21,38 @@ namespace Chat.FrontWeb.Controllers
         {
             ActivityViewModel model = new ActivityViewModel();
             model.Activity= activityService.GetByStatus("答题进行中");
+            if(model.Activity==null)
+            {
+                model.Activity = activityService.GetNew();
+            }
+            activityService.UpdateCount(model.Activity.Id, true, false, false, false, false);
             return View(model);
         }
 
-        public ActionResult Answer()
+        public ActionResult Answer(long id)
         {
             AnswerViewModel model = new AnswerViewModel();
-            ActivityDTO activity = activityService.GetByStatus("答题进行中");
+            ActivityDTO activity;
+            if (id<=0)
+            {
+                activity = activityService.GetByStatus("答题进行中");
+            }
+            activity = activityService.GetById(id);
             model.ActivityName = activity.Name;
             model.Exercises= exeService.GetExercisesByPaperId(activity.PaperId);
             model.Id = activity.Id;
             return View(model);
         }
 
-        public ActionResult Topic()
+        public ActionResult Topic(long id)
         {
             TopicModel model = new TopicModel();
-            ActivityDTO activity = activityService.GetByStatus("答题进行中");
+            ActivityDTO activity;
+            if (id <= 0)
+            {
+                activity = activityService.GetByStatus("答题进行中");
+            }
+            activity = activityService.GetById(id);
             model.ActivityName = activity.Name;
             var exetips = exeService.GetExercisesByPaperId(activity.PaperId);
             List<string> lists = new List<string>();
@@ -49,10 +64,15 @@ namespace Chat.FrontWeb.Controllers
             return View(model);
         }
 
-        public ActionResult Prize()
+        public ActionResult Prize(long id)
         {
             PrizeViewModel model = new PrizeViewModel();
-            ActivityDTO activity= activityService.GetByStatus("答题进行中");
+            ActivityDTO activity;
+            if (id <= 0)
+            {
+                activity = activityService.GetByStatus("答题进行中");
+            }
+            activity = activityService.GetById(id);
             model.ActivityName = activity.Name;
             model.PrizeName = activity.PrizeName;
             model.PrizeImgUrl = activity.PrizeImgUrl;
@@ -67,6 +87,8 @@ namespace Chat.FrontWeb.Controllers
             }
             model.Users = winUsers;
             model.winCount = winUsers.Count();
+            string mobile = (string)Session["Mobile"];
+            model.UserIsWon = userService.UserIsWonByMobile(mobile);
             return View(model);
         }
 
@@ -80,6 +102,7 @@ namespace Chat.FrontWeb.Controllers
             ResultModel model = new ResultModel();
             ActivityDTO activity = activityService.GetById(id);
             model.ActivityName = activity.Name;
+            model.Id = activity.Id;
             long paperId = activity.PaperId;
             string[] strs = asks.Trim(',').Split(',');
             List<string> lists = new List<string>();
@@ -110,7 +133,15 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Json(new AjaxResult { Status="error",ErrorMsg="手机号必须是数字"});
             }
-            userService.AddNew(model.Name, "", "", model.Mobile, model.Gender, model.Address);
+            long userId= userService.AddNew(model.Name, "", "", model.Mobile, model.Gender, model.Address);
+            if(userId==-1)
+            {
+                userService.UpdateUser(model.Mobile, model.Name, model.Gender, model.Address);
+            }
+            if(userId>0)
+            {
+                Session["Mobile"] = model.Mobile;
+            }
             return Json(new AjaxResult { Status="success"});
         }
     }

@@ -250,5 +250,59 @@ namespace Chat.Service.Service
                 return cs.GetTotalCount();
             }
         }
+
+        public bool CheckByPaperId(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                return cs.GetAll().Any(a => a.PaperId == id);
+            }
+        }
+
+        /// <summary>
+        /// 更新访问次数等
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="setVisitCount">访问次数</param>
+        /// <param name="setForwardCount">转发次数</param>
+        /// <param name="setAnswerCount">答题人数</param>
+        /// <param name="setHavePrizeCount">获奖资格人数</param>
+        /// <param name="setPrizeCount">获奖人数</param>
+        /// <returns></returns>
+        public bool UpdateCount(long id, bool setVisitCount,bool setForwardCount,bool setAnswerCount, bool setHavePrizeCount,bool setPrizeCount)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                ActivityEntity entity = cs.GetAll().SingleOrDefault(a=>a.Id==id);
+                if(entity==null)
+                {
+                    return false;
+                }
+                if(setVisitCount)
+                {
+                    entity.VisitCount++;
+                }
+                if(setForwardCount)
+                {
+                    entity.ForwardCount++;
+                }
+                if (setAnswerCount)
+                {
+                    entity.AnswerCount++;
+                }
+                if (setHavePrizeCount)
+                {
+                    entity.HavePrizeCount++;
+                }
+                if(setPrizeCount)
+                {
+                    entity.PrizeCount++;
+                }
+                dbc.SaveChanges();
+                return true;
+            }
+        }
     }
 }

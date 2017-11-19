@@ -116,7 +116,8 @@
     <Content Include="css\common.css" />
     <Content Include="css\style-default.css" />
     <Content Include="Global.asax" />
-    <Content Include="img\code.png" />
+    <Content Include="img\23e.png" />
+    <Content Include="img\code.jpg" />
     <Content Include="img\default\ask-title-border.png" />
     <Content Include="img\default\bg-i.jpg" />
     <Content Include="img\default\bg-l.jpg" />

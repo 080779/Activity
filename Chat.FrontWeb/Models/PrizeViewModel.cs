@@ -13,5 +13,6 @@ namespace Chat.FrontWeb.Models
         public string PrizeImgUrl { get; set; }
         public int winCount { get; set; }
         public List<IsWonUser> Users { get; set; }
+        public bool UserIsWon { get; set; }
     }
 }

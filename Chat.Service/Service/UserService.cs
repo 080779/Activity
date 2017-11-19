@@ -225,5 +225,41 @@ namespace Chat.Service.Service
                 return true;
             }
         }
+
+        public bool UserIsWonByMobile(string mobile)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                if(string.IsNullOrEmpty(mobile))
+                {
+                    return false;
+                }
+                var user= cs.GetAll().SingleOrDefault(u=>u.Mobile==mobile);
+                if(user==null)
+                {
+                    return false;
+                }
+               return user.IsWon == true;
+            }
+        }
+
+        public bool UpdateUser(string mobile,string name,bool gender,string address)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                UserEntity user= cs.GetAll().SingleOrDefault(u=>u.Mobile==mobile);
+                if(user==null)
+                {
+                    return false;
+                }
+                user.Name = name;
+                user.Gender = gender;
+                user.Address = address;
+                dbc.SaveChanges();
+                return true;
+            }
+        }
     }
 }

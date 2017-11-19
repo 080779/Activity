@@ -21,5 +21,7 @@ namespace Chat.IService.Interface
         bool AddUserId(long activityId, long userId);
         ActivityDTO[] GetByUserId(long id);
         long GetTotalCount();
+        bool CheckByPaperId(long id);
+        bool UpdateCount(long id, bool setVisitCount, bool setForwardCount, bool setAnswerCount, bool setHavePrizeCount, bool setPrizeCount);
     }
 }

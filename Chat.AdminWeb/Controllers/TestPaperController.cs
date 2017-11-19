@@ -15,6 +15,7 @@ namespace Chat.AdminWeb.Controllers
     {
         public ITestPaperService testPaperService { get; set; }
         public IExercisesService exercisesService { get; set; }
+        public IActivityService activityService { get; set; }
 
         [Permission("list")]
         public ActionResult List()
@@ -175,6 +176,10 @@ namespace Chat.AdminWeb.Controllers
         [Permission("manager")]
         public ActionResult DelPaper(long id)
         {
+            if(activityService.CheckByPaperId(id))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "试卷正在被活动使用中" });
+            }
             if(!testPaperService.Delete(id))
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "试卷删除失败" });
