@@ -157,6 +157,7 @@
     <Compile Include="Models\PrizeViewModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\TopicModel.cs" />
+    <Compile Include="Models\user\AddUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

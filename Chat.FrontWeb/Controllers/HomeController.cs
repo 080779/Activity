@@ -97,5 +97,10 @@ namespace Chat.FrontWeb.Controllers
             model.Result = lists;
             return View(model);
         }
+
+        public ActionResult SaveUser(string name,string mobile,bool gender,string address)
+        {
+            return Json("");
+        }
     }
 }
