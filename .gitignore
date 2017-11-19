@@ -244,3 +244,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /Chat.AdminWeb/App_Data/Log
+/Chat.AdminWeb/upload/2017/11/19
