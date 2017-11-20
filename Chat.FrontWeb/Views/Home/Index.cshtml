@@ -12,7 +12,7 @@
     <div class="index-bg">
         <div class="index-wrap">
             <div class="index-title">@Model.Activity.Name</div>
-            <div class="index-dec">@Model.Activity.Description</div>
+            <div class="index-dec">@Html.Raw(Model.Activity.Description.Replace("{{br}}", @"<br>"))</div>
         </div>
         <div class="index-wrap">
             <dl class="index-dl">

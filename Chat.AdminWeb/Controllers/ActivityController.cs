@@ -411,5 +411,10 @@ namespace Chat.AdminWeb.Controllers
             ViewBag.TotalCount = dtos.Count();
             return Json(new AjaxResult { Status = "success", Data = dtos });
         }
+
+        public ActionResult SetData()
+        {
+            return Json("aa");
+        }
     }
 }
