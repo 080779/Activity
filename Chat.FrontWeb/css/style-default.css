@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 /* font */
 @font-face{ font-family: "hzgb"; src: url('../font/hzgb.ttf') format('truetype');}
@@ -16,7 +16,7 @@
 	background: url(../img/default/bg-l.jpg) no-repeat fixed;
 	background-size: 100% auto;
 	box-sizing: border-box;
-	padding: 3%;
+	padding: 3% 3% 5rem;
 }
 
 .index-wrap{

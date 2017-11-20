@@ -178,7 +178,7 @@ namespace Chat.AdminWeb.Controllers
         {
             if(activityService.CheckByPaperId(id))
             {
-                return Json(new AjaxResult { Status = "error", ErrorMsg = "试卷正在被活动使用中" });
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "有活动正在使用此试卷，无法删除" });
             }
             if(!testPaperService.Delete(id))
             {
