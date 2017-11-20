@@ -133,11 +133,12 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult SaveUser(AddUser model)
         {
+            activityService.UpdateCount(model.Id, false, false, true, false, false);
             //if(!ModelState.IsValid)
             //{
             //    return Json(new AjaxResult { Status="error",ErrorMsg=MVCHelper.GetValidMsg(ModelState)});
             //}
-            if(string.IsNullOrEmpty(model.Name))
+            if (string.IsNullOrEmpty(model.Name))
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "姓名不能为空" });
             }
@@ -170,14 +171,13 @@ namespace Chat.FrontWeb.Controllers
             activityService.AddUserId(model.Id, userId);
             userService.RetSetWon(userId);
             userService.IsHavePrizeChance(userId);            
-            if(userId==-1)
+            if (userId==-1)
             {
                 return Json(new AjaxResult { Status = "error",ErrorMsg="你已参加本次活动，无法再次参与！" });
                 //userService.UpdateUser(model.Mobile, model.Name, model.Gender, model.Address);                
             }
             if(userId>0)
-            {
-                activityService.UpdateCount(model.Id, false, false, true, false, false);
+            {                
                 Session["Mobile"] = model.Mobile;
             }
             return Json(new AjaxResult { Status="success"});

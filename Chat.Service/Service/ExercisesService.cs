@@ -72,6 +72,11 @@ namespace Chat.Service.Service
             return dto;
         }
 
+        /// <summary>
+        /// 根据试卷id获得试题
+        /// </summary>
+        /// <param name="testPaperId"></param>
+        /// <returns></returns>
         public ExercisesDTO[] GetExercisesByPaperId(long testPaperId)
         {
             using (MyDbContext dbc = new MyDbContext())
