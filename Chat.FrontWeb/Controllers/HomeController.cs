@@ -46,6 +46,8 @@ namespace Chat.FrontWeb.Controllers
             model.ActivityName = activity.Name;
             model.Exercises= exeService.GetExercisesByPaperId(activity.PaperId);
             model.Id = activity.Id;
+            model.ImgUrl = activity.ImgUrl;
+            model.FirstUrl= settingService.GetValue("前端奖品图片地址"); 
             return View(model);
         }
 

@@ -254,6 +254,7 @@
             var datastring = datastr.replace("&nbsp;", " ");
             datastring = replaceAllstr(datastr);
             $("#description").val(datastring);
+            $("#desc").val(datastring.replace(/\n/g, "{{br}}").replace(/\s/g, "&nbsp;"));
         })
 </script>    
 }

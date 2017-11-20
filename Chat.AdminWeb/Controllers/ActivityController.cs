@@ -399,7 +399,20 @@ namespace Chat.AdminWeb.Controllers
             string fullPath = HttpContext.Server.MapPath("~" + path);
             new FileInfo(fullPath).Directory.Create();
             ImageProcessingJob jobNormal = new ImageProcessingJob();
-            jobNormal.Filters.Add(new FixedResizeConstraint(600, 600));//限制图片的大小，避免生成
+            jobNormal.Filters.Add(new FixedResizeConstraint(512, 512));//限制图片的大小，避免生成
+            jobNormal.SaveProcessedImageToFileSystem(file.InputStream, fullPath);
+            return path;
+        }
+
+        public string BackImgSave(HttpPostedFileBase file)
+        {
+            string md5 = CommonHelper.GetMD5(file.InputStream);
+            string ext = Path.GetExtension(file.FileName);
+            string path = "/upload/" + DateTime.Now.ToString("yyyy/MM/dd") + "/" + md5 + ext;
+            string fullPath = HttpContext.Server.MapPath("~" + path);
+            new FileInfo(fullPath).Directory.Create();
+            ImageProcessingJob jobNormal = new ImageProcessingJob();
+            jobNormal.Filters.Add(new FixedResizeConstraint(360, 640));//限制图片的大小，避免生成
             jobNormal.SaveProcessedImageToFileSystem(file.InputStream, fullPath);
             return path;
         }

@@ -128,7 +128,8 @@
 	position: relative;
 	/*min-height: 160%;*/
 	/*background: #b7ebf6 url(../img/default/bg2.png) repeat-y;*/
-	background: url(../img/default/bg-l.jpg) fixed;
+	background-image: url(../img/default/bg-i.jpg);
+    background-attachment: fixed;
 	background-size: 100% auto;
 }
 
@@ -199,7 +200,7 @@
 	min-height: 15rem;
 	background-size: 100% 100%;
 	box-sizing: border-box;
-	padding: 2rem 2rem 3rem 2.8rem;
+	padding: 2rem 3.5rem 3rem 2.8rem;
 }
 
 .anserli-knowledge{
@@ -272,7 +273,7 @@
 }
 
 .anserli-con{
-	padding: 0 2.5rem 0 1rem;
+	padding: 0 1rem;
 }
 
 .anserli-as{
