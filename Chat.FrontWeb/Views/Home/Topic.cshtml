@@ -15,7 +15,7 @@
             <div class="knowlege-con">
                 @for (int i = 0; i < Model.ExesTip.Count; i++)
                 {
-                    <div class="knowlege-qes">@i.@Model.ExesTip[i]</div>
+                    <div class="knowlege-qes">@(i+1).@Model.ExesTip[i]</div>
                 }                             
             </div>
         </div>
