@@ -163,7 +163,7 @@ namespace Chat.AdminWeb.Controllers
                 return Content("活动状态必须选择");
             }
             //statusId=6为活动正在进行中
-            if (activityService.CheckByPaperId(6))
+            if (activityService.CheckByStatusId(model.activityId,6))
             {
                 return Content("有活动已经在进行中，请选择其他状态");
             }

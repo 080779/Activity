@@ -253,12 +253,30 @@ namespace Chat.Service.Service
             }
         }
 
+        public bool CheckByStatusId(long id,long statusId)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                return cs.GetAll().Where(a=>a.Id!=id).Any(a => a.StatusId == id);
+            }
+        }
+
+        public bool CheckByStatusId(long statusId)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                return cs.GetAll().Any(a => a.StatusId == statusId);
+            }
+        }
+
         public bool CheckByPaperId(long id)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
-                return cs.GetAll().Any(a => a.StatusId == id);
+                return cs.GetAll().Any(a => a.PaperId == id);
             }
         }
 
