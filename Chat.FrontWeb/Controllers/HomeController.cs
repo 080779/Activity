@@ -16,6 +16,7 @@ namespace Chat.FrontWeb.Controllers
         public IActivityService activityService { get; set; }
         public IExercisesService exeService { get; set; }
         public IUserService userService { get; set; }
+        public ISettingService settingService { get; set; }
 
         public ActionResult Index()
         {
@@ -81,6 +82,7 @@ namespace Chat.FrontWeb.Controllers
             model.PrizeName = activity.PrizeName;
             model.PrizeImgUrl = activity.PrizeImgUrl;
             model.PrizeTime = activity.RewardTime;
+            model.PrizeFirstUrl = settingService.GetValue("前端奖品图片地址");
             var users = userService.GetByActivityIdIsWon(activity.Id);
             List<IsWonUser> winUsers = new List<IsWonUser>();            
             foreach (var user in users)

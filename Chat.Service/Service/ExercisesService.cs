@@ -142,6 +142,22 @@ namespace Chat.Service.Service
                 exe.OptionC = optionC;
                 exe.OptionD = optionD;
                 exe.RightKeyId = rightKeyId;
+
+                switch (rightKeyId)
+                {
+                    case 1:
+                        exe.Tip = title + optionA;
+                        break;
+                    case 2:
+                        exe.Tip = title + optionB;
+                        break;
+                    case 3:
+                        exe.Tip = title + optionC;
+                        break;
+                    case 4:
+                        exe.Tip = title + optionD;
+                        break;
+                }
                 exe.Title = title;
                 exe.Tip = tip;
                 dbc.SaveChanges();
