@@ -79,10 +79,10 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Content("有活动已经在进行中，不能存在两个同时进行的活动，请选择其他状态");
             }
-            if (model.imgUrl == null)
-            {
-                return Content("活动背景图不能为空");
-            }
+            //if (model.imgUrl == null)
+            //{
+            //    return Content("活动背景图不能为空");
+            //}
             string ext = Path.GetExtension(model.imgUrl.FileName);
             string[] imgs = { ".png", ".jpg", ".jpeg", ".bmp" };
             if (!imgs.Contains(ext))
@@ -109,10 +109,10 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Content("奖品名称不能为空");
             }
-            if (model.PrizeImgUrl == null)
-            {
-                return Content("奖品图片不能为空");
-            }
+            //if (model.PrizeImgUrl == null)
+            //{
+            //    return Content("奖品图片不能为空");
+            //}
             ext = Path.GetExtension(model.PrizeImgUrl.FileName);
             if (!imgs.Contains(ext))
             {

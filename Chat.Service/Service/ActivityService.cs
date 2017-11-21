@@ -107,10 +107,10 @@ namespace Chat.Service.Service
             {
                 CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
                 ActivityEntity entity = cs.GetAll().Include(a => a.Status).Include(a => a.Papers).SingleOrDefault(a => a.Status.Name == statusName);
-                //if (entity == null)
-                //{
-                //    return null;
-                //}
+                if (entity == null)
+                {
+                    return null;
+                }
                 return ToDTO(entity);
             }
         }

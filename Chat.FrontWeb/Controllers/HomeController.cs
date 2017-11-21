@@ -20,13 +20,17 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult Index()
         {
-            ActivityViewModel model = new ActivityViewModel();
-            model.Activity= activityService.GetByStatus("答题进行中");
-            if(model.Activity==null)
+            ActivityViewModel model = new ActivityViewModel();            
+            if(activityService.GetByStatus("答题进行中") == null)
             {
                 model.Activity = activityService.GetNew();
             }
-            if(activityService.GetAll().Count()<=0)
+            else
+            {
+                model.Activity = activityService.GetByStatus("答题进行中");
+            }
+            
+            if (activityService.GetAll().Count()<=0)
             {
                 return Content("当前没有活动！");
             }
