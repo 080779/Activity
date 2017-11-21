@@ -16,10 +16,12 @@ namespace Test
 {
     class Program
     {
-        static void Main3(string[] args)
+        static void Main(string[] args)
         {
+            IActivityService actService = new ActivityService();
+            bool b= actService.CheckByStatusId(19, 6);
             string m= CommonHelper.FormatMoblie("15615615656");
-            Console.WriteLine(m);
+            Console.WriteLine(b);
             Console.ReadKey();
         }
 
@@ -103,7 +105,7 @@ namespace Test
             Console.WriteLine("ok");
             Console.ReadKey();
         }
-        static void Main(string[] args)
+        static void Main3(string[] args)
         {
             IAdminUserService adminService = new AdminUserService();
             IRoleService roleService = new RoleService();

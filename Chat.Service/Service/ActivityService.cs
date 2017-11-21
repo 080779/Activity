@@ -177,6 +177,56 @@ namespace Chat.Service.Service
             }
         }
 
+        /// <summary>
+        /// 根据条件查询活动
+        /// </summary>
+        /// <param name="statusId">活动状态</param>
+        /// <param name="startTime">活动开始时间</param>
+        /// <param name="endTime">活动结束时间</param>
+        /// <param name="keyWord">关键字</param>
+        /// <param name="currentIndex">跳过的条数（（当前页-1）*每页数）</param>
+        /// <param name="pageSize">每页数</param>
+        /// <returns></returns>
+        public ActivitySearchResult Search(long? statusId, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<Entities.ActivityEntity>(dbc);
+                var items = cs.GetAll();
+                if (statusId != null)
+                {
+
+                    items = items.Where(p => p.StatusId == statusId);
+                }
+                if (startTime != null)
+                {
+                    startTime = DateTimeHelper.GetBeginDate((DateTime)startTime);
+                    items = items.Where(p => p.CreateDateTime >= startTime);
+                }
+                if (endTime != null)
+                {
+                    endTime = DateTimeHelper.GetEndDate((DateTime)endTime);
+                    items = items.Where(p => p.CreateDateTime <= endTime);
+                }
+                if (!string.IsNullOrEmpty(keyWord))
+                {
+                    items = items.Where(p => p.Name.Contains(keyWord) || p.Description.Contains(keyWord));
+                }
+                items = items.OrderByDescending(p => p.CreateDateTime);
+                int count = items.Count();
+                ActivitySearchResult result = new ActivitySearchResult();
+                result.Activities= items.Skip(currentIndex).Take(pageSize).ToList().Select(p => ToDTO(p)).ToArray();
+                result.TotalCount = count;
+                return result;
+            }
+        }
+
+        public class ActivitySearchResult
+        {
+            public ActivityDTO[] Activities { get; set; }
+            public int TotalCount { get; set; }
+        }
+
         public bool Delete(long id)
         {
             using (MyDbContext dbc = new MyDbContext())
@@ -258,7 +308,7 @@ namespace Chat.Service.Service
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
-                return cs.GetAll().Where(a=>a.Id!=id).Any(a => a.StatusId == id);
+                return cs.GetAll().Any(a => a.Id==id && a.StatusId == statusId);
             }
         }
 
