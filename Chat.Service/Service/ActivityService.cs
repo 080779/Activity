@@ -82,6 +82,11 @@ namespace Chat.Service.Service
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                long count = cs.GetTotalCount();
+                if(count<=0)
+                {
+                    return null;
+                }
                 ActivityEntity entity = cs.GetAll().OrderByDescending(a => a.CreateDateTime).First();
                 return ToDTO(entity);
             }
@@ -98,6 +103,20 @@ namespace Chat.Service.Service
                     return null;
                 }
                 return ToDTO(entity);
+            }
+        }
+
+        /// <summary>
+        /// 判断活动id 的活动是否存在
+        /// </summary>
+        /// <param name="id">活动id</param>
+        /// <returns></returns>
+        public bool ExistActivity(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                return cs.GetAll().Any(a=>a.Id==id);
             }
         }
 
@@ -136,12 +155,7 @@ namespace Chat.Service.Service
                 activity.PrizeName = prizeName;
                 if (!string.IsNullOrWhiteSpace(prizeImgUrl))
                     activity.PrizeImgUrl = prizeImgUrl;
-                activity.AnswerCount = 0;
-                activity.ForwardCount = 0;
-                activity.HavePrizeCount = 0;
-                activity.PrizeCount = 0;
                 activity.StatusId = statusId;
-                activity.VisitCount = 0;
                 dbc.SaveChanges();
                 return true;
             }
@@ -311,8 +325,21 @@ namespace Chat.Service.Service
                 return cs.GetAll().Any(a => a.Id==id && a.StatusId == statusId);
             }
         }
+        /// <summary>
+        /// 检查状态是否存在，添加活动时使用
+        /// </summary>
+        /// <param name="statusId"></param>
+        /// <returns></returns>
+        public bool CheckByStatusId(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                return cs.GetAll().Any(a => a.StatusId == id);
+            }
+        }
 
-        public bool CheckByStatusId(long statusId)
+        public bool CheckByStatusIdExcludeMe(long id,long statusId)
         {
             using (MyDbContext dbc = new MyDbContext())
             {

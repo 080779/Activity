@@ -14,6 +14,7 @@ namespace Chat.IService.Interface
         ActivityDTO[] GetPageData(int pageSize, int currentIndex);
         ActivityDTO GetNew();
         ActivityDTO GetById(long id);
+        bool ExistActivity(long id);
         ActivityDTO GetByStatus(string statusName);
         bool Update(long id, string name, string description, long statusId, string imgUrl, DateTime startTime, DateTime examEndTime, DateTime rewardTime, long paperId, string prizeName, string prizeImgUrl);
         ActivityDTO[] Search(long? statusId, DateTime? startTime, DateTime? endTime, string keyWord);
@@ -22,7 +23,8 @@ namespace Chat.IService.Interface
         ActivityDTO[] GetByUserId(long id);
         long GetTotalCount();
         bool CheckByStatusId(long id,long statusId);
-        bool CheckByStatusId(long statusId);
+        bool CheckByStatusId(long id);
+        bool CheckByStatusIdExcludeMe(long id,long statusId);
         bool CheckByPaperId(long id);
         /// <summary>
         /// 更新访问次数等

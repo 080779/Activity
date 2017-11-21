@@ -19,7 +19,8 @@ namespace Test
         static void Main(string[] args)
         {
             IActivityService actService = new ActivityService();
-            bool b= actService.CheckByStatusId(19, 6);
+            //bool b= actService.CheckByStatusId(19, 6);
+            bool b = actService.ExistActivity(13);
             string m= CommonHelper.FormatMoblie("15615615656");
             Console.WriteLine(b);
             Console.ReadKey();
