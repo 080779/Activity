@@ -63,7 +63,10 @@ namespace Chat.FrontWeb.Controllers
             {
                 activity = activityService.GetByStatus("答题进行中");
             }
-            activity = activityService.GetById(id);
+            else
+            {
+                activity = activityService.GetById(id);
+            }            
             model.ActivityName = activity.Name;
             var exetips = exeService.GetExercisesByPaperId(activity.PaperId);
             List<string> lists = new List<string>();
@@ -82,6 +85,10 @@ namespace Chat.FrontWeb.Controllers
             if (id <= 0)
             {
                 activity = activityService.GetByStatus("答题进行中");
+            }
+            else
+            {
+                activity = activityService.GetById(id);
             }
             activity = activityService.GetById(id);
             model.ActivityName = activity.Name;
