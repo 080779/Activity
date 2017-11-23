@@ -152,7 +152,7 @@ namespace Chat.FrontWeb.Controllers
             return View(model);
         }
 
-        public ActionResult Topic(long id)
+        public ActionResult Topic(long id,string topic="home")
         {
             TopicModel model = new TopicModel();
             ActivityDTO activity;
@@ -171,6 +171,7 @@ namespace Chat.FrontWeb.Controllers
             {
                 lists.Add(exetip.Tip);
             }
+            model.Topic = topic;
             model.ExesTip = lists;
             return View(model);
         }

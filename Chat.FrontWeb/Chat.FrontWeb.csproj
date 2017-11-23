@@ -143,10 +143,6 @@
     <Content Include="img\default\tit-bg.png" />
     <Content Include="img\default\tm-bg.png" />
     <Content Include="js\jquery.min.js" />
-    <Content Include="pic\header1.jpg" />
-    <Content Include="pic\header2.jpg" />
-    <Content Include="pic\header3.jpg" />
-    <Content Include="pic\pro1.jpg" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

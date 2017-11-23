@@ -289,19 +289,19 @@ namespace Chat.AdminWeb.Controllers
             }
             if (id == -2)
             {
-                return Json(new AjaxResult { Status = "error", ErrorMsg = "不能添加活动的状态为“答题进行中”，“答题进行中”状态已经存在,只能有一个活动为“答题进行中”或“开奖中”" });
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "不能编辑活动的状态为“答题进行中”，“答题进行中”状态已经存在,只能有一个活动为“答题进行中”或“开奖中”" });
             }
             if (id == -3)
             {
-                return Json(new AjaxResult { Status = "error", ErrorMsg = "不能添加活动的状态为“答题进行中”，“开奖中”状态已经存在,只能有一个活动为“答题进行中”或“开奖中”" });
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "不能编辑活动的状态为“答题进行中”，“开奖中”状态已经存在,只能有一个活动为“答题进行中”或“开奖中”" });
             }
             if (id == -4)
             {
-                return Json(new AjaxResult { Status = "error", ErrorMsg = "不能添加活动的状态为“开奖中”，“答题进行中”状态已经存在,只能有一个活动为“答题进行中”或“开奖中”" });
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "不能编辑活动的状态为“开奖中”，“答题进行中”状态已经存在,只能有一个活动为“答题进行中”或“开奖中”" });
             }
             if (id == -5)
             {
-                return Json(new AjaxResult { Status = "error", ErrorMsg = "不能添加活动的状态为“开奖中”，“开奖中”状态已经存在,只能有一个活动为“答题进行中”或“开奖中”" });
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "不能编辑活动的状态为“开奖中”，“开奖中”状态已经存在,只能有一个活动为“答题进行中”或“开奖中”" });
             }
             if (id == -6)
             {
