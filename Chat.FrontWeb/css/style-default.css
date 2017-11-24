@@ -1,4 +1,4 @@
-﻿@charset "utf-8";
+@charset "utf-8";
 
 /* font */
 @font-face{ font-family: "hzgb"; src: url('../font/hzgb.ttf') format('truetype');}
@@ -201,7 +201,7 @@
 	min-height: 15rem;
 	background-size: 100% 100%;
 	box-sizing: border-box;
-	padding: 2rem 2rem 3rem 2.8rem;
+	padding: 2rem 2.5rem 3rem 2rem;
 }
 
 .anserli-knowledge{
@@ -274,7 +274,7 @@
 }
 
 .anserli-con{
-	padding: 0 2.5rem 0 1rem;
+	padding: 0 1.5rem;
 }
 
 .anserli-as{
