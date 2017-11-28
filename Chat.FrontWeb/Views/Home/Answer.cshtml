@@ -35,7 +35,7 @@
             </div>
             <div class="anser-btn">
                 <a href="~/home/index" class="btn-home">返回首页</a>
-                <a href="#" id="btnSave" class="btn-sub">提交答卷</a>@*~/home/result*@
+                <a href="#" id="btnSave" class="btn-sub">提交答卷</a>
             </div>
         </div>
     </div>
@@ -48,12 +48,12 @@
 
                     if (!that.hasClass("isrightclass")) {
                         //回答错误
-                        $(this).addClass('wrong').siblings().removeClass('wrong right');
+                        $(this).addClass('wrong').siblings().removeClass('wrong right').unbind("click");
                         qus.find('.anserli-knowledge').css('display', 'block');
                     }
                     else {
                         //回答正确
-                        $(this).addClass('right').siblings().removeClass('wrong right');
+                        $(this).addClass('right').siblings().removeClass('wrong right').unbind("click");
                         qus.find('.anserli-knowledge').css('display', 'none');
                     }
                 })

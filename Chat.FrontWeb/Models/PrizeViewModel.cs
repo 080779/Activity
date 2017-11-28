@@ -8,6 +8,7 @@ namespace Chat.FrontWeb.Models
 {
     public class PrizeViewModel
     {
+        public long ActivityId { get; set; }
         public string ActivityName { get; set; }
         public string PrizeName { get; set; }
         public string PrizeImgUrl { get; set; }

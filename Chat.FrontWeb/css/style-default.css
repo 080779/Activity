@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 /* font */
 @font-face{ font-family: "hzgb"; src: url('../font/hzgb.ttf') format('truetype');}
@@ -288,7 +288,8 @@
 }
 
 .anserli-as.wrong{
-	border: 2px solid #2a2a30;
+	/*border: 2px solid #2a2a30;*/
+    background-color:red;
 	background-image: url(../img/default/icon-wrong.png);
 	background-repeat: no-repeat;
 	background-position: 93% center;
@@ -297,13 +298,13 @@
 }
 
 .anserli-as.right{
-	background-color: #edd121;
+	background-color:forestgreen;
 	background-image: url(../img/default/icon-right.png);
 	background-repeat: no-repeat;
 	background-position: 93% center;
 	background-size: .7rem auto;
 	padding-right: 2rem;
-	box-shadow: 0 4px 0 rgba(210,184,22,1);
+	/*box-shadow: 0 4px 0 rgba(210,184,22,1);*/
 }
 
 .anser-btn{

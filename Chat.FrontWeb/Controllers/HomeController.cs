@@ -189,6 +189,7 @@ namespace Chat.FrontWeb.Controllers
                 activity = activityService.GetById(id);
             }
             activity = activityService.GetById(id);
+            model.ActivityId = activity.Id;
             model.ActivityName = activity.Name;
             model.PrizeName = activity.PrizeName;
             model.PrizeImgUrl = activity.PrizeImgUrl;
@@ -200,7 +201,7 @@ namespace Chat.FrontWeb.Controllers
             foreach (var user in users)
             {
                 IsWonUser winUser = new IsWonUser();
-                winUser.UserName = user.Name;
+                winUser.UserName = CommonHelper.FormatUserName(user.Name);
                 winUser.Mobile = CommonHelper.FormatMoblie(user.Mobile);
                 winUsers.Add(winUser);
             }
@@ -209,6 +210,24 @@ namespace Chat.FrontWeb.Controllers
             string mobile = (string)Session["Mobile"];
             model.UserIsWon = userService.UserIsWonByMobile(mobile);
             return View(model);
+        }
+
+        public ActionResult PrizeUserSearch(long id,string lastM)
+        {
+            var users= userService.SearchIsWon(id,lastM,0,10);
+            if(users==null)
+            {
+                return Json(new AjaxResult { Status = "error",ErrorMsg="查询没有数据" });
+            }
+            List<SearchUser> lists = new List<SearchUser>();
+            foreach(var user in users.Users)
+            {
+                SearchUser item = new SearchUser();
+                item.UserName = CommonHelper.FormatUserName(user.Name);
+                item.Mobile = CommonHelper.FormatMoblie(user.Mobile);
+                lists.Add(item);
+            }
+            return Json(new AjaxResult { Status="success",Data=lists});
         }
 
         public ActionResult Result(string asks,long id)
@@ -291,6 +310,7 @@ namespace Chat.FrontWeb.Controllers
             {                
                 Session["Mobile"] = model.Mobile;
             }
+            activityService.UpdateCount(model.Id, false, false, false, true, false);
             return Json(new AjaxResult { Status="success"});
         }
     }

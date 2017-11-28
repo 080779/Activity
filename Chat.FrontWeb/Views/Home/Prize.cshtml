@@ -12,6 +12,7 @@
     <div class="prize-bg">
         <div class="prize-t">
             <div class="prize-active-tit font">
+                <input type="hidden" id="id" value="@Model.ActivityId" />
                 <p>@Model.ActivityName</p>
                 <p>活动奖项</p>
             </div>
@@ -36,7 +37,7 @@
         }        
         <div class="prize-people">
             <div class="prize-people-tit">获奖用户名</div>
-            <div class="prize-list">
+            <div class="prize-list" id="prize_user">
                 @if (Model.StatusName=="开奖中")
                 {
                     foreach (var user in Model.Users)
@@ -50,10 +51,40 @@
                     }
                 }            
             </div>
+            
         </div>
         <div class="prize-btn">
+            <div>手机号后四位：<input id="lastMoblie" type="text"><button id="btnSearch">search</button></div>
             <a href="~/home/index">返回首页</a>
         </div>
     </div>
+    <script src="~/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#btnSearch").click(function () {
+                var lastM = $("#lastMoblie").val();
+                var id = $("#id").val();
+                $.ajax({
+                    url: "/home/prizeusersearch", type: "post", data: { id: id, lastM: lastM },
+                    success: function (result) {
+                        if (result.status == "error") {
+                            alert(result.errorMsg);
+                        }
+                        else if (result.status == "success") {
+                            $("#prize_user").empty();
+                            for (var i = 0; i < result.data.length; i++)
+                            {
+                                $("#prize_user").append('<div class="prize-li"><div class="prize-li-header"><span>' + result.data[i].userName + '</span></div><div class="prize-li-phone">' + result.data[i].mobile + '</div></div>');
+                            }                            
+                        }
+                        else {
+                            alert("未知错误");
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

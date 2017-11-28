@@ -339,7 +339,7 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status="error",ErrorMsg="不存在这个答题活动"});
             }
-            return Json(new AjaxResult { Status = "success", Data = userService.PrizeSearch1(id,startTime, endTime, keyWord,0,10) });
+            return Json(new AjaxResult { Status = "success", Data = userService.GetByActivityIdHavePrize(id,startTime, endTime, keyWord,0,10).Users });
         }
 
         [HttpPost]

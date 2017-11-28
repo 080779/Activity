@@ -132,7 +132,7 @@ namespace Chat.Service.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public UserSearchResult GetByActivityIdHavePrize(long id, int currentIndex, int pageSize)
+        public UserSearchResult GetByActivityIdHavePrize(long id, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -147,6 +147,18 @@ namespace Chat.Service.Service
                             from a in u.Activities
                             where a.Id == id && u.IsDeleted == false && u.LoginErrorTimes==1
                             select u;
+                if(startTime!=null)
+                {
+                    users = users.Where(u => u.CreateDateTime >= startTime);
+                }
+                if(endTime!=null)
+                {
+                    users = users.Where(u => u.CreateDateTime >= endTime);
+                }
+                if(!string.IsNullOrEmpty(keyWord))
+                {
+                    users = users.Where(u => u.Name.Contains(keyWord) || u.Mobile.Contains(keyWord));
+                }
                 UserSearchResult result = new UserSearchResult();
                 result.TotalCount = users.Count();
                 result.Users = users.OrderByDescending(u=>u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
@@ -192,6 +204,31 @@ namespace Chat.Service.Service
                 UserSearchResult result = new UserSearchResult();
                 result.TotalCount = users.Count();
                 result.Users = users.OrderByDescending(u=>u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
+                return result;
+            }
+        }
+
+        public UserSearchResult SearchIsWon(long activityId, string lastM, int currentIndex, int pageSize)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                var activity = cs.GetAll().SingleOrDefault(a => a.Id == activityId);
+                if (activity == null)
+                {
+                    return null;
+                }
+                var users = from u in dbc.Users
+                            from a in u.Activities
+                            where a.Id == activityId && u.IsDeleted == false && u.IsWon == true
+                            select u;
+                UserSearchResult result = new UserSearchResult();
+                if (!string.IsNullOrEmpty(lastM))
+                {
+                    users = users.Where(u=>u.Mobile.Contains(lastM));
+                }
+                result.TotalCount = users.Count();
+                result.Users = users.OrderByDescending(u => u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
                 return result;
             }
         }
@@ -291,7 +328,7 @@ namespace Chat.Service.Service
                 }
                 UserSearchResult result = new UserSearchResult();
                 result.TotalCount = items.Count();
-                result.Users= items.Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
+                result.Users= items.OrderByDescending(u=>u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
                 return result;
             }
         }
