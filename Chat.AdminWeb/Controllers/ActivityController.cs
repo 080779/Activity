@@ -324,31 +324,72 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("manager")]
-        public ActionResult Prize(long id)
+        public ActionResult Prize(long id,int pageIndex=1)
         {
             PrizeSetModel model = new PrizeSetModel();
-            model.Users = userService.GetByActivityIdHavePrize1(id);
+            UserSearchResult result= userService.GetByActivityIdHavePrize(id, null, null, null, 0, 20);
+            model.Users = result.Users;
             model.ActivityId = id;
+            //分页
+            Pagination pager = new Pagination();
+            pager.CurrentLinkClassName = "curPager";
+            pager.MaxPagerCount = 10;
+            pager.PageIndex = pageIndex;//这些数据，cshtml不知道，就必须让Action传递给我们
+            //对于所有cshtml要用到，但是又获取不到的数据，都由Action来获取，然后放到ViewBag或者Model中传递给cshtml
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+            pager.UrlPattern = "javascript:getPage({pn});";
+            if(result.TotalCount<=20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
             return View(model);
         }
         [HttpPost]
         [Permission("manager")]
-        public ActionResult PrizeSearch(long id, DateTime? startTime, DateTime? endTime, string keyWord)
+        public ActionResult PrizeSearch(long id, DateTime? startTime, DateTime? endTime, string keyWord,int pageIndex=1)
         {
             if(id<=0)
             {
                 return Json(new AjaxResult { Status="error",ErrorMsg="不存在这个答题活动"});
             }
-            return Json(new AjaxResult { Status = "success", Data = userService.GetByActivityIdHavePrize(id,startTime, endTime, keyWord,0,10).Users });
+            PrizeSetModel model = new PrizeSetModel();
+            UserSearchResult result= userService.GetByActivityIdHavePrize(id, startTime, endTime, keyWord, (pageIndex-1)*20, 20);
+
+            Pagination pager = new Pagination();
+            pager.CurrentLinkClassName = "curPager";
+            pager.MaxPagerCount = 10;
+            pager.PageIndex = pageIndex;//这些数据，cshtml不知道，就必须让Action传递给我们
+            //对于所有cshtml要用到，但是又获取不到的数据，都由Action来获取，然后放到ViewBag或者Model中传递给cshtml
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+            pager.UrlPattern = "javascript:getPage({pn});";
+
+            model.ActivityId = id;
+            model.Users = result.Users;
+            if(result.TotalCount<=20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+
+            return Json(new AjaxResult { Status = "success", Data = model});
         }
 
         [HttpPost]
         [Permission("manager")]
-        public ActionResult PrizeWon(long[] isWonIds)
+        public ActionResult PrizeWon(long[] isWonIds,long activityId)
         {
             for(int i=0;i<isWonIds.Length;i++)
             {
-                userService.SetWon(isWonIds[i]);
+                userService.SetWon(isWonIds[i],activityId);
                 userService.ReSetPrizeChance(isWonIds[i]);
             }
             return Json("success");

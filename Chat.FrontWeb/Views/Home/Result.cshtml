@@ -31,6 +31,7 @@
             {
                 <div id="tj">
                     <input type="hidden" class="right" id="right" value="@Model.Id" />
+                    <input type="hidden" id="isfirst" value="@Model.IsFirst" />
                     <!--答题正确-->
                     <div class="result-rs font">恭喜您全部答对！</div>
                     <div class="result-rs font">请完善个人信息，并关注官方微信公众号<br />获取抽奖资格！</div>
@@ -100,6 +101,13 @@
         })
 
         $(function () {
+
+            if ($("#isfirst").val == 1)
+            {
+                $("#tj").css('display', 'none');
+                $("#tjwc").css('display', 'block');
+            }
+
             $(".jsClose").click(function () {
                 $(".mask").css("display", "none");
             });

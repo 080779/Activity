@@ -225,7 +225,7 @@ namespace Chat.Service.Service
                 UserSearchResult result = new UserSearchResult();
                 if (!string.IsNullOrEmpty(lastM))
                 {
-                    users = users.Where(u=>u.Mobile.Contains(lastM));
+                    users = users.Where(u=>u.Mobile.Substring(7).Contains(lastM));
                 }
                 result.TotalCount = users.Count();
                 result.Users = users.OrderByDescending(u => u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
@@ -333,7 +333,7 @@ namespace Chat.Service.Service
             }
         }
 
-        public bool SetWon(long id)
+        public bool SetWon(long id,long activityId)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -345,6 +345,17 @@ namespace Chat.Service.Service
                 }
                 user.IsWon = true;
                 user.WinCount++;
+
+                var acts = from a in dbc.Activities
+                           from u in a.Users
+                           where u.Id == id
+                           select a;
+                var act= acts.SingleOrDefault(a => a.Id == activityId);
+                if(act==null)
+                {
+                    return false;
+                }
+                act.PrizeCount++;
                 dbc.SaveChanges();
                 return true;
             }

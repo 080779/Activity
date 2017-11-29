@@ -214,6 +214,25 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult PrizeUserSearch(long id,string lastM)
         {
+            var act= activityService.GetById(id);
+            if(act==null)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "活动不存在" });
+            }
+            if(act.StatusName!="开奖中")
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "活动尚未开奖" });
+            }
+            long lastm;
+            bool b= long.TryParse(lastM, out lastm);
+            if(!b)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "手机号码必须是数字" });
+            }
+            if(lastM.Length!=4)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请输入四位数字" });
+            }
             var users= userService.SearchIsWon(id,lastM,0,10);
             if(users==null)
             {
@@ -257,6 +276,7 @@ namespace Chat.FrontWeb.Controllers
                 lists.Add(b ? "right" : "wrong");
             }
             model.IsAllRight = count == strs.Count();
+            model.IsFirst = 1;
             model.Result = lists;
             return View(model);
         }
