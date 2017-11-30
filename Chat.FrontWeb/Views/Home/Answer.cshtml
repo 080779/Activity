@@ -81,6 +81,19 @@
                     }
                     else {
                         window.location.href = "/home/result?id=" + id + "&asks=" + tid;
+                        action = "/home/result";
+                        form = $("<form></form>");
+                        form.attr('action', action);
+                        form.attr('method', 'post');
+                        input1 = $("<input type='hidden' name='id' />");
+                        input1.attr('value', id);
+                        input2 = $("<input type='text' name='asks'/>");
+                        input2.attr('value',tid);
+                        form.append(input1);
+                        form.append(input2);
+                        form.appendTo("body");
+                        form.css('display', 'none');
+                        form.submit();
                     }
                     //$.post("/home/result",
                     //{

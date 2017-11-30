@@ -148,7 +148,8 @@ namespace Chat.FrontWeb.Controllers
             model.Exercises= exeService.GetExercisesByPaperId(activity.PaperId);
             model.Id = activity.Id;
             model.ImgUrl = activity.ImgUrl;
-            model.FirstUrl= settingService.GetValue("前端奖品图片地址"); 
+            model.FirstUrl= settingService.GetValue("前端奖品图片地址");
+            Session["IsFirst"] = true;
             return View(model);
         }
 
@@ -251,38 +252,71 @@ namespace Chat.FrontWeb.Controllers
 
         public ActionResult Result(string asks,long id)
         {
-
-            if(string.IsNullOrEmpty(asks))
+            if((bool)Session["IsFirst"])
             {
-                return Content("请答完题再提交");
-            }
-            ResultModel model = new ResultModel();
-            ActivityDTO activity = activityService.GetById(id);
-            model.ActivityName = activity.Name;
-            model.Id = activity.Id;
-            model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd");
-            long paperId = activity.PaperId;
-            string[] strs = asks.Trim(',').Split(',');
-            List<string> lists = new List<string>();
-            int count = 0;
-            foreach(string str in strs)
-            {
-                string[] results = str.Split(':');
-                bool b = exeService.IsRightOrWrong(paperId, Convert.ToInt64(results[0]), Convert.ToInt64(results[1]));
-                if(b)
+                if (string.IsNullOrEmpty(asks))
                 {
-                    count++;
+                    return Content("请答完题再提交");
                 }
-                lists.Add(b ? "right" : "wrong");
+                ResultModel model = new ResultModel();
+                ActivityDTO activity = activityService.GetById(id);
+                model.ActivityName = activity.Name;
+                model.Id = activity.Id;
+                model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd");
+                long paperId = activity.PaperId;
+                string[] strs = asks.Trim(',').Split(',');
+                List<string> lists = new List<string>();
+                int count = 0;
+                foreach (string str in strs)
+                {
+                    string[] results = str.Split(':');
+                    bool b = exeService.IsRightOrWrong(paperId, Convert.ToInt64(results[0]), Convert.ToInt64(results[1]));
+                    if (b)
+                    {
+                        count++;
+                    }
+                    lists.Add(b ? "right" : "wrong");
+                }
+                model.IsAllRight = count == strs.Count();
+                model.Result = lists;
+                model.IsFirst = true;
+                return View(model);
             }
-            model.IsAllRight = count == strs.Count();
-            model.IsFirst = 1;
-            model.Result = lists;
-            return View(model);
+            else
+            {
+                if (string.IsNullOrEmpty(asks))
+                {
+                    return Content("请答完题再提交");
+                }
+                ResultModel model = new ResultModel();
+                ActivityDTO activity = activityService.GetById(id);
+                model.ActivityName = activity.Name;
+                model.Id = activity.Id;
+                model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd");
+                long paperId = activity.PaperId;
+                string[] strs = asks.Trim(',').Split(',');
+                List<string> lists = new List<string>();
+                int count = 0;
+                foreach (string str in strs)
+                {
+                    string[] results = str.Split(':');
+                    bool b = exeService.IsRightOrWrong(paperId, Convert.ToInt64(results[0]), Convert.ToInt64(results[1]));
+                    if (b)
+                    {
+                        count++;
+                    }
+                    lists.Add(b ? "right" : "wrong");
+                }
+                model.IsAllRight = count == strs.Count();
+                model.Result = lists;
+                model.IsFirst = false;
+                return View(model);
+            }
         }
 
         public ActionResult SaveUser(AddUser model)
         {
+            Session["IsFirst"] = false;
             activityService.UpdateCount(model.Id, false, false, true, false, false);
             //if(!ModelState.IsValid)
             //{

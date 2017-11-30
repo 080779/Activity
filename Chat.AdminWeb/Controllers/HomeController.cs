@@ -13,6 +13,7 @@ namespace Chat.AdminWeb.Controllers
     public class HomeController : Controller
     {
         public IAdminUserService adminService { get; set; }
+        public ISettingService settingService { get; set; }
 
         public ActionResult Login()
         {
@@ -26,6 +27,8 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
             }
+            settingService.UpdateValue("前端奖品图片地址", "http://104.151.50.99:8225");
+
             if (adminService.CheckLogin(model.Name, model.Password))
             {
                 Session["AdminUserId"] = adminService.GetByName(model.Name).Id;

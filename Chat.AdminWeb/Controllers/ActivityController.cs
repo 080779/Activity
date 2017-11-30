@@ -22,7 +22,7 @@ namespace Chat.AdminWeb.Controllers
         public IActivityService activityService { get; set; }
         public ITestPaperService paperService { get; set; }
         public IIdNameService idNameService { get; set; }
-        public IUserService userService { get; set; }
+        public IUserService userService { get; set; }        
 
         [Permission("list")]
         public ActionResult List(int pageIndex=1)
@@ -79,7 +79,6 @@ namespace Chat.AdminWeb.Controllers
                 return Content("请上传奖品图片文件，支持格式“png、jpg、jpeg、bmp”");
             }            
             long id= activityService.AddNew(model.Name, model.Description,model.StatusId, PicSave(model.imgUrl), model.StartTime, model.ExamEndTime, model.RewardTime, model.PaperId, model.PrizeName, PicSave(model.PrizeImgUrl));
-                        
             return Redirect("~/activity/list");
         }
         [Permission("manager")]
@@ -126,7 +125,6 @@ namespace Chat.AdminWeb.Controllers
             }               
             
             bool b = activityService.Update( model.activityId,model.Name, model.Description, model.StatusId, sImgPath, model.StartTime, model.ExamEndTime, model.RewardTime, model.PaperId, model.PrizeName,sPrizeImgPath);
-            
             return Redirect("~/activity/list");
         }
         [Permission("manager")]

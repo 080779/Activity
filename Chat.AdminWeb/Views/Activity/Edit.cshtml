@@ -40,13 +40,13 @@
                                     </option>
                                 }
                             </select>
-                            <!-<label class="col-sm-9 control-label">只有一个活动处于“答题进行中”或“开奖中”、“已结束”活动不能再设置其他状态</label>-->
+                            <label class="col-sm-9 control-label">只有一个活动处于“答题进行中”或“开奖中”、“已结束”活动不能再设置其他状态</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">活动背景图:</label>
                         <div class="col-sm-6">
-                            <input type="file" id="file_back" name="imgUrl" />
+                            <input type="file" id="file_back" name="imgUrl" /><p>请上传360*640图片，支持格式“png、jpg、jpeg、bmp”</p>
                             <img src="@Model.Activity.ImgUrl" id="img_back" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
                             <input type="hidden" id="val_back_img" value="@Model.Activity.ImgUrl" />
                         </div>
@@ -124,7 +124,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">奖品图片:</label>
                         <div class="col-sm-6">
-                            <input type="file" name="prizeImgUrl" id="file_prize" />
+                            <input type="file" name="prizeImgUrl" id="file_prize" /><p>请上传512*512图片，支持格式“png、jpg、jpeg、bmp”</p>
                             <img src="@Model.Activity.PrizeImgUrl" id="img_prize" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
                             <input type="hidden" id="val_prize_img" value="@Model.Activity.PrizeImgUrl" />
                         </div>
