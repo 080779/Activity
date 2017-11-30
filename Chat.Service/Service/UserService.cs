@@ -314,12 +314,12 @@ namespace Chat.Service.Service
                 }
                 if (startTime != null)
                 {
-                    startTime = DateTimeHelper.GetBeginDate((DateTime)startTime);
+                    startTime = (DateTime)startTime;
                     items = items.Where(u => u.CreateDateTime >= startTime);
                 }
                 if (endTime != null)
                 {
-                    endTime = DateTimeHelper.GetEndDate((DateTime)endTime);
+                    endTime = (DateTime)endTime;
                     items = items.Where(u => u.CreateDateTime <= endTime);
                 }
                 if (keyWord != null)

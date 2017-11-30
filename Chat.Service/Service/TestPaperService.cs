@@ -95,12 +95,12 @@ namespace Chat.Service.Service
                 var items = cs.GetAll();
                 if(startTime!= null)
                 {
-                    startTime = DateTimeHelper.GetBeginDate((DateTime)startTime);
+                    startTime = (DateTime)startTime;
                     items = items.Where(p => p.CreateDateTime >= startTime);
                 }
                 if(endTime!= null)
                 {
-                    endTime = DateTimeHelper.GetEndDate((DateTime)endTime);
+                    endTime = (DateTime)endTime;
                     items = items.Where(p => p.CreateDateTime <= endTime);
                 }
                 if(!string.IsNullOrEmpty(keyWord))

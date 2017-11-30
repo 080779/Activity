@@ -30,9 +30,9 @@ namespace Chat.FrontWeb.Controllers
                     model.Id = activity.Id;
                     model.Name = activity.Name;
                     model.Description = activity.Description;
-                    model.StartTime = activity.StartTime.ToString("yyyy-MM-dd");
-                    model.ExamEndTime = activity.ExamEndTime.ToString("yyyy-MM-dd");
-                    model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd");
+                    model.StartTime = activity.StartTime.ToString("yyyy-MM-dd HH:mm");
+                    model.ExamEndTime = activity.ExamEndTime.ToString("yyyy-MM-dd HH:mm");
+                    model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
                     model.AnswerCount = activity.AnswerCount;
                     model.StatusName = activity.StatusName;
                 }
@@ -54,9 +54,9 @@ namespace Chat.FrontWeb.Controllers
                 model.Id = activity.Id;
                 model.Name = activity.Name;
                 model.Description = activity.Description;
-                model.StartTime = activity.StartTime.ToString("yyyy-MM-dd");
-                model.ExamEndTime = activity.ExamEndTime.ToString("yyyy-MM-dd");
-                model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd");
+                model.StartTime = activity.StartTime.ToString("yyyy-MM-dd HH:mm");
+                model.ExamEndTime = activity.ExamEndTime.ToString("yyyy-MM-dd HH:mm");
+                model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
                 model.AnswerCount = activity.AnswerCount;
                 model.StatusName = activity.StatusName;
             }
@@ -66,9 +66,9 @@ namespace Chat.FrontWeb.Controllers
                 model.Id = activity.Id;
                 model.Name = activity.Name;
                 model.Description = activity.Description;
-                model.StartTime = activity.StartTime.ToString("yyyy-MM-dd");
-                model.ExamEndTime = activity.ExamEndTime.ToString("yyyy-MM-dd");
-                model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd");
+                model.StartTime = activity.StartTime.ToString("yyyy-MM-dd HH:mm");
+                model.ExamEndTime = activity.ExamEndTime.ToString("yyyy-MM-dd HH:mm");
+                model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
                 model.AnswerCount = activity.AnswerCount;
                 model.StatusName = activity.StatusName;
             }
@@ -194,7 +194,7 @@ namespace Chat.FrontWeb.Controllers
             model.ActivityName = activity.Name;
             model.PrizeName = activity.PrizeName;
             model.PrizeImgUrl = activity.PrizeImgUrl;
-            model.PrizeTime = activity.RewardTime;
+            model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
             model.PrizeFirstUrl = settingService.GetValue("前端奖品图片地址");
             model.StatusName = activity.StatusName;
             var users = userService.GetByActivityIdIsWon1(activity.Id);
@@ -262,7 +262,7 @@ namespace Chat.FrontWeb.Controllers
                 ActivityDTO activity = activityService.GetById(id);
                 model.ActivityName = activity.Name;
                 model.Id = activity.Id;
-                model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd");
+                model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
                 long paperId = activity.PaperId;
                 string[] strs = asks.Trim(',').Split(',');
                 List<string> lists = new List<string>();
