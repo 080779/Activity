@@ -21,36 +21,20 @@ namespace Chat.FrontWeb.Controllers
         public ActionResult Index()
         {
             ActivityViewModel model = new ActivityViewModel();
-            ActivityDTO activity;
-            if(activityService.GetByStatus("答题进行中") == null && activityService.GetByStatus("开奖中") ==null)
+            ActivityDTO activity= activityService.GetIsCurrent();
+            if(activity==null)
             {
-                if(activityService.GetNew()!=null)
-                {
-                    activity = activityService.GetNew();
-                    model.Id = activity.Id;
-                    model.Name = activity.Name;
-                    model.Description = activity.Description;
-                    model.StartTime = activity.StartTime.ToString("yyyy-MM-dd HH:mm");
-                    model.ExamEndTime = activity.ExamEndTime.ToString("yyyy-MM-dd HH:mm");
-                    model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
-                    model.AnswerCount = activity.AnswerCount;
-                    model.StatusName = activity.StatusName;
-                }
-                else
-                {
-                    model.Id = 0;
-                    model.Name = "当前暂无活动";
-                    model.Description = "当前暂无活动简介";
-                    model.StartTime = "****-**-**";
-                    model.ExamEndTime = "****-**-**";
-                    model.RewardTime = "****-**-**";
-                    model.AnswerCount = 0;
-                    model.StatusName = "无活动";
-                }
+                model.Id = 0;
+                model.Name = "当前暂无活动";
+                model.Description = "当前暂无活动简介";
+                model.StartTime = "****-**-**";
+                model.ExamEndTime = "****-**-**";
+                model.RewardTime = "****-**-**";
+                model.AnswerCount = 0;
+                model.StatusName = "无活动";
             }
-            else if(activityService.GetByStatus("答题进行中") != null)
+            else
             {
-                activity = activityService.GetByStatus("答题进行中");
                 model.Id = activity.Id;
                 model.Name = activity.Name;
                 model.Description = activity.Description;
@@ -59,19 +43,7 @@ namespace Chat.FrontWeb.Controllers
                 model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
                 model.AnswerCount = activity.AnswerCount;
                 model.StatusName = activity.StatusName;
-            }
-            else if (activityService.GetByStatus("开奖中") != null)
-            {
-                activity = activityService.GetByStatus("开奖中");
-                model.Id = activity.Id;
-                model.Name = activity.Name;
-                model.Description = activity.Description;
-                model.StartTime = activity.StartTime.ToString("yyyy-MM-dd HH:mm");
-                model.ExamEndTime = activity.ExamEndTime.ToString("yyyy-MM-dd HH:mm");
-                model.RewardTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
-                model.AnswerCount = activity.AnswerCount;
-                model.StatusName = activity.StatusName;
-            }
+            }            
 
             activityService.UpdateCount(model.Id, true, false, false, false, false);
             return View(model);
@@ -113,7 +85,7 @@ namespace Chat.FrontWeb.Controllers
                     return Json(new AjaxResult { Status = "redirect", Data = "/home/prize?id=" + id });
                 }
             }
-            if (statusName == "开奖中")
+            if (statusName == "待开奖")
             {
                 if (typeName == "topic")
                 {
@@ -121,7 +93,22 @@ namespace Chat.FrontWeb.Controllers
                 }
                 if (typeName == "answer")
                 {
-                    return Json(new AjaxResult { Status = "tip", ErrorMsg = "开奖中" });
+                    return Json(new AjaxResult { Status = "tip", ErrorMsg = "待开奖" });
+                }
+                if (typeName == "prize")
+                {
+                    return Json(new AjaxResult { Status = "redirect", Data = "/home/prize?id=" + id });
+                }
+            }
+            if (statusName == "活动结束正开奖")
+            {
+                if (typeName == "topic")
+                {
+                    return Json(new AjaxResult { Status = "redirect", Data = "/home/topic?id=" + id });
+                }
+                if (typeName == "answer")
+                {
+                    return Json(new AjaxResult { Status = "tip", ErrorMsg = "活动结束正开奖" });
                 }
                 if (typeName == "prize")
                 {
@@ -137,18 +124,17 @@ namespace Chat.FrontWeb.Controllers
             ActivityDTO activity;
             if (!activityService.ExistActivity(id))
             {
-                activity = activityService.GetByStatus("答题进行中");
+                activity = activityService.GetIsCurrent();
             }
             else
             {
-
+                activity = activityService.GetById(id);                
             }
-            activity = activityService.GetById(id);
             model.ActivityName = activity.Name;
-            model.Exercises= exeService.GetExercisesByPaperId(activity.PaperId);
+            model.Exercises = exeService.GetExercisesByPaperId(activity.PaperId);
             model.Id = activity.Id;
             model.ImgUrl = activity.ImgUrl;
-            model.FirstUrl= settingService.GetValue("前端奖品图片地址");
+            model.FirstUrl = settingService.GetValue("前端奖品图片地址");
             Session["IsFirst"] = true;
             return View(model);
         }
@@ -159,7 +145,7 @@ namespace Chat.FrontWeb.Controllers
             ActivityDTO activity;
             if (id <= 0)
             {
-                activity = activityService.GetByStatus("答题进行中");
+                activity = activityService.GetIsCurrent();
             }
             else
             {
@@ -183,13 +169,12 @@ namespace Chat.FrontWeb.Controllers
             ActivityDTO activity;
             if (id <= 0)
             {
-                activity = activityService.GetByStatus("答题进行中");
+                activity = activityService.GetIsCurrent();
             }
             else
             {
                 activity = activityService.GetById(id);
             }
-            activity = activityService.GetById(id);
             model.ActivityId = activity.Id;
             model.ActivityName = activity.Name;
             model.PrizeName = activity.PrizeName;
@@ -347,7 +332,7 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "请输入11位手机号" });
             }
-            if (model.Address.Length < 2 || model.Address.Length > 20)
+            if (model.Address.Length < 2 || model.Address.Length > 300)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "地址长度在2-300之间" });
             }
@@ -357,7 +342,7 @@ namespace Chat.FrontWeb.Controllers
             userService.IsHavePrizeChance(userId);            
             if (userId==-1)
             {
-                return Json(new AjaxResult { Status = "error",ErrorMsg="你已参加本次活动，无法再次参与！" });
+                return Json(new AjaxResult { Status = "error",ErrorMsg="你已参加本次活动，完成答题，无法再次参与！" });
                 //userService.UpdateUser(model.Mobile, model.Name, model.Gender, model.Address);                
             }
             if(userId>0)

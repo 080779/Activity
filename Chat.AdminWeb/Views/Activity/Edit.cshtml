@@ -27,26 +27,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">活动状态:</label>
-                        <div class="col-sm-6">
-                            <select name="statusId"  id="statusId" class="col-sm-3" style="height:30px">
-                                <option value="0">
-                                    活动状态
-                                </option>
-                                @foreach (var status in Model.Status)
-                                {
-                                    <option value="@status.Id" selected="@(Model.Activity.StatusId==status.Id)">
-                                        @status.Name
-                                    </option>
-                                }
-                            </select>
-                            <label class="col-sm-9 control-label">只有一个活动处于“答题进行中”或“开奖中”、“已结束”活动不能再设置其他状态</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-sm-3 control-label">活动背景图:</label>
                         <div class="col-sm-6">
-                            <input type="file" id="file_back" name="imgUrl" /><p>请上传360*640图片，支持格式“png、jpg、jpeg、bmp”</p>
+                            <input type="file" id="file_back" name="imgUrl" /><p>请上传750*1334图片，支持格式“png、jpg、jpeg、bmp”</p>
                             <img src="@Model.Activity.ImgUrl" id="img_back" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
                             <input type="hidden" id="val_back_img" value="@Model.Activity.ImgUrl" />
                         </div>
@@ -140,24 +123,7 @@
 </div><!-- mainpanel -->
         </div><!-- mainwrapper -->
     </section>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">提示</h4>
-            </div>
-            <div class="modal-body">
-                <p>确定删除该活动？</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="sureDel">确认</button>
-            </div>
-        </div>
-    </div>
-</div>            
+          
 @section FooterScript
 {
 <script type="text/javascript">
@@ -172,10 +138,7 @@
             $(".checkTm").click(function () {
                 $(this).parents('tr').addClass('check').siblings().removeClass('check');
             })
-            //确认删除
-            $("#sureDel").click(function(){
 
-            })
             //上传图片
             uploadpic("#file_back", "#img_back");
             uploadpic("#file_prize", "#img_prize");
@@ -239,7 +202,6 @@
                 var actId = $("#activityId").val();
                 var name = $("#name").val();
                 var description = $("#desc").val();
-                var statusId = $("#statusId").val();
                 var imgUrl = $("#val_back_img").val();
                 var startTime = $("#startTime").val();
                 var examEndTime = $("#examEndTime").val();
@@ -249,7 +211,7 @@
                 var prizeImgUrl = $("#val_prize_img").val();
                 $.ajax({
                     url: "/activity/editJsonResp", type: "post",
-                    data: {activityId:actId, name: name, description: description, statusId: statusId, imgUrl: imgUrl, startTime: startTime, examEndTime: examEndTime, rewardTime: rewardTime, paperId: paperId, prizeName: prizeName, prizeImgUrl: prizeImgUrl },
+                    data: {activityId:actId, name: name, description: description, imgUrl: imgUrl, startTime: startTime, examEndTime: examEndTime, rewardTime: rewardTime, paperId: paperId, prizeName: prizeName, prizeImgUrl: prizeImgUrl },
                     success: function (result) {
                         if (result.status == "error") {
                             alert(result.errorMsg);

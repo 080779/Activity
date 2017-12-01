@@ -64,5 +64,19 @@ namespace Chat.AdminWeb.Controllers
         {
             return View();
         }
+        [Permission("manager")]
+        [HttpPost]
+        public ActionResult SetPicAdminUrl(string value)
+        {
+            if(string.IsNullOrEmpty(value))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "地址不能为空" });
+            }
+            if(!settingService.UpdateValue("前端奖品图片地址", value))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "地址设置不成功" });
+            }
+            return Json(new AjaxResult { Status = "success"});
+        }
     }
 }

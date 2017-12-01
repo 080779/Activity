@@ -126,6 +126,9 @@
                         else if (result.status == "tip" && result.errorMsg == "开奖中") {
                             $("#mask-over").css("display", "block");
                         }
+                        else if (result.status == "tip" && result.errorMsg == "活动结束正开奖") {
+                            $("#mask-over").css("display", "block");
+                        }
                     },
                     error: function () { alert("网络错误"); }
                 });

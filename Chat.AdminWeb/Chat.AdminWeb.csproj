@@ -232,6 +232,7 @@
     <Compile Include="Models\AtivityEditModel.cs" />
     <Compile Include="Models\LoadAddExeModel.cs" />
     <Compile Include="Models\PrizeSetModel.cs" />
+    <Compile Include="Models\UserListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

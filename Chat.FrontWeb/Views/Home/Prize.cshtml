@@ -19,7 +19,7 @@
             <div class="prize-top-box">
                 <div class="prize-top-tit">活动奖品</div>
                 <div class="prize-top-name">@Model.PrizeName</div>
-                @if (Model.StatusName == "开奖中")
+                @if (Convert.ToDateTime(Model.PrizeTime)<=DateTime.Now)
                 {
                     <div class="prize-top-dec">获奖人数:@Model.winCount</div>
                 }
@@ -38,7 +38,7 @@
         <div class="prize-people">
             <div class="prize-people-tit">获奖用户名</div>
             <div class="prize-list" id="prize_user">
-                @if (Model.StatusName=="开奖中")
+                @if (Convert.ToDateTime(Model.PrizeTime) <= DateTime.Now)
                 {
                     foreach (var user in Model.Users)
                     {

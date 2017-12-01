@@ -66,7 +66,7 @@ namespace Chat.Service.Service
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
-                return cs.GetAll().Take(10).ToList().Select(u=>ToDTO(u)).ToArray();
+                return cs.GetAll().OrderByDescending(u=>u.CreateDateTime).Take(20).ToList().Select(u=>ToDTO(u)).ToArray();
             }
         }
 
