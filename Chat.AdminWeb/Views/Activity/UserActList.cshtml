@@ -18,7 +18,7 @@
                             <th style="min-width: 80px;">状态</th>
                             <th style="min-width: 80px;">是否当前活动</th>
                             <th style="min-width: 80px;">访问量</th>
-                            <th style="min-width: 80px;">转发次数</th>
+                            <!--<th style="min-width: 80px;">转发次数</th>-->
                             <th style="min-width: 80px;">答题次数</th>
                             <th style="min-width: 80px;">获奖资格人数</th>
                             <th style="min-width: 80px;">获奖人数</th>
@@ -34,7 +34,7 @@
                                 <td data-attr="状态">@activity.StatusName</td>
                                 <td data-attr="是否当前活动">@(activity.IsCurrent ? "是" : "否")</td>
                                 <td data-attr="访问量">@activity.VisitCount</td>
-                                <td data-attr="转发次数">@activity.ForwardCount</td>
+                                <!--<td data-attr="转发次数"></td>-->
                                 <td data-attr="答题次数">@activity.AnswerCount</td>
                                 <td data-attr="获奖资格人数">@activity.HavePrizeCount</td>
                                 <td data-attr="获奖人数">@activity.PrizeCount</td>
@@ -50,140 +50,8 @@
         </div><!-- mainwrapper -->
     </section>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">提示</h4>
-            </div>
-            <div class="modal-body">
-                <p>确定删除该活动？</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="cancel" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="sureDel">确认</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @section FooterScript
 {
-    <script type="text/javascript">
-        $(function () {
-            jQuery('.datepicker').datepicker({
-                autoclose: true,
-                todayHighlight: true,
-                format: 'yyyy-mm-dd'
-            });
-
-            $('.Jsdel').click(function () {
-                $("#sureDel").val($(this).val());
-            });
-
-            $('.excelSave').click(function () {
-                $("#sureSaveCel").val($(this).val());
-            });
-
-            ////设为当前,动态加载数据获取事件需要这样写
-            //$('.current').live('click', function () {
-            //    var id = $(this).val();
-            //    var yesorno = $(this).text();
-            //    $.ajax({
-            //        url: "/activity/setcurrent", type: "post", data: { id: id,yesorno:yesorno},
-            //        success: function (result) {
-            //            if (result.status == "error") {
-            //                alert(result.errorMsg);
-            //            }
-            //            else if (result.status == "successis") {
-            //                alert("设为当前活动设置成功！");
-            //                $("#search").click();
-            //            }
-            //            else if (result.status == "successno") {
-            //                alert("取消当前活动设置成功！");
-            //                $("#search").click();
-            //            }
-            //            else {
-            //                alert("未知错误");
-            //            }
-            //        },
-            //        error: function () { alert("网络错误"); }
-            //    });
-            //});
-
-            //搜索
-            $("#search").click(function () {
-                var statusId = $("#status").val();
-                var startTime = $("#txtStar").val();
-                var endTime = $("#txtEnd").val();
-                var keyWord = $("#keyword").val();
-                $.ajax({
-                    url: "/activity/search", type: "post", data: {statusId:statusId, startTime: startTime, endTime: endTime, keyWord: keyWord },
-                    success: function (result) {
-                        if (result.status == "error") {
-                            alert(result.errorMsg);
-                        }
-                        else if (result.status == "success") {
-                            $("#paperList").empty();
-                            for (var i = 0; i < result.data.length; i++) {
-                                var iscurrent = result.data[i].isCurrent ? "是" : "否";
-                                $("#paperList").append('<tr><td data-attr="期数">' + result.data[i].num + result.data[i].id + '</td><td data-attr="活动名称">' + result.data[i].name + '</td><td data-attr="状态">' + result.data[i].statusName + '</td><td data-attr="是否当前活动">'+iscurrent+'</td><td data-attr="访问量">' + result.data[i].visitCount + '</td><td data-attr="转发次数">' + result.data[i].forwardCount + '</td><td data-attr="答题次数">' + result.data[i].answerCount + '</td><td data-attr="获奖资格人数">' + result.data[i].havePrizeCount + '</td><td data-attr="获奖人数">' + result.data[i].prizeCount + '</td><td data-attr="创建时间">' + result.data[i].createDateTime + '</td></tr>');
-                            }
-                        }
-                        else {
-                            alert("未知错误");
-                        }
-                    },
-                    error: function () { alert("网络错误"); }
-                });
-            });
-
-            //删除
-            $("#sureDel").click(function () {
-                var id = $(this).val();
-                $.ajax({
-                    url: "/activity/delactivity", type: "post", data: { id: id },
-                    success: function (result) {
-                        if (result.status == "error") {
-                            alert(result.errorMsg);
-                            $("#cancel").click();
-                        }
-                        else if (result.status == "success") {
-                            $("#cancel").click();
-                            window.location.reload();
-                        }
-                        else {
-                            alert("未知错误");
-                            $("#cancel").click();
-                        }
-                    },
-                    error: function () { alert("网络错误"); $("#cancel").click(); }
-                });
-            });
-            //导出开奖结果
-            //$("#sureSaveCel").click(function () {
-            //    var id = $(this).val();
-            //    $.ajax({
-            //        url: "/activity/createexcel", type: "post", data: { id: id },
-            //        success: function (result) {
-            //            if (result.status == "error") {
-            //                alert(result.errorMsg);
-            //                $("#cancelSave").click();
-            //            }
-            //            else if (result.status == "success") {
-            //                $("#cancelSave").click();
-            //                window.location.reload();
-            //            }
-            //            else {
-            //                alert("未知错误");
-            //                $("#cancelSave").click();
-            //            }
-            //        },
-            //        error: function () { alert("网络错误"); $("#cancel").click(); }
-            //    });
-            //});
-
-        })
-    </script>
+   
 }
