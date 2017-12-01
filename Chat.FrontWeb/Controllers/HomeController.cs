@@ -205,7 +205,7 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "活动不存在" });
             }
-            if(act.StatusName!="开奖中")
+            if(act.StatusName!= "活动结束正开奖")
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "活动尚未开奖" });
             }
