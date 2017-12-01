@@ -104,9 +104,9 @@ namespace Chat.AdminWeb.Controllers
             string sImgPath = string.Empty;
             string sPrizeImgPath = string.Empty;
 
-            
-            string[] imgs = { ".png", ".jpg", ".jpeg", ".bmp" };
-            
+
+            string[] imgs = { ".png", ".jpg", ".jpeg", ".bmp", ".PNG", ".JPG", ".JPEG", ".BMP" };
+
             if (model.PrizeImgUrl != null)
             {
                 string ext = Path.GetExtension(model.PrizeImgUrl.FileName);
