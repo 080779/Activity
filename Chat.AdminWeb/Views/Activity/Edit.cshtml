@@ -89,6 +89,16 @@
                                 <td data-attr="考题数">@Model.Paper.ExercisesCount</td>
                                 <td data-attr="创建时间">@Model.Paper.CreateDateTime</td>
                             </tr>
+                         @foreach (var paper in Model.Papers)
+                         {
+                            <tr>
+                                <td data-attr="选择"><input type="radio" name="paperId" id="paperId" value="@paper.Id" class="checkTm" /></td>
+                                <td data-attr="编号">@paper.Num@paper.Id</td>
+                                <td data-attr="试卷标题">@paper.TestTitle</td>
+                                <td data-attr="考题数">@paper.ExercisesCount</td>
+                                <td data-attr="创建时间">@paper.CreateDateTime</td>
+                            </tr>
+                         }
                         </tbody>
                     </table>
                 </div>

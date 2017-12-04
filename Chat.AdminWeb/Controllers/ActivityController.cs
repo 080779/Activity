@@ -94,6 +94,7 @@ namespace Chat.AdminWeb.Controllers
             ActivityEditLoadModel model = new ActivityEditLoadModel();
             model.Activity = activity;
             model.Paper = paperService.GetByActivityId(id);
+            model.Papers = paperService.GetAllExcludeBelongActId(id);
             model.Status = idNameService.GetAll("活动状态");
             return View(model);
         }
