@@ -191,6 +191,7 @@
     <Content Include="Picture\logo-primary.png" />
     <Content Include="Picture\logo.png" />
     <Content Include="Picture\profile.png" />
+    <Content Include="Picture\zhb.png" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
