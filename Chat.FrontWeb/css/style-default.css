@@ -13,37 +13,79 @@
 /* 首页 */
 .index-bg{
 	min-height: 100%;
-	background: url(../img/default/bg-l.jpg) no-repeat fixed;
+	background: #37a976 url(../img/default/bg-index.jpg) no-repeat fixed;
 	background-size: 100% auto;
 	box-sizing: border-box;
 	padding: 3% 3% 5rem;
 }
 
 .index-wrap{
-	background: #fff;
 	margin-bottom: 20px;
-	border-radius: 10px;
 	box-sizing: border-box;
 	padding: 10px;
 }
 
 .index-title{
 	color: #09AD6A;
-	font-size: 1.1rem;
-	margin-bottom: 10px;
+    font-size: 1.2rem;
+    padding-bottom: 15%;
+    padding-top: 10%;
+    text-align: center;
 }
 
 .index-dec{
-	color: #666;
-	font-size: .9rem;
-	margin-bottom: 5px;
-	line-height: 1.5em;
+	position: relative;
+    font-size: .9rem;
+    margin-bottom: 5px;
+    line-height: 1.5em;
+    background: url(../img/default/bg-dec-index.png) no-repeat;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+    padding: 10% 8%;
+    color: #4c9665;
+    z-index: 1;
 }
+
+.index-dec:before{
+	content: "";
+    display: block;
+    position: absolute;
+    width: 116%;
+    height: 60px;
+    background: url(../img/default/caitiao.png) no-repeat;
+    background-size: 100% auto;
+    left: -10%;
+    bottom: -55px;
+}
+
+.index-dec span{
+	display: block;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.index-dlbg,.index-dlbg2{
+    width: 80%;
+    margin: 0 auto;
+    background: url(../img/default/heiban-i.png) no-repeat;
+    background-size: 100% 100%;
+    padding: 0 20px 5px;
+    color: #4c9665;
+}
+
+.index-dlbg{
+	padding: 0 20px 5px;
+	margin-bottom: 10px;
+}
+
+.index-dlbg2{
+	padding: 5px 20px 20px;
+}
+
 
 .index-dl{
 	zoom: 1;
 	font-size: .9rem;
-	border-bottom: 1px solid #e5e5e5;
 }
 
 .index-dl:last-child{
@@ -58,7 +100,6 @@
 
 .index-dl dt{
 	float: left;
-	color: #666;
 	width: 5.5rem;
 	text-align: right;
 	margin-right: 10px;
@@ -288,23 +329,23 @@
 }
 
 .anserli-as.wrong{
-	/*border: 2px solid #2a2a30;*/
-    background-color:red;
+	background-color: #fa746b;
 	background-image: url(../img/default/icon-wrong.png);
 	background-repeat: no-repeat;
 	background-position: 93% center;
 	background-size: .7rem auto;
 	padding-right: 2rem;
+	box-shadow: 0 4px 0 #b93a31;
 }
 
 .anserli-as.right{
-	background-color:forestgreen;
+	background-color: #58ad6a;
 	background-image: url(../img/default/icon-right.png);
 	background-repeat: no-repeat;
 	background-position: 93% center;
 	background-size: .7rem auto;
 	padding-right: 2rem;
-	/*box-shadow: 0 4px 0 rgba(210,184,22,1);*/
+	box-shadow: 0 4px 0 #63965b;
 }
 
 .anser-btn{
@@ -335,7 +376,6 @@
 
 /* 答题结果页 */
 .result-bg{
-	min-height: 100%;
 	padding: 3%;
 }
 
@@ -347,7 +387,8 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background: url(../img/default/bg-l.jpg) center 0 no-repeat;
+	background: #b5f0fe;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#cbf4fd), to(#9aedff));
 	background-size: 100% auto;
 }
 
@@ -383,6 +424,11 @@
 	box-sizing: border-box;
 }
 
+.result-qusli.wrong{
+	background: #fa746b;
+	box-shadow: 0 4px 0 rgba(188,55,48,1);
+}
+
 .result-qusli:nth-child(2n){
 	margin-right:0;
 }
@@ -412,7 +458,12 @@
 	color: #FF637D;
 	font-size: .8rem;
 	text-align: center;
-	padding: 15px 0;
+	line-height: 1.3;
+	margin: 15px 0;
+}
+
+.result-rs.blk{
+	color: #333;
 }
 
 .result-qx{
@@ -750,6 +801,38 @@ input[type=text]::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
 	padding-bottom: 90%;
 }
 
+.prize-search{
+	position: relative;
+	width: 90%;
+	margin: 20px auto 0;
+	background: #fff;
+	border-radius: 5px;
+	box-sizing: border-box;
+	padding-right: 3rem;
+}
+
+.prize-search input[type=text]{
+	width: 100%;
+	height: 2rem;
+	border: none;
+	box-sizing: border-box;
+	background: none;
+	padding: 5px 10px 5px 2rem;
+	background: url(../img/default/icon-search.png) no-repeat 10px center;
+	background-size: 1rem auto;
+}
+
+.prize-search input[type=submit]{
+	width: 3rem;
+	height: 2rem;
+	position: absolute;
+	right: 0;
+	top: 0;
+	background: none;
+	border: none;
+	color: #3ba75f;
+}
+
 .prize-active-tit{
 	text-align: center;
 	position: absolute;
@@ -813,9 +896,19 @@ input[type=text]::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
 }
 
 .prize-people-tit{
-	font-size: .8rem;
 	padding: 10px;
 	border-bottom: 1px solid #eee;
+	font-size: 0;
+}
+
+.prize-people-tit span{
+	width: 50%;
+	display: inline-block;
+	font-size: .8rem;
+}
+
+.prize-people-tit span:last-child{
+	text-align: right;
 }
 
 .prize-list{
@@ -835,6 +928,7 @@ input[type=text]::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
 	width: 50%;
 	display: inline-block;
 	padding: 10px;
+	color: #666;
 }
 
 .prize-li-header span{
@@ -853,6 +947,7 @@ input[type=text]::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
 	width: 40%;
 	display: inline-block;
 	text-align: right;
+	color: #666;
 }
 
 .prize-btn{

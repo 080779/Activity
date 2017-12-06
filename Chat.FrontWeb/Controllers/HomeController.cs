@@ -189,12 +189,13 @@ namespace Chat.FrontWeb.Controllers
                 IsWonUser winUser = new IsWonUser();
                 winUser.UserName = CommonHelper.FormatUserName(user.Name);
                 winUser.Mobile = CommonHelper.FormatMoblie(user.Mobile);
+                winUser.Gender = user.Gender ? "先生" : "女士";
                 winUsers.Add(winUser);
             }
             model.Users = winUsers;
             model.winCount = winUsers.Count();
-            string mobile = (string)Session["Mobile"];
-            model.UserIsWon = userService.UserIsWonByMobile(mobile);
+            //string mobile = (string)Session["Mobile"];
+            //model.UserIsWon = userService.UserIsWonByMobile(mobile);
             return View(model);
         }
 
@@ -209,6 +210,10 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "活动尚未开奖" });
             }
+            if (string.IsNullOrEmpty(lastM))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "手机号尾数不能为空" });
+            }
             long lastm;
             bool b= long.TryParse(lastM, out lastm);
             if(!b)
@@ -217,12 +222,12 @@ namespace Chat.FrontWeb.Controllers
             }
             if(lastM.Length!=4)
             {
-                return Json(new AjaxResult { Status = "error", ErrorMsg = "请输入四位数字" });
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请输入四位手机尾数" });
             }
             var users= userService.SearchIsWon(id,lastM,0,10);
             if(users==null)
             {
-                return Json(new AjaxResult { Status = "error",ErrorMsg="查询没有数据" });
+                return Json(new AjaxResult { Status = "error",ErrorMsg="活动不存在" });
             }
             List<SearchUser> lists = new List<SearchUser>();
             foreach(var user in users.Users)
@@ -230,6 +235,7 @@ namespace Chat.FrontWeb.Controllers
                 SearchUser item = new SearchUser();
                 item.UserName = CommonHelper.FormatUserName(user.Name);
                 item.Mobile = CommonHelper.FormatMoblie(user.Mobile);
+                item.Gender = user.Gender ? "先生" : "女士";
                 lists.Add(item);
             }
             return Json(new AjaxResult { Status="success",Data=lists});

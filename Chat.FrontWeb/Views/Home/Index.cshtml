@@ -14,31 +14,33 @@
     <div class="index-bg">
         <div class="index-wrap">
             <div class="index-title">@Model.Name</div>
-            <div class="index-dec">@Html.Raw(Model.Description.Replace("{{br}}", @"<br>"))</div>
+            <div class="index-dec"><span>@Html.Raw(Model.Description.Replace("{{br}}", @"<br>"))</span></div>
         </div>
         <div class="index-wrap">
-            <dl class="index-dl">
+            <dl class="index-dl index-dlbg">
                 <dt>活动开始时间</dt>
                 <dd>@Model.StartTime</dd>
             </dl>
-            <dl class="index-dl">
+            <dl class="index-dl index-dlbg">
                 <dt>答题截止时间</dt>
                 <dd>@Model.ExamEndTime</dd>
             </dl>
-            <dl class="index-dl">
+            <dl class="index-dl index-dlbg">
                 <dt>开奖时间</dt>
                 <dd>@Model.RewardTime</dd>
             </dl>
         </div>
         <div class="index-wrap">
-            <dl class="index-dl">
-                <dt>当前参与人数</dt>
-                <dd>@(Model.AnswerCount)人</dd>
-            </dl>
-            <dl class="index-dl">
-                <dt>活动状态</dt>
-                <dd class="txt-foces">@Model.StatusName</dd>                
-            </dl>            
+            <div class="index-dlbg2">
+                <dl class="index-dl">
+                    <dt>当前参与人数</dt>
+                    <dd>@(Model.AnswerCount)人</dd>
+                </dl>
+                <dl class="index-dl">
+                    <dt>活动状态</dt>
+                    <dd class="txt-foces">@Model.StatusName</dd>
+                </dl>
+            </div>
             <input type="hidden" id="status" value="@Model.StatusName" />
         </div>
     </div>

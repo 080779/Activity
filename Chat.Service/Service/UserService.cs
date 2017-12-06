@@ -361,6 +361,25 @@ namespace Chat.Service.Service
             }
         }
 
+        public bool RandSetWon(int count,long actId)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                var users = from u in dbc.Users
+                            from a in u.Activities
+                            where a.Id == actId && u.IsDeleted ==false && u.LoginErrorTimes==1
+                            select u;
+                users=users.OrderBy(u => Guid.NewGuid()).Take(count);
+                foreach(var user in users)
+                {
+                    user.IsWon = true;
+                }
+                dbc.SaveChanges();
+                return true;
+            }
+        }
+
         public bool RetSetWon(long id)
         {
             using (MyDbContext dbc = new MyDbContext())
