@@ -122,11 +122,15 @@
     <Content Include="img\active-over.jpg" />
     <Content Include="img\active-start.jpg" />
     <Content Include="img\default\ask-title-border.png" />
+    <Content Include="img\default\bg-dec-index.png" />
     <Content Include="img\default\bg-i.jpg" />
+    <Content Include="img\default\bg-index.jpg" />
     <Content Include="img\default\bg-l.jpg" />
     <Content Include="img\default\bg1.png" />
     <Content Include="img\default\bg2.png" />
     <Content Include="img\default\bg3.png" />
+    <Content Include="img\default\caitiao.png" />
+    <Content Include="img\default\heiban-i.png" />
     <Content Include="img\default\i-icon1.png" />
     <Content Include="img\default\i-icon2.png" />
     <Content Include="img\default\i-icon3.png" />
@@ -135,6 +139,7 @@
     <Content Include="img\default\icon-knowlege.png" />
     <Content Include="img\default\icon-number.png" />
     <Content Include="img\default\icon-right.png" />
+    <Content Include="img\default\icon-search.png" />
     <Content Include="img\default\icon-wrong.png" />
     <Content Include="img\default\prize-top-bg.jpg" />
     <Content Include="img\default\result-right.png" />

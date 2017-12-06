@@ -265,6 +265,21 @@ namespace Chat.Service.Service
             }
         }
 
+        public bool IsCurrentAct(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                var act = cs.GetAll().SingleOrDefault(a=>a.Id==id);
+                if(act==null)
+                {
+                    return false;
+                }
+                return act.IsCurrent;
+                //return cs.GetAll().Any(a => a.Id == id && a.IsCurrent == true);
+            }
+        }
+
         public ActivityDTO GetByStatus(string statusName)
         {
             using (MyDbContext dbc = new MyDbContext())

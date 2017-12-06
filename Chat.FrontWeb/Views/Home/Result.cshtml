@@ -26,39 +26,52 @@
             @if (!Model.IsAllRight)
             {
                 <!--答题失败-->
-                <div class="result-rs font">很遗憾，本次答题您未能通关。请再接再厉！</div>
+                <div class="result-rs font">很遗憾，本次答题您未能通关。<br />请再接再厉！</div>
                 <input type="hidden" class="wrong" id="right" value="@Model.Id" />
+                <div class="result-code"><img src="~/img/code.jpg" /></div>
+                <div class="result-codetxt font">长按二维码即可关注“广西环保”微信订阅号</div>
             }
-            else if(Model.IsFirst)
+            else if (Model.IsFirst)
             {
+                <div class="result-rs font">恭喜您全部答对！</div>
                 <div id="tj">
                     <input type="hidden" class="right" id="right" value="@Model.Id" />
                     <input type="hidden" id="isfirst" value="0" />
-                    <!--答题正确-->
-                    <div class="result-rs font">恭喜您全部答对！</div>
+                    <!--答题正确-->                    
                     <div class="result-rs font blk">请完善个人信息，并关注官方微信公众号<br />获取抽奖资格！</div>
                     <div class="result-qx"><a href="javascript:;" id="openForm">填写邮寄信息，快递小哥将把奖品送达</a></div>
+                    <div class="result-code"><img src="~/img/code.jpg" /></div>
+                    <div class="result-codetxt font">长按二维码即可关注“广西环保”微信订阅号</div>
                 </div>
                 <div id="tjwc" style="display:none">
-                    <div class="star-time">恭喜您全部答对！<br />并获得抽奖资格！<br />开奖时间：@Model.PrizeTime</div>
+                    <div class="result-code"><img src="~/img/code.jpg" /></div>
+                    <div class="result-codetxt font">长按二维码即可关注“广西环保”微信订阅号</div>
+                    <div class="star-time">并获得抽奖资格！<br />开奖时间：@Model.PrizeTime</div>
                 </div>
             }
             else
             {
+                <div class="result-rs font">恭喜您全部答对！</div>
                 <div id="tjwc" style="display:block">
-                    <div class="star-time">恭喜您全部答对！<br />并获得抽奖资格！<br />开奖时间：@Model.PrizeTime</div>
+                    <div class="result-code"><img src="~/img/code.jpg" /></div>
+                    <div class="result-codetxt font">长按二维码即可关注“广西环保”微信订阅号</div>
+                    <div class="star-time">并获得抽奖资格！<br />开奖时间：@Model.PrizeTime</div>
                 </div>
-            }
-
-            <div class="result-code"><img src="~/img/code.jpg" /></div>
-            <div class="result-codetxt font">长按二维码，关注官方微信公众号（广西环保）</div>
+            }                        
         </div>
     </div>
     <div class="result-fixed clear">
         <div class="result-fixed-wrap">
             <a href="~/home/index" class="btn-def"><b class="icon1"></b><span>返回首页</span></a>
             <a href="~/home/topic?id=@Model.Id" class="btn-def"><b class="icon2"></b><span>知识点回顾</span></a>
-            <a href="javascript:;" id="tryagin" class="btn-prm"><span>再试一次</span></a>
+            @if (!Model.IsAllRight)
+            {
+                <a href="javascript:;" id="tryagin" class="btn-prm"><span>再试一次</span></a>
+            }
+            else
+            {
+                <a href="javascript:;" id="share" class="btn-prm twoline"><span>转发给好友<br/>(+30%的中奖概率)</span></a>
+            }
         </div>
     </div>
     <div class="mask" id="mask" style="display: none;">
@@ -99,6 +112,9 @@
             </div>
         </div>
     </div>
+    <div class="mask" id="mask-share">
+        <div class="share jsClose"><img src="/img/share.png" /></div>
+    </div>
     <script src="~/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
         $("#openForm").click(function () {
@@ -113,7 +129,6 @@
         }
 
         $(function () {           
-
             //alert(window.location.href);
 
             $(".jsClose").click(function () {
@@ -145,14 +160,18 @@
 
             $("#tryagin").click(function () {
                 var id = $("#right").val();
-                if ($("#right").hasClass("right"))
-                {
-                    $("#mask-complete").css("display", "block");
-                }
+                //if ($("#right").hasClass("right"))
+                //{
+                //    $("#mask-complete").css("display", "block");
+                //}
                 if ($("#right").hasClass("wrong"))
                 {
                     window.location.href = "/home/answer?id=" + id;
                 }
+            });
+
+            $("#share").click(function () {
+                $("#mask-share").css("display", "block");
             });
         });
     </script>

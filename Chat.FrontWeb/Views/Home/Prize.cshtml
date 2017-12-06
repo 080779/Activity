@@ -21,7 +21,7 @@
             <div class="prize-top-box">
                 <div class="prize-top-tit">活动奖品</div>
                 <div class="prize-top-name">@Model.PrizeName</div>
-                <div class="prize-top-dec">获奖人数:@Model.winCount</div>
+                <!--<div class="prize-top-dec">获奖人数:@Model.winCount</div>-->
                 <!--<div class="prize-top-dec">开奖时间:@Model.PrizeTime</div>-->              
                 <div class="prize-top-ck">图片仅供产考请以实物为准</div>
                 <div class="prize-top-img"><img src="@Model.PrizeFirstUrl@Model.PrizeImgUrl" /></div>
@@ -33,7 +33,7 @@
         }
         else
         {
-            <div class="prize-result">中奖结果已经公布，您可以在下面查询是否中奖！</div>
+            <div class="prize-result">获奖人数:@Model.winCount</div>
         }
         <div class="prize-search">
             <input type="text" id="lastMoblie" value="" placeholder="请输入手机号后四位搜索" />
@@ -41,9 +41,15 @@
         </div>
         <div class="prize-people">
             <div class="prize-people-tit">获奖用户名</div>
-            <div class="prize-list" id="prize_user">
+            <div class="prize-list" id="prize_user">                              
                 @if (Convert.ToDateTime(Model.PrizeTime) <= DateTime.Now)
                 {
+                    <div class="prize-li">
+                        <div class="prize-li-header">
+                            <span>获奖用户</span>
+                        </div>
+                        <div class="prize-li-phone">用户手机号</div>
+                    </div>
                     foreach (var user in Model.Users)
                     {
                         <div class="prize-li">
@@ -58,9 +64,9 @@
                 {
                     <div class="prize-li">
                         <div class="prize-li-header">
-                            <span>活动尚未开奖</span>
+                            <span>获奖用户</span>
                         </div>
-                        <div class="prize-li-phone"></div>
+                        <div class="prize-li-phone">用户手机号</div>
                     </div>
                 }
             </div>
@@ -87,7 +93,7 @@
                             if (result.data.length <= 0)
                             {
                                 alert("查询无中奖信息");
-                                $("#prize_user").append('<div class="prize-li"><div class="prize-li-header"><span>查询无中奖信息</span></div><div class="prize-li-phone"></div></div>');
+                                $("#prize_user").append('<div class="prize-li"><div class="prize-li-header"><span>获奖用户</span></div><div class="prize-li-phone">用户手机号</div></div>');
                             }
                             for (var i = 0; i < result.data.length; i++)
                             {

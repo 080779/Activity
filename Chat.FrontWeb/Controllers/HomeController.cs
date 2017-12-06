@@ -49,9 +49,13 @@ namespace Chat.FrontWeb.Controllers
             return View(model);
         }
 
-        public ActionResult Judge(long id,string typeName,string statusName)
+        public ActionResult Judge(string typeName,string statusName,long id= 0)
         {
-            if(statusName=="无活动")
+            if (id == 0)
+            {
+                return Json(new AjaxResult { Status = "nonExist", ErrorMsg = "当前暂无活动" });
+            }
+            if (statusName=="无活动")
             {
                 return Json(new AjaxResult { Status = "nonExist", ErrorMsg = "当前暂无活动" });
             }
@@ -100,7 +104,7 @@ namespace Chat.FrontWeb.Controllers
                     return Json(new AjaxResult { Status = "redirect", Data = "/home/prize?id=" + id });
                 }
             }
-            if (statusName == "活动结束正开奖")
+            if (statusName == "已结束")
             {
                 if (typeName == "topic")
                 {
@@ -108,7 +112,7 @@ namespace Chat.FrontWeb.Controllers
                 }
                 if (typeName == "answer")
                 {
-                    return Json(new AjaxResult { Status = "tip", ErrorMsg = "活动结束正开奖" });
+                    return Json(new AjaxResult { Status = "tip", ErrorMsg = "已结束" });
                 }
                 if (typeName == "prize")
                 {
@@ -118,17 +122,29 @@ namespace Chat.FrontWeb.Controllers
             return Json(new AjaxResult { Status="success"});
         }
 
-        public ActionResult Answer(long id)
+        public ActionResult Answer(long id=0)
         {
             AnswerViewModel model = new AnswerViewModel();
-            ActivityDTO activity;
+            ActivityDTO activity=new ActivityDTO();
+            if (id==0)
+            {
+                return Redirect("/home/index");
+            }            
             if (!activityService.ExistActivity(id))
             {
-                activity = activityService.GetIsCurrent();
+                return Redirect("/home/index");
+            }
+            else if (activityService.IsCurrentAct(id))
+            {
+                return Redirect("/home/index");
             }
             else
             {
                 activity = activityService.GetById(id);                
+            }
+            if(activity.StatusId==7 || activity.StatusId==8)
+            {
+                return Redirect("/home/index");
             }
             model.ActivityName = activity.Name;
             model.Exercises = exeService.GetExercisesByPaperId(activity.PaperId);
@@ -139,18 +155,30 @@ namespace Chat.FrontWeb.Controllers
             return View(model);
         }
 
-        public ActionResult Topic(long id,string topic="home")
+        public ActionResult Topic(long id=0,string topic="home")
         {
             TopicModel model = new TopicModel();
-            ActivityDTO activity;
-            if (id <= 0)
+            ActivityDTO activity=new ActivityDTO();
+            if (id == 0)
             {
-                activity = activityService.GetIsCurrent();
+                return Redirect("/home/index");
+            }
+            if (!activityService.ExistActivity(id))
+            {
+                return Redirect("/home/index");
+            }
+            else if (activityService.IsCurrentAct(id))
+            {
+                return Redirect("/home/index");
             }
             else
             {
                 activity = activityService.GetById(id);
-            }            
+            }
+            if (activity.StatusId == 7 || activity.StatusId == 8)
+            {
+                return Redirect("/home/index");
+            }
             model.ActivityName = activity.Name;
             var exetips = exeService.GetExercisesByPaperId(activity.PaperId);
             List<string> lists = new List<string>();
@@ -163,17 +191,29 @@ namespace Chat.FrontWeb.Controllers
             return View(model);
         }
 
-        public ActionResult Prize(long id)
+        public ActionResult Prize(long id=0)
         {
             PrizeViewModel model = new PrizeViewModel();
-            ActivityDTO activity;
-            if (id <= 0)
+            ActivityDTO activity=new ActivityDTO();
+            if (id == 0)
             {
-                activity = activityService.GetIsCurrent();
+                return Redirect("/home/index");
+            }
+            if (!activityService.ExistActivity(id))
+            {
+                return Redirect("/home/index");
+            }
+            else if (activityService.IsCurrentAct(id))
+            {
+                return Redirect("/home/index");
             }
             else
             {
                 activity = activityService.GetById(id);
+            }
+            if (activity.StatusId == 7 || activity.StatusId == 8)
+            {
+                return Redirect("/home/index");
             }
             model.ActivityId = activity.Id;
             model.ActivityName = activity.Name;
@@ -182,31 +222,43 @@ namespace Chat.FrontWeb.Controllers
             model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
             model.PrizeFirstUrl = settingService.GetValue("前端奖品图片地址");
             model.StatusName = activity.StatusName;
-            var users = userService.GetByActivityIdIsWon1(activity.Id);
-            List<IsWonUser> winUsers = new List<IsWonUser>();            
-            foreach (var user in users)
+            //var users = userService.GetByActivityIdIsWon1(activity.Id);
+            if(activity.RewardTime<=DateTime.Now)
             {
-                IsWonUser winUser = new IsWonUser();
-                winUser.UserName = CommonHelper.FormatUserName(user.Name);
-                winUser.Mobile = CommonHelper.FormatMoblie(user.Mobile);
-                winUser.Gender = user.Gender ? "先生" : "女士";
-                winUsers.Add(winUser);
+                UserSearchResult result = userService.GetByActivityIdIsWon(activity.Id, 0, 10);
+                List<IsWonUser> winUsers = new List<IsWonUser>();
+                foreach (var user in result.Users)
+                {
+                    IsWonUser winUser = new IsWonUser();
+                    winUser.UserName = CommonHelper.FormatUserName(user.Name);
+                    winUser.Mobile = CommonHelper.FormatMoblie(user.Mobile);
+                    winUser.Gender = user.Gender ? "先生" : "女士";
+                    winUsers.Add(winUser);
+                }
+                model.Users = winUsers;
+                model.winCount = result.TotalCount;
             }
-            model.Users = winUsers;
-            model.winCount = winUsers.Count();
+            else
+            {
+                model.winCount = 0;
+            }
             //string mobile = (string)Session["Mobile"];
             //model.UserIsWon = userService.UserIsWonByMobile(mobile);
             return View(model);
         }
 
-        public ActionResult PrizeUserSearch(long id,string lastM)
+        public ActionResult PrizeUserSearch(string lastM,long id=0)
         {
+            if(id==0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "活动不存在" });
+            }
             var act= activityService.GetById(id);
             if(act==null)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "活动不存在" });
             }
-            if(act.StatusName!= "活动结束正开奖")
+            if(act.StatusName!= "已结束")
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "活动尚未开奖" });
             }
@@ -241,8 +293,33 @@ namespace Chat.FrontWeb.Controllers
             return Json(new AjaxResult { Status="success",Data=lists});
         }
 
-        public ActionResult Result(string asks,long id)
+        public ActionResult Result(string asks,long id=0)
         {
+            ActivityDTO activity = new ActivityDTO();
+            if (id == 0)
+            {
+                return Redirect("/home/index");
+            }
+            if (!activityService.ExistActivity(id))
+            {
+                return Redirect("/home/index");
+            }
+            else if (activityService.IsCurrentAct(id))
+            {
+                return Redirect("/home/index");
+            }
+            else
+            {
+                activity = activityService.GetById(id);
+            }
+            if (activity.StatusId == 7 || activity.StatusId == 8)
+            {
+                return Redirect("/home/index");
+            }
+            if (Session["IsFirst"]==null)
+            {
+                return Redirect("/home/index");
+            }
             if((bool)Session["IsFirst"])
             {
                 if (string.IsNullOrEmpty(asks))
@@ -250,7 +327,6 @@ namespace Chat.FrontWeb.Controllers
                     return Content("请答完题再提交");
                 }
                 ResultModel model = new ResultModel();
-                ActivityDTO activity = activityService.GetById(id);
                 model.ActivityName = activity.Name;
                 model.Id = activity.Id;
                 model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
@@ -280,10 +356,9 @@ namespace Chat.FrontWeb.Controllers
                     return Content("请答完题再提交");
                 }
                 ResultModel model = new ResultModel();
-                ActivityDTO activity = activityService.GetById(id);
                 model.ActivityName = activity.Name;
                 model.Id = activity.Id;
-                model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd");
+                model.PrizeTime = activity.RewardTime.ToString("yyyy-MM-dd HH:mm");
                 long paperId = activity.PaperId;
                 string[] strs = asks.Trim(',').Split(',');
                 List<string> lists = new List<string>();
