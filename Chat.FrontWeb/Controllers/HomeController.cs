@@ -134,7 +134,7 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Redirect("/home/index");
             }
-            else if (activityService.IsCurrentAct(id))
+            else if (!activityService.IsCurrentAct(id))
             {
                 return Redirect("/home/index");
             }
@@ -142,7 +142,7 @@ namespace Chat.FrontWeb.Controllers
             {
                 activity = activityService.GetById(id);                
             }
-            if(activity.StatusId==7 || activity.StatusId==8)
+            if(activity.StatusId==5 || activity.StatusId==7 || activity.StatusId==8)
             {
                 return Redirect("/home/index");
             }
@@ -167,17 +167,13 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Redirect("/home/index");
             }
-            else if (activityService.IsCurrentAct(id))
+            else if (!activityService.IsCurrentAct(id))
             {
                 return Redirect("/home/index");
             }
             else
             {
                 activity = activityService.GetById(id);
-            }
-            if (activity.StatusId == 7 || activity.StatusId == 8)
-            {
-                return Redirect("/home/index");
             }
             model.ActivityName = activity.Name;
             var exetips = exeService.GetExercisesByPaperId(activity.PaperId);
@@ -203,17 +199,13 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Redirect("/home/index");
             }
-            else if (activityService.IsCurrentAct(id))
+            else if (!activityService.IsCurrentAct(id))
             {
                 return Redirect("/home/index");
             }
             else
             {
                 activity = activityService.GetById(id);
-            }
-            if (activity.StatusId == 7 || activity.StatusId == 8)
-            {
-                return Redirect("/home/index");
             }
             model.ActivityId = activity.Id;
             model.ActivityName = activity.Name;
@@ -304,7 +296,7 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Redirect("/home/index");
             }
-            else if (activityService.IsCurrentAct(id))
+            else if (!activityService.IsCurrentAct(id))
             {
                 return Redirect("/home/index");
             }
@@ -312,7 +304,7 @@ namespace Chat.FrontWeb.Controllers
             {
                 activity = activityService.GetById(id);
             }
-            if (activity.StatusId == 7 || activity.StatusId == 8)
+            if (activity.StatusId==5 || activity.StatusId == 7 || activity.StatusId == 8)
             {
                 return Redirect("/home/index");
             }
