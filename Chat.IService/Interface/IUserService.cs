@@ -9,7 +9,7 @@ namespace Chat.IService.Interface
 {
     public interface IUserService:IServiceSupport
     {
-        long AddNew(string name,string nickName,string photoUrl,string mobile,bool gender,string address);
+        long AddNew(string name, long actId, string photoUrl,string mobile,bool gender,string address);
         UserDTO[] GetAll();
         UserSearchResult Search(bool? gender,bool? isWon,DateTime? startTime,DateTime? endTime,string keyWord, int currentIndex, int pageSize);
         UserDTO[] GetByActivityId(long id);

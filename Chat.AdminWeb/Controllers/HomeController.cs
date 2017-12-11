@@ -15,6 +15,7 @@ namespace Chat.AdminWeb.Controllers
     {
         public IAdminUserService adminService { get; set; }
         public ISettingService settingService { get; set; }
+        public IRoleService roleService { get; set; }
 
         public ActionResult Login()
         {
@@ -39,6 +40,25 @@ namespace Chat.AdminWeb.Controllers
             else
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "用户名密码错误" });
+            }
+        }
+
+        public ActionResult VuCe(AdminUserRegisterModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
+            }
+            long id= adminService.AddAdminUser(model.Name, "", true, "aaa@qq.com", model.Password);
+            if(id<=0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "手机号已经存在" });
+            }
+            else
+            {
+                long[] roleids = { 1 };
+                roleService.AddRoleIds(id,roleids);
+                return Json(new AjaxResult { Status = "success"});
             }
         }
 

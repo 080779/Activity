@@ -13,12 +13,28 @@ namespace Chat.Service.Service
 {
     public class UserService : IUserService
     {
-        public long AddNew(string name, string nickName, string photoUrl, string mobile, bool gender, string address)
+        public long AddNew(string name, long actId, string photoUrl, string mobile, bool gender, string address)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
+                CommonService<ActivityEntity> acs = new CommonService<ActivityEntity>(dbc);
                 CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
-                if(cs.GetAll().Any(u=>u.Mobile==mobile))
+
+                var acts= acs.GetAll().SingleOrDefault(a=>a.Id==actId);
+                if(acts==null)
+                {
+                    return -2;
+                }
+                var uexsit = cs.GetAll().SingleOrDefault(u => u.Mobile == mobile);
+                if(!acts.Users.Any(u=>u.Mobile==mobile) && uexsit != null)
+                {
+                    uexsit.Name = name;
+                    uexsit.Gender = gender;
+                    uexsit.Address = address;
+                    dbc.SaveChanges();
+                    return uexsit.Id;
+                }
+                if(acts.Users.Any(u => u.Mobile == mobile) && uexsit != null)
                 {
                     return -1;
                 }

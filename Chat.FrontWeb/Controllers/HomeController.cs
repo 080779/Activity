@@ -409,7 +409,7 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "地址长度在2-300之间" });
             }
-            long userId= userService.AddNew(model.Name, "", "", model.Mobile, model.Gender, model.Address);
+            long userId= userService.AddNew(model.Name,model.Id, "", model.Mobile, model.Gender, model.Address);
             activityService.AddUserId(model.Id, userId);
             userService.RetSetWon(userId);
             userService.IsHavePrizeChance(userId);            

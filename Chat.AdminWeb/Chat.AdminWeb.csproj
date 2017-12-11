@@ -229,6 +229,7 @@
     <Compile Include="Models\ActivityListModel.cs" />
     <Compile Include="Models\AddExercisesModel.cs" />
     <Compile Include="Models\AdminUserLoginModel.cs" />
+    <Compile Include="Models\AdminUserRegisterModel.cs" />
     <Compile Include="Models\AtivityAddModel.cs" />
     <Compile Include="Models\AtivityEditModel.cs" />
     <Compile Include="Models\LoadAddExeModel.cs" />
