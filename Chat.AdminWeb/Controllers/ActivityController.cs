@@ -337,7 +337,7 @@ namespace Chat.AdminWeb.Controllers
         public ActionResult Prize(long id,int pageIndex=1)
         {
             PrizeSetModel model = new PrizeSetModel();
-            UserSearchResult result= userService.GetByActivityIdHavePrize(id, null, null, null, 0, 20);
+            UserSearchResult result= userService.GetUsersByActivityId(id,null,null,null, 0, 20);
             model.Users = result.Users;
             model.ActivityId = id;
             //分页
@@ -368,7 +368,7 @@ namespace Chat.AdminWeb.Controllers
                 return Json(new AjaxResult { Status="error",ErrorMsg="不存在这个答题活动"});
             }
             PrizeSetModel model = new PrizeSetModel();
-            UserSearchResult result= userService.GetByActivityIdHavePrize(id, startTime, endTime, keyWord, (pageIndex-1)*20, 20);
+            UserSearchResult result= userService.GetUsersByActivityId(id, startTime, endTime, keyWord, (pageIndex-1)*20, 20);
 
             Pagination pager = new Pagination();
             pager.CurrentLinkClassName = "curPager";
@@ -397,12 +397,53 @@ namespace Chat.AdminWeb.Controllers
         [Permission("manager")]
         public ActionResult PrizeWon(long[] isWonIds,long activityId)
         {
-            for(int i=0;i<isWonIds.Length;i++)
+            if(isWonIds.Length<=0)
             {
-                userService.SetWon(isWonIds[i],activityId);
-                userService.ReSetPrizeChance(isWonIds[i]);
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请选择用户" });
             }
-            return Json("success");
+            //for(int i=0;i<isWonIds.Length;i++)
+            //{
+            //    userService.SetWon(isWonIds[i],activityId);
+            //    userService.ReSetPrizeChance(isWonIds[i]);
+            //}
+            return Json(new AjaxResult { Status = "success"});
+        }
+
+        [HttpPost]
+        [Permission("manager")]
+        public ActionResult SetWon(long id, long activityId)
+        {
+            if (id <= 0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请选择用户" });
+            }
+            if (activityId <= 0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "活动不存在" });
+            }
+            if (!userService.SetWon(id, activityId))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "设置失败" });
+            }
+            return Json(new AjaxResult { Status = "success" });
+        }
+        [HttpPost]
+        [Permission("manager")]
+        public ActionResult ReSetWon(long id, long activityId)
+        {
+            if(id<=0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请选择用户" });
+            }
+            if(activityId<=0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "活动不存在" });
+            }
+            if(!userService.ReSetWon(id, activityId))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "设置失败" });
+            }
+            return Json(new AjaxResult { Status = "success" });
         }
 
         [Permission("manager")]

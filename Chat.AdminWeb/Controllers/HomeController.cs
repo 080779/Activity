@@ -43,6 +43,7 @@ namespace Chat.AdminWeb.Controllers
             }
         }
 
+        [Permission("manager")]
         public ActionResult VuCe(AdminUserRegisterModel model)
         {
             if (!ModelState.IsValid)

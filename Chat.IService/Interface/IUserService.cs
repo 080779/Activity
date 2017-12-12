@@ -14,9 +14,11 @@ namespace Chat.IService.Interface
         UserSearchResult Search(bool? gender,bool? isWon,DateTime? startTime,DateTime? endTime,string keyWord, int currentIndex, int pageSize);
         UserDTO[] GetByActivityId(long id);
         UserSearchResult GetUsersByActivityId(long id, int currentIndex, int pageSize);
+        UserSearchResult GetUsersByActivityId(long id, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize);
         //UserSearchResult PrizeSearch(long id, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize);
         UserDTO[] PrizeSearch1(long id, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize);
         bool SetWon(long id, long activityId);
+        bool ReSetWon(long id, long activityId);
         UserSearchResult  GetByActivityIdHavePrize(long id, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize);
         UserDTO[] GetByActivityIdHavePrize1(long id);
         UserDTO[] GetByActivityIdIsWon1(long id);
@@ -27,6 +29,7 @@ namespace Chat.IService.Interface
         bool RetSetWon(long id);
         bool IsHavePrizeChance(long id);
         bool ReSetPrizeChance(long id);
+        bool Del(long id);
     }
     public class UserSearchResult
     {

@@ -69,5 +69,20 @@ namespace Chat.AdminWeb.Controllers
 
             return Json(new AjaxResult { Status = "success", Data = model });            
         }
+
+        [Permission("manager")]
+        public ActionResult Del(long id)
+        {
+            //
+            if(id<=0)
+            {
+                return Json(new AjaxResult { Status = "error",ErrorMsg="用户不存在" });
+            }
+            if(!userService.Del(id))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "删除失败" });
+            }
+            return Json(new AjaxResult { Status = "success"});
+        }
     }
 }

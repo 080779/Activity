@@ -102,6 +102,38 @@ namespace Chat.Service.Service
             }
         }
 
+        public UserSearchResult GetUsersByActivityId(long id, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                CommonService<UserEntity> ucs = new CommonService<UserEntity>(dbc);
+                var activity = cs.GetAll().SingleOrDefault(a => a.Id == id);
+                if (activity == null)
+                {
+                    return null;
+                }
+                var users = activity.Users.Where(u=>u.IsDeleted==false);
+                if (startTime != null)
+                {
+                    users = users.Where(u => u.CreateDateTime >= startTime);
+                }
+                if (endTime != null)
+                {
+                    users = users.Where(u => u.CreateDateTime >= endTime);
+                }
+                if (!string.IsNullOrEmpty(keyWord))
+                {
+                    users = users.Where(u => u.Name.Contains(keyWord) || u.Mobile.Contains(keyWord));
+                }
+
+                UserSearchResult result = new UserSearchResult();
+                result.TotalCount = users.Count();
+                result.Users = users.OrderByDescending(u => u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
+                return result;
+            }
+        }
+
         /// <summary>
         /// 根据活动id查找参与活动的用户
         /// </summary>
@@ -354,6 +386,7 @@ namespace Chat.Service.Service
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                CommonService<ActivityEntity> acs = new CommonService<ActivityEntity>(dbc);
                 var user=cs.GetAll().SingleOrDefault(u => u.Id == id);
                 if(user==null)
                 {
@@ -362,16 +395,45 @@ namespace Chat.Service.Service
                 user.IsWon = true;
                 user.WinCount++;
 
-                var acts = from a in dbc.Activities
-                           from u in a.Users
-                           where u.Id == id
-                           select a;
-                var act= acts.SingleOrDefault(a => a.Id == activityId);
+                //var acts = from a in dbc.Activities
+                //           from u in a.Users
+                //           where u.Id == id
+                //           select a;
+                var act= acs.GetAll().SingleOrDefault(a => a.Id == activityId);
                 if(act==null)
                 {
                     return false;
                 }
                 act.PrizeCount++;
+                dbc.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool ReSetWon(long id, long activityId)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                CommonService<ActivityEntity> acs = new CommonService<ActivityEntity>(dbc);
+                var user = cs.GetAll().SingleOrDefault(u => u.Id == id);
+                if (user == null)
+                {
+                    return false;
+                }
+                user.IsWon = false;
+                user.WinCount--;
+
+                //var acts = from a in dbc.Activities
+                //           from u in a.Users
+                //           where u.Id == id
+                //           select a;
+                var act = acs.GetAll().SingleOrDefault(a => a.Id == activityId);
+                if (act == null)
+                {
+                    return false;
+                }
+                act.PrizeCount--;
                 dbc.SaveChanges();
                 return true;
             }
@@ -475,6 +537,22 @@ namespace Chat.Service.Service
                     return false;
                 }
                 user.LoginErrorTimes = 0;
+                dbc.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool Del(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
+                var user= cs.GetAll().SingleOrDefault(u=>u.Id==id);
+                if(user==null)
+                {
+                    return false;
+                }
+                user.IsDeleted = true;
                 dbc.SaveChanges();
                 return true;
             }
