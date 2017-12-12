@@ -36,7 +36,7 @@
             </div>
         </div>-->
         <div class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading" id="wincount">
                 <h4>从具备抽奖资格的人员中选取获奖者(已选@(Model.WinCount)/@(Model.TotalCount))</h4>
             </div>
             <div class="panel-heading">
@@ -130,12 +130,14 @@
                 $("#pager").append(result.data.page);
                 $("#paperList").empty();
                 $("#paperList").append('<input type="hidden" id="index" value="' + pageIndex + '" />');
+                $("#wincount").empty();
+                $("#wincount").append('<h4>从具备抽奖资格的人员中选取获奖者(已选'+result.data.winCount+'/'+result.data.totalCount+')</h4>');
                 //if (result.data.users.length <= 0)
                 //{
                 //    if ((pageIndex - 1)>=1)
                 //    {
                 //        return getPage(pageIndex-1);
-                //    }                  
+                //    }
                 //}
                 for (var i = 0; i < result.data.users.length; i++) {
                     var isWon = result.data.users[i].isWon;
@@ -179,6 +181,8 @@
                         $("#pager").append(result.data.page);
                         $("#paperList").empty();
                         $("#paperList").append('<input type="hidden" id="index" value="1" />');
+                        $("#wincount").empty();
+                        $("#wincount").append('<h4>从具备抽奖资格的人员中选取获奖者(已选' + result.data.winCount + '/' + result.data.totalCount + ')</h4>');
                         for (var i = 0; i < result.data.users.length; i++) {
                             var isWon = result.data.users[i].isWon;
                             var gerdern = result.data.users[i].gender ? "男" : "女";
