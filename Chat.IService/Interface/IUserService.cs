@@ -23,6 +23,7 @@ namespace Chat.IService.Interface
         UserDTO[] GetByActivityIdHavePrize1(long id);
         UserDTO[] GetByActivityIdIsWon1(long id);
         UserSearchResult GetByActivityIdIsWon(long id, int currentIndex, int pageSize);
+        UserSearchResult GetByActivityIdIsWon(long id, int? currentIndex, int? pageSize);
         UserSearchResult SearchIsWon(long activityId,string lastM, int currentIndex, int pageSize);
         bool UserIsWonByMobile(string mobile);
         bool UpdateUser(string mobile, string name, bool gender, string address);

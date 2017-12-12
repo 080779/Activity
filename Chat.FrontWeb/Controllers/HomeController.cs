@@ -217,7 +217,7 @@ namespace Chat.FrontWeb.Controllers
             //var users = userService.GetByActivityIdIsWon1(activity.Id);
             if(activity.RewardTime<=DateTime.Now)
             {
-                UserSearchResult result = userService.GetByActivityIdIsWon(activity.Id, 0, 10);
+                UserSearchResult result = userService.GetByActivityIdIsWon(activity.Id, null, null);
                 List<IsWonUser> winUsers = new List<IsWonUser>();
                 foreach (var user in result.Users)
                 {

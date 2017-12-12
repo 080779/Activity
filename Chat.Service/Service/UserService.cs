@@ -257,6 +257,35 @@ namespace Chat.Service.Service
             }
         }
 
+        public UserSearchResult GetByActivityIdIsWon(long id, int? currentIndex, int? pageSize)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                var activity = cs.GetAll().SingleOrDefault(a => a.Id == id);
+                if (activity == null)
+                {
+                    return null;
+                }
+                //var users = from u in dbc.Users
+                //            from a in u.Activities
+                //            where a.Id == id && u.IsDeleted == false && u.IsWon == true
+                //            select u;
+                var users = activity.Users.Where(u => u.IsDeleted == false && u.IsWon == true).OrderByDescending(u=>u.CreateDateTime);
+                UserSearchResult result = new UserSearchResult();
+                result.TotalCount = users.Count();
+                if(pageSize==null)
+                {
+                    result.Users = users.ToList().Select(u => ToDTO(u)).ToArray();
+                }
+                else
+                {
+                    result.Users = users.Skip((int)currentIndex).Take((int)pageSize).ToList().Select(u => ToDTO(u)).ToArray();
+                }                
+                return result;
+            }
+        }
+
         public UserSearchResult SearchIsWon(long activityId, string lastM, int currentIndex, int pageSize)
         {
             using (MyDbContext dbc = new MyDbContext())
