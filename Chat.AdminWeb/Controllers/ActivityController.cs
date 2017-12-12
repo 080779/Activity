@@ -340,6 +340,8 @@ namespace Chat.AdminWeb.Controllers
             UserSearchResult result= userService.GetUsersByActivityId(id,null,null,null, 0, 20);
             model.Users = result.Users;
             model.ActivityId = id;
+            model.TotalCount = result.TotalCount;
+            model.WinCount = result.WinCount;
             //分页
             Pagination pager = new Pagination();
             pager.CurrentLinkClassName = "curPager";
@@ -381,7 +383,9 @@ namespace Chat.AdminWeb.Controllers
 
             model.ActivityId = id;
             model.Users = result.Users;
-            if(result.TotalCount<=20)
+            model.TotalCount = result.TotalCount;
+            model.WinCount = result.WinCount;
+            if (result.TotalCount<=20)
             {
                 model.Page = "";
             }

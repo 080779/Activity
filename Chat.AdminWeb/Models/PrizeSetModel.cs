@@ -11,5 +11,7 @@ namespace Chat.AdminWeb.Models
         public UserDTO[] Users { get; set; }
         public long ActivityId { get; set; }
         public string Page { get; set; }
+        public int TotalCount { get; set; }
+        public int WinCount { get; set; }
     }
 }

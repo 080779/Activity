@@ -35,5 +35,6 @@ namespace Chat.IService.Interface
     {
         public UserDTO[] Users { get; set; }
         public int TotalCount { get; set; }
+        public int WinCount { get; set; }
     }
 }

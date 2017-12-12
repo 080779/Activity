@@ -130,6 +130,7 @@ namespace Chat.Service.Service
                 UserSearchResult result = new UserSearchResult();
                 result.TotalCount = users.Count();
                 result.Users = users.OrderByDescending(u => u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
+                result.WinCount = users.Where(u => u.IsWon == true).Count();
                 return result;
             }
         }
