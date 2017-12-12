@@ -24,7 +24,7 @@
                 <!--<div class="prize-top-dec">获奖人数:@Model.winCount</div>-->
                 <!--<div class="prize-top-dec">开奖时间:@Model.PrizeTime</div>-->              
                 <div class="prize-top-ck">图片仅供产考请以实物为准</div>
-                <div class="prize-top-img"><img src="@Model.PrizeFirstUrl@Model.PrizeImgUrl" /></div>
+                <div class="prize-top-img" style="height:80px;width:80px"><img src="@Model.PrizeFirstUrl@Model.PrizeImgUrl" /></div>
             </div>
         </div>
         @if (Convert.ToDateTime(Model.PrizeTime) >= DateTime.Now)
