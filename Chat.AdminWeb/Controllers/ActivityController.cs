@@ -399,9 +399,13 @@ namespace Chat.AdminWeb.Controllers
 
         [HttpPost]
         [Permission("manager")]
-        public ActionResult PrizeWon(long[] isWonIds,long activityId)
+        public ActionResult PrizeWon(PrizeWonViewModel model)
         {
-            if(isWonIds.Length<=0)
+            if (ModelState.IsValid)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = MVCHelper.GetValidMsg(ModelState) });
+            }
+            if (model.IsWonIds.Length<=0)
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "请选择用户" });
             }
@@ -644,6 +648,26 @@ namespace Chat.AdminWeb.Controllers
                     return Json(new AjaxResult { Status = "error", ErrorMsg = "活动不存在" });
                 }
                 return Json(new AjaxResult { Status = "successno"});
+            }
+        }
+
+        public ActionResult RandSetWon(int count, long id)
+        {
+            if (count <= 0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "请填写随机获奖人数" });
+            }
+            if (id <= 0)
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "活动不存在" });
+            }
+            if (!userService.RandSetWon(count, id))
+            {
+                return Json(new AjaxResult { Status = "error", ErrorMsg = "随机获奖出错" });
+            }
+            else
+            {
+                return Json(new AjaxResult { Status = "success" });
             }
         }
     }

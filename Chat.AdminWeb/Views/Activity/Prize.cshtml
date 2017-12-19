@@ -95,20 +95,22 @@
                 <button class="btn btn-default">取消</button>
             </div>
         </div>
-       <!-- <div class="panel panel-default">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>随机选择获奖者</h4>
             </div>
             <div class="panel-heading">
                 <div class="form-inline">
                     <div class="form-group mt10">
-                        <input name="" type="text" placeholder="请输入随机获奖人数" class="form-control">
+                        <input type="hidden" value="@Model.ActivityId" id="actId" />
+                        <input name="" type="text" id="randCount" placeholder="请输入随机获奖人数" class="form-control">
                     </div>
                     <div class="form-group mt10">
-                        <a class="btn btn-primary mr5" href="javascript:;" data-toggle="modal" data-target="#myModal">确定 </a>
+                        <a class="btn btn-primary mr5" id="btnRand" href="javascript:;" data-toggle="modal" data-target="#myModal">确定</a>
                     </div>
                 </div>
-            </div>-->
+            </div>
+        </div>
         </div>
     </div><!-- contentpanel -->
 </div><!-- mainpanel -->
@@ -202,26 +204,60 @@
             });
         });
 
-        $("#btnSaveWon").click(function () {
-            var formData = $("#formCheck").serializeArray();
-            var index = $("#index").val();
-
+        //定人数随机设置获奖
+        $("#btnRand").click(function () {
             $.ajax({
-                url: "/activity/prizewon", type: "post", data: formData,
+                url: "/activity/randsetwon", type: "post", data: { id: $("#actId").val(), count: $("#randCount").val() },
                 success: function (result) {
-                    alert("设置为获奖成功");
-                    //if ((index - 1) >= 1)
-                    //{
-                    //    getPage(index);
-                    //}
-                    //else
-                    //{
-                    //    getPage(1);
-                    //}
-                    getPage(index);
+                    if (result.status == "error") {
+                        alert(result.errorMsg);
+                    }
+                    else if (result.status == "success") {
+                        alert("设置随机获奖成功");
+                    }
+                    else {
+                        alert("未知错误");
+                    }
                 },
                 error: function () { alert("网络错误"); }
             });
+        });
+
+        $("#btnSaveWon").click(function () {
+            var count=0;
+            $(".checkTm").each(function () {
+                if($(this).attr("checked"))
+                {
+                    count++;
+                }
+            });
+            if(count<=0)
+            {
+                alert("请选择用户");
+            }
+            else
+            {
+                alert("设置为获奖成功");
+            }
+            //var formData = $("#formCheck").serializeArray();
+            //var index = $("#index").val();
+
+            //$.ajax({
+            //    url: "/activity/prizewon", type: "post", data: formData,
+            //    success: function (result) {
+            //        alert("设置为获奖成功");
+            //        //if ((index - 1) >= 1)
+            //        //{
+            //        //    getPage(index);
+            //        //}
+            //        //else
+            //        //{
+            //        //    getPage(1);
+            //        //}
+            //        getPage(index);
+            //    },
+            //    error: function () { alert("网络错误"); }
+            //});
         });
 
         //

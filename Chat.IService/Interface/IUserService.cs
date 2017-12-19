@@ -19,6 +19,7 @@ namespace Chat.IService.Interface
         UserDTO[] PrizeSearch1(long id, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize);
         bool SetWon(long id, long activityId);
         bool ReSetWon(long id, long activityId);
+        bool RandSetWon(int count, long actId);
         UserSearchResult  GetByActivityIdHavePrize(long id, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize);
         UserDTO[] GetByActivityIdHavePrize1(long id);
         UserDTO[] GetByActivityIdIsWon1(long id);

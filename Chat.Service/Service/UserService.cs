@@ -474,14 +474,22 @@ namespace Chat.Service.Service
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<UserEntity> cs = new CommonService<UserEntity>(dbc);
-                var users = from u in dbc.Users
-                            from a in u.Activities
-                            where a.Id == actId && u.IsDeleted ==false && u.LoginErrorTimes==1
-                            select u;
-                users=users.OrderBy(u => Guid.NewGuid()).Take(count);
+                CommonService<ActivityEntity> acs = new CommonService<ActivityEntity>(dbc);
+                var act = acs.GetAll().SingleOrDefault(a=>a.Id==actId);
+                if(act==null)
+                {
+                    return false;
+                }
+                var users = act.Users.Where(u => u.IsDeleted == false && u.LoginErrorTimes == 1).OrderBy(u => Guid.NewGuid()).Take(count);
                 foreach(var user in users)
                 {
-                    user.IsWon = true;
+                    if(!user.IsWon)
+                    {
+                        act.PrizeCount++;
+                        user.IsWon = true;
+                        user.WinCount++;
+                        user.LoginErrorTimes = 0;
+                    }                    
                 }
                 dbc.SaveChanges();
                 return true;
