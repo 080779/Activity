@@ -480,16 +480,13 @@ namespace Chat.Service.Service
                 {
                     return false;
                 }
-                var users = act.Users.Where(u => u.IsDeleted == false && u.LoginErrorTimes == 1).OrderBy(u => Guid.NewGuid()).Take(count);
+                var users = act.Users.Where(u => u.IsDeleted == false && u.IsWon==false).OrderBy(u => Guid.NewGuid()).Take(count);
                 foreach(var user in users)
                 {
-                    if(!user.IsWon)
-                    {
-                        act.PrizeCount++;
-                        user.IsWon = true;
-                        user.WinCount++;
-                        user.LoginErrorTimes = 0;
-                    }                    
+                    act.PrizeCount++;
+                    user.IsWon = true;
+                    user.WinCount++;
+                    user.LoginErrorTimes = 0;
                 }
                 dbc.SaveChanges();
                 return true;

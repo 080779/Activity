@@ -95,7 +95,7 @@
                 <button class="btn btn-default">取消</button>
             </div>
         </div>
-        <div class="panel panel-default">
+        <!--<div class="panel panel-default">
             <div class="panel-heading">
                 <h4>随机选择获奖者</h4>
             </div>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
         </div>
     </div><!-- contentpanel -->
 </div><!-- mainpanel -->
@@ -214,6 +214,7 @@
                     }
                     else if (result.status == "success") {
                         alert("设置随机获奖成功");
+                        window.location.reload();
                     }
                     else {
                         alert("未知错误");
