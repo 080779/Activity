@@ -95,7 +95,7 @@
                 <button class="btn btn-default">取消</button>
             </div>
         </div>
-        <!--<div class="panel panel-default">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>随机选择获奖者</h4>
             </div>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>
         </div>
     </div><!-- contentpanel -->
 </div><!-- mainpanel -->
@@ -206,6 +206,7 @@
 
         //定人数随机设置获奖
         $("#btnRand").click(function () {
+            var index = $("#index").val();
             $.ajax({
                 url: "/activity/randsetwon", type: "post", data: { id: $("#actId").val(), count: $("#randCount").val() },
                 success: function (result) {
@@ -214,7 +215,7 @@
                     }
                     else if (result.status == "success") {
                         alert("设置随机获奖成功");
-                        window.location.reload();
+                        getPage(index);
                     }
                     else {
                         alert("未知错误");
@@ -225,21 +226,24 @@
         });
 
         $("#btnSaveWon").click(function () {
-            var count=0;
-            $(".checkTm").each(function () {
-                if($(this).attr("checked"))
-                {
-                    count++;
-                }
-            });
-            if(count<=0)
-            {
-                alert("请选择用户");
-            }
-            else
-            {
-                alert("设置为获奖成功");
-            }
+            var index = $("#index").val();
+            alert("设置为获奖成功");
+            getPage(index);
+            //var count=0;
+            //$(".checkTm").each(function () {
+            //    if($(this).attr("checked"))
+            //    {
+            //        count++;
+            //    }
+            //});
+            //if(count<=0)
+            //{
+            //    alert("请选择用户");
+            //}
+            //else
+            //{
+            //    alert("设置为获奖成功");
+            //}
             //var formData = $("#formCheck").serializeArray();
             //var index = $("#index").val();
 
