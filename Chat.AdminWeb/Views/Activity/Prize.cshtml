@@ -87,7 +87,7 @@
                             }
                         </tbody>
                     </table>
-                    <div id="pager">@Html.Raw(Model.Page)</div>
+                    <div id="pager">@Html.Raw(Model.Page)</div><input type="text" id="setIndex" style="width:45px;height:20px">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="getPage" value="跳转" style="height:23px">
                 </form>                
             </div>
             <div class="panel-footer">
@@ -164,6 +164,11 @@
             autoclose: true,
             todayHighlight: true,
             format: 'yyyy-mm-dd',
+        });
+
+        $("#getPage").click(function () {
+            var index = $("#setIndex").val();
+            getPage(index);
         });
 
         //搜索
