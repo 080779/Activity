@@ -52,6 +52,7 @@
     <Compile Include="DTO\RoleDTO.cs" />
     <Compile Include="DTO\SettingDTO.cs" />
     <Compile Include="DTO\TestPaperDTO.cs" />
+    <Compile Include="DTO\TrainDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DTO\IdNameDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

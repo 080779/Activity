@@ -12,7 +12,7 @@ namespace Chat.IService.Interface
     /// </summary>
     public interface IPermissionService : IServiceSupport
     {
-        long AddNew(string name, string description);
+        long AddNew(string name, string description,int levelList);
         void UpdatePermission(long id, string name, string description);
         bool MarkDeleted(long id);
         PermissionDTO GetById(long id);

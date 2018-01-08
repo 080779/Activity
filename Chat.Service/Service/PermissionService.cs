@@ -12,7 +12,7 @@ namespace Chat.Service.Service
 {
     public class PermissionService : IPermissionService
     {
-        public long AddNew(string name, string description)
+        public long AddNew(string name, string description, int levelList)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -24,6 +24,7 @@ namespace Chat.Service.Service
                 PermissionEntity permission = new PermissionEntity();
                 permission.Name = name;
                 permission.Description = description;
+                permission.LevelList = levelList;
                 dbc.Permissions.Add(permission);
                 dbc.SaveChanges();
                 return permission.Id;
@@ -71,7 +72,7 @@ namespace Chat.Service.Service
                 {
                     return null;
                 }
-                return new PermissionDTO { Id = pm.Id, Name = pm.Name, Description = pm.Description, CreateDateTime = pm.CreateDateTime };
+                return new PermissionDTO { Id = pm.Id, Name = pm.Name,LevelList=pm.LevelList,Description = pm.Description, CreateDateTime = pm.CreateDateTime };
             }
         }
 

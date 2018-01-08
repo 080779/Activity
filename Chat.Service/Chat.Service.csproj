@@ -60,12 +60,14 @@
     <Compile Include="Entities\AdminUserEntity.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\CityEntity.cs" />
+    <Compile Include="Entities\EntryEntity.cs" />
     <Compile Include="Entities\ExercisesEntity.cs" />
     <Compile Include="Entities\IdNameEntity.cs" />
     <Compile Include="Entities\PermissionEntity.cs" />
     <Compile Include="Entities\RoleEntity.cs" />
     <Compile Include="Entities\SettingEntity.cs" />
     <Compile Include="Entities\TestPaperEntity.cs" />
+    <Compile Include="Entities\TrainEntity.cs" />
     <Compile Include="Entities\UserEntity.cs" />
     <Compile Include="ModelConfig\ActivityConfig.cs" />
     <Compile Include="ModelConfig\ActivityImgConfig.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="ModelConfig\RoleConfig.cs" />
     <Compile Include="ModelConfig\SettingConfig.cs" />
     <Compile Include="ModelConfig\TestPaperConfig.cs" />
+    <Compile Include="ModelConfig\TrainConfig.cs" />
     <Compile Include="ModelConfig\UserConfig.cs" />
     <Compile Include="MyDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="Service\SettingService.cs" />
     <Compile Include="Service\RoleService.cs" />
     <Compile Include="Service\TestPaperService.cs" />
+    <Compile Include="Service\TrainService.cs" />
     <Compile Include="Service\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
