@@ -15,8 +15,10 @@ namespace Chat.Service.Entities
         public DateTime EndTime { get; set; }
         public virtual IdNameEntity Status { get; set; }
         public long StatusId { get; set; }
+        public long VisitCount { get; set; } = 0;//访问量
         public decimal EntryFee { get; set; }//报名费用
         public long UpToOne { get; set; }//最多可报名
         public string Description { get; set; }//培训详情
+        public virtual ICollection<EntryEntity> Entries { get; set; } = new List<EntryEntity>();
     }
 }

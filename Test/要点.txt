@@ -1,0 +1,8 @@
+查询：默认查询已经结束的活动，如果没有已经结束的活动，就查询进行中和开奖中的活动，这种情况下就提示开奖时间
+
+
+update T_Users set IsDeleted=1 where Id in (select top(22)Id from T_Users)
+
+
+http://u.pmdaniu.com/J8zl
+7777777

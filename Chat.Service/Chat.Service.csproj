@@ -74,6 +74,7 @@
     <Compile Include="ModelConfig\AdminLogConfig.cs" />
     <Compile Include="ModelConfig\AdminUserConfig.cs" />
     <Compile Include="ModelConfig\CityConfig.cs" />
+    <Compile Include="ModelConfig\EntryConfig.cs" />
     <Compile Include="ModelConfig\ExercisesConfig.cs" />
     <Compile Include="ModelConfig\IdNameConfig.cs" />
     <Compile Include="ModelConfig\PermissionConfig.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Service\ActivityService.cs" />
     <Compile Include="Service\AdminUserService.cs" />
     <Compile Include="Service\CityService.cs" />
+    <Compile Include="Service\EntryService.cs" />
     <Compile Include="Service\ExercisesService.cs" />
     <Compile Include="Service\PermissionService.cs" />
     <Compile Include="Service\AdminLogService.cs" />

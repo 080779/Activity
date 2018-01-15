@@ -45,6 +45,7 @@
     <Compile Include="Interface\IAdminLogService.cs" />
     <Compile Include="Interface\IAdminUserService.cs" />
     <Compile Include="Interface\ICityService.cs" />
+    <Compile Include="Interface\IEntryService.cs" />
     <Compile Include="Interface\IExercisesService.cs" />
     <Compile Include="Interface\IIdNameService.cs" />
     <Compile Include="Interface\IPermissionService.cs" />

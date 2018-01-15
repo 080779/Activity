@@ -46,6 +46,7 @@
     <Compile Include="DTO\AdminLogDTO.cs" />
     <Compile Include="DTO\AdminUserDTO.cs" />
     <Compile Include="DTO\CityDTO.cs" />
+    <Compile Include="DTO\EntryDTO.cs" />
     <Compile Include="DTO\ExercisesDTO.cs" />
     <Compile Include="DTO\PermissionDTO.cs" />
     <Compile Include="DTO\PrizeDTO.cs" />

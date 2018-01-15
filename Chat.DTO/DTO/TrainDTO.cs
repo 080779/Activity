@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chat.DTO.DTO
 {
-    public class TrainDTO
+    public class TrainDTO:BaseDTO
     {
         /// <summary>
         /// 培训标题
@@ -23,6 +23,7 @@ namespace Chat.DTO.DTO
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public long StatusId { get; set; }
+        public long VisitCount { get; set; }//访问量
         /// <summary>
         /// 报名费用
         /// </summary>

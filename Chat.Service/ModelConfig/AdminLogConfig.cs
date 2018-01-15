@@ -17,6 +17,7 @@ namespace Chat.Service.ModelConfig
         {
             ToTable("T_AdminLogs");
             HasRequired(a => a.AdminUser).WithMany().HasForeignKey(a => a.AdminUserId).WillCascadeOnDelete(false);
+            Property(a => a.IpAddress).HasMaxLength(20).IsRequired();
             Property(a => a.Message).IsRequired();
         }
     }

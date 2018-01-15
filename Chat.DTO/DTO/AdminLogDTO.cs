@@ -9,6 +9,7 @@ namespace Chat.DTO.DTO
     public class AdminLogDTO : BaseDTO
     {
         public long AdminUserId { get; set; }
+        public string IpAddress { get; set; }
         public string Message { get; set; }
         public string AdminUserName { get; set; }
         public string AdminUserPhoneNum { get; set; }

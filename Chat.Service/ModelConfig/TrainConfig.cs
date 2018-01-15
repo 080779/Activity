@@ -12,12 +12,12 @@ namespace Chat.Service.ModelConfig
     {
         public TrainConfig()
         {
-            ToTable("T_Train");
+            ToTable("T_Trains");
             Property(t => t.Title).HasMaxLength(150).IsRequired();
-            Property(t => t.Img).HasMaxLength(200).IsRequired().IsUnicode(false);
+            Property(t => t.Img).HasMaxLength(150).IsRequired().IsUnicode(false);
             Property(t => t.Address).HasMaxLength(256).IsRequired();
             Property(t => t.Description).HasMaxLength(256).IsRequired();
-            HasRequired(a => a.Status).WithMany().HasForeignKey(a => a.StatusId).WillCascadeOnDelete(false);
+            HasRequired(t => t.Status).WithMany().HasForeignKey(e => e.StatusId).WillCascadeOnDelete(false);
         }
     }
 }

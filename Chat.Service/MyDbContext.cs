@@ -42,5 +42,6 @@ namespace Chat.Service
         public DbSet<TestPaperEntity> TestPapers { get; set; }
         public DbSet<UserEntity> Users { get; set; }        
         public DbSet<TrainEntity> Trains { get; set; }
+        public DbSet<EntryEntity> Entries { get; set; }
     }
 }

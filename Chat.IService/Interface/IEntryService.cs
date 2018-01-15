@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chat.DTO.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Chat.IService.Interface
 {
-    public interface IAdminLogService:IServiceSupport
+    public interface IEntryService: IServiceSupport
     {
-        long AddNew(long adminUserId, string ipAddress, string message);
+        long Add(EntryDTO dto);
     }
 }

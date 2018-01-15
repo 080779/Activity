@@ -13,6 +13,7 @@ namespace Chat.Service.Entities
     {
         public long AdminUserId { get; set; }
         public virtual AdminUserEntity AdminUser { get; set; }
+        public string IpAddress { get; set; }
         public string Message { get; set; }
     }
 }

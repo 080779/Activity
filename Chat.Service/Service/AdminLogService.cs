@@ -11,12 +11,13 @@ namespace Chat.Service.Service
 {
     public class AdminLogService : IAdminLogService
     {
-        public long AddNew(long adminUserId, string message)
+        public long AddNew(long adminUserId,string ipAddress, string message)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
                 AdminLogEntity adminLog = new AdminLogEntity();
                 adminLog.AdminUserId = adminUserId;
+                adminLog.IpAddress = ipAddress;
                 adminLog.Message = message;
                 dbc.AdminLogs.Add(adminLog);
                 dbc.SaveChanges();
