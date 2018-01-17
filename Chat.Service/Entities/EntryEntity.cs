@@ -18,6 +18,8 @@ namespace Chat.Service.Entities
         public long StayId { get; set; }
         public virtual IdNameEntity Pays { get; set; }//支付方式
         public long PayId { get; set; }
+        public virtual IdNameEntity EntryChannels { get; set; }//报名渠道
+        public long EntryChannelId { get; set; }
         public virtual IdNameEntity Cities { get; set; }
         public long CityId { get; set; }
         public string InvoiceUp { get; set; }//发票抬头

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace Chat.DTO.DTO
+namespace Chat.AdminWeb.Models.Train
 {
-    public class TrainDTO:BaseDTO
+    public class TrainListViewModel
     {
         /// <summary>
         /// 培训标题
@@ -22,7 +21,7 @@ namespace Chat.DTO.DTO
         public string Address { get; set; }//培训地址
         public string StartTime { get; set; }
         public string EndTime { get; set; }
-        public string StatusName { get; set; }
+        public string Status { get; set; }
         public long VisitCount { get; set; }//访问量
         /// <summary>
         /// 报名费用

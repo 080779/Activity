@@ -75,6 +75,20 @@ namespace Chat.Service.Service
             }
         }
 
+        public RoleDTO[] GetByDescription(string description)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<RoleEntity> cs = new CommonService<RoleEntity>(dbc);
+                var roles = cs.GetAll().Where(r => r.Description == description);
+                if(roles==null)
+                {
+                    return null;
+                }
+                return roles.AsNoTracking().Select(e => new RoleDTO { Name = e.Name, CreateDateTime = e.CreateDateTime, Description = e.Description, Id = e.Id }).ToArray();
+            }
+        }
+
         public RoleDTO GetById(long id)
         {
             using (MyDbContext dbc = new MyDbContext())
@@ -91,7 +105,16 @@ namespace Chat.Service.Service
 
         public RoleDTO GetByName(string name)
         {
-            throw new NotImplementedException();
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<RoleEntity> cs = new CommonService<RoleEntity>(dbc);
+                RoleEntity role = cs.GetAll().SingleOrDefault(r => r.Name == name);
+                if (role == null)
+                {
+                    return null;
+                }
+                return new RoleDTO { Id = role.Id, Name = role.Name, Description = role.Description, CreateDateTime = role.CreateDateTime };
+            }
         }
 
         public bool MarkDeleted(long roleId)

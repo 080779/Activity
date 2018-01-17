@@ -18,6 +18,7 @@ namespace Chat.IService.Interface
         RoleDTO GetById(long id);
         RoleDTO GetByName(string name);
         RoleDTO[] GetAll();
+        RoleDTO[] GetByDescription(string description);
         void AddRoleIds(long adminUserId, long[] roleIds);
         void UpdateRoleIds(long adminUserId, long[] roleIds);
         RoleDTO[] GetByAdminUserId(long adminUserId);

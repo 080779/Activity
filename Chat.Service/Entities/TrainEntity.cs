@@ -18,6 +18,10 @@ namespace Chat.Service.Entities
         public long VisitCount { get; set; } = 0;//访问量
         public decimal EntryFee { get; set; }//报名费用
         public long UpToOne { get; set; }//最多可报名
+        /// <summary>
+        /// 已报名人数
+        /// </summary>
+        public long EntryCount { get; set; } = 0;
         public string Description { get; set; }//培训详情
         public virtual ICollection<EntryEntity> Entries { get; set; } = new List<EntryEntity>();
     }

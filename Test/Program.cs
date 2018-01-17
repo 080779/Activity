@@ -39,7 +39,7 @@ namespace Test
                 dto.PayId = 1;
                 dto.StayId = 1;
                 dto.CityId = 1;
-                dto.Workplace = "南宁市";
+                //dto.Workplace = "南宁市";
                 dto.WorkUnits = row["工作单位"].ToString();
                 long id = entryService.Add(dto);
                 Console.WriteLine(id);

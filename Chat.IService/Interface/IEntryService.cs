@@ -10,5 +10,6 @@ namespace Chat.IService.Interface
     public interface IEntryService: IServiceSupport
     {
         long Add(EntryDTO dto);
+        EntryListDTO[] GetAll();
     }
 }

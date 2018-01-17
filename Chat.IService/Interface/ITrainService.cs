@@ -9,7 +9,7 @@ namespace Chat.IService.Interface
 {
     public interface ITrainService: IServiceSupport
     {
-        long AddNew(string Title, string Img, string Address, DateTime? startTime, DateTime? endTime, decimal entryFee, string upToOne, string description);
+        long AddNew(string title, string img, string address, DateTime? startTime, DateTime? endTime, decimal entryFee, long upToOne, string description);
         TrainDTO[] GetAll();
     }
 }

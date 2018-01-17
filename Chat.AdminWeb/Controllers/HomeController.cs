@@ -1,5 +1,6 @@
 ﻿using Chat.AdminWeb.App_Start;
 using Chat.AdminWeb.Models;
+using Chat.AdminWeb.Models.AdminManager;
 using Chat.DTO.DTO;
 using Chat.IService.Interface;
 using Chat.WebCommon;
@@ -98,6 +99,14 @@ namespace Chat.AdminWeb.Controllers
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "地址设置不成功" });
             }
             return Json(new AjaxResult { Status = "success"});
+        }
+
+        public ActionResult Add()
+        {
+            AddAdminUserViewModel model = new AddAdminUserViewModel();
+            model.Citys = roleService.GetByDescription("在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格");
+            model.Hall = roleService.GetByName("厅级管理员");
+            return View(model);
         }
     }
 }

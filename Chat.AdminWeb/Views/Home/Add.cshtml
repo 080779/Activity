@@ -1,0 +1,74 @@
+﻿@model Chat.AdminWeb.Models.AdminManager.AddAdminUserViewModel
+@{
+    ViewBag.Title = "新增管理员";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="mainpanel">
+    <div class="contentpanel">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>新增管理员</h4>
+            </div>
+            <div class="panel-body">
+                <form action="" class="form-horizontal">
+                    <div class="form-group">
+                        登录名：<input type="text" id="name" /><br />
+                        初始登录密码：<input type="text" id="password" />
+                        确认密码：<input type="text" id="password1" />
+                        管理员等级：<input type="radio" name="manager" id="hallManager" checked="checked" value="@Model.Hall.Id" />厅级管理员<br />
+                        <input type="radio" name="manager" id="cityManager" />市级管理员
+                        <select id="city">
+                            <option value="selectCity">选择所属市级</option>
+                            @foreach (var role in Model.Citys)
+                            {
+                                <option value="@role.Id">@role.Name</option>
+                            }
+                        </select>
+                        <input type="button" id="btnSave" value="提交"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- contentpanel -->
+</div><!-- mainpanel -->
+        </div><!-- mainwrapper -->
+    </section>
+@section FooterScript
+{
+    <script type="text/javascript">
+        $(function () {
+
+            $("#city").change(function () {
+                $("#cityManager").val($(this).val());
+                $("#cityManager").attr("checked", "checked");
+            });
+
+            $("#btnSave").live("click", function () {
+                if ($("input[name='manager']:checked").val() == 'on' || $("input[name='manager']:checked").val() == 'selectCity')
+                {
+                    alert("请选择所属市级");
+                    return;
+                }
+                var role = $("input[name='manager']:checked").val();
+                $.ajax({
+                    url: "/home/add", type: "post", data: { role: role },
+                    success: function (result) {
+                        if (result.status == "error")
+                        {
+                            alert(result.errorMsg);
+                        }
+                        else if (result.status == "success")
+                        {
+                            alert("添加成功！");
+                            window.location.href = "/testpaper/list";
+                        }
+                        else {
+                            alert("未知错误");
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+        });
+    </script>
+}

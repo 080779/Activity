@@ -21,6 +21,7 @@ namespace Chat.Service.ModelConfig
             Property(e => e.Duty).HasMaxLength(10).IsRequired();
             HasRequired(e => e.Stays).WithMany().HasForeignKey(e => e.StayId).WillCascadeOnDelete(false);
             HasRequired(e => e.Pays).WithMany().HasForeignKey(e => e.PayId).WillCascadeOnDelete(false);
+            HasRequired(e => e.EntryChannels).WithMany().HasForeignKey(e => e.EntryChannelId).WillCascadeOnDelete(false);
             HasRequired(e => e.Cities).WithMany().HasForeignKey(e => e.CityId).WillCascadeOnDelete(false);
             Property(e => e.InvoiceUp).HasMaxLength(20).IsRequired();
             Property(e => e.Ein).HasMaxLength(30).IsRequired().IsUnicode();

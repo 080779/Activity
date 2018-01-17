@@ -1,0 +1,79 @@
+﻿@model Chat.AdminWeb.Models.AdminManager.AddAdminUserViewModel
+@{
+    ViewBag.Title = "新增培训";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="mainpanel">
+    <div class="contentpanel">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>新增培训</h4>
+            </div>
+            <div class="panel-body">
+                <form action="" class="form-horizontal">
+                    <div class="form-group">
+                        培训主题：<input type="text" id="title" /><br />
+                        培训头图：<input type="file" id="train_pic" /><p>请上传750*1334图片，支持格式“png、jpg、jpeg、bmp”</p>
+                                    <img src="" id="train_img" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
+                        培训地点：<input type="text" id="address" />
+                        开始时间：<input type="text" id="startTime" />
+                        结束时间：<input type="text" id="endTime" />
+                        报名费用：<input type="text" id="entryFee"/>
+                        最多可报名：<input type="text" id="upToOne" />
+                        培训详情：<input type="text" id="description" />
+                        <input type="button" id="btnSave" value="提交"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- contentpanel -->
+</div><!-- mainpanel -->
+        </div><!-- mainwrapper -->
+    </section>
+@section FooterScript
+{
+    <script type="text/javascript">
+        $(function () {
+
+            uploadpic("#train_pic", "#train_img");
+            function uploadpic(fileid, img) {
+                var oUpload = new UploadPic();
+                oUpload.init({
+                    input: $(fileid)[0],
+                    callback: function (base64) {
+                        $(img).attr('src', base64);
+                    }
+                });
+            }
+
+            $("#btnSave").live("click", function () {
+                var title = $("#title").val();
+                var img = $("#train_img").attr("src");
+                var address = $("#address").val();
+                var startTime = $("#startTime").val();
+                var endTime = $("#endTime").val();
+                var entryFee = $("#entryFee").val();
+                var upToOne = $("#upToOne").val();
+                var description = $("#description").val();
+                $.ajax({
+                    url: "/train/add", type: "post", data: { title: title,img:img,address:address,startTime:startTime,endTime:endTime,entryFee:entryFee,upToOne:upToOne,description:description },
+                    success: function (result) {
+                        if (result.status == "0")
+                        {
+                            alert(result.errorMsg);
+                        }
+                        else if (result.status == "1")
+                        {
+                            alert("添加成功！");
+                            //window.location.href = "/testpaper/list";
+                        }
+                        else {
+                            alert("未知错误");
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+        });
+    </script>
+}

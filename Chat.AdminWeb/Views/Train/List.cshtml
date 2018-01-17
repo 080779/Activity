@@ -1,0 +1,91 @@
+﻿@model Chat.DTO.DTO.TrainDTO[]
+@{
+    ViewBag.Title = "培训管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="mainpanel">
+    <div class="contentpanel">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>培训管理</h4>
+                <a href="/train/add">添加培训</a>
+            </div>
+            <div class="panel-body">
+                <form action="" class="form-horizontal">
+                    <div class="form-group">
+                        <table>
+                            <thead><tr><th>编号</th><th>培训主题</th><th>状态</th><th>报名费用</th><th>访问量</th><th>已报名人数</th><th>报名人数上限</th><th>创建时间</th><th>开始时间</th><th>截止时间</th><th>操作</th></tr></thead>
+                            <tbody>
+                                @foreach (var train in Model)
+                                {
+                                    <tr>
+                                        <td>@train.Id</td>
+                                        <td>@train.Title</td>
+                                        <td>@train.StatusName</td>
+                                        <td>@train.EntryFee</td>
+                                        <td>@train.VisitCount</td>
+                                        <td>@train.EntryCount</td>
+                                        <td>@train.UpToOne</td>
+                                        <td>@train.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                        <td>@train.StartTime</td>
+                                        <td>@train.EndTime</td>
+                                        <td>操作</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- contentpanel -->
+</div><!-- mainpanel -->
+        </div><!-- mainwrapper -->
+    </section>
+@section FooterScript
+{
+    <script type="text/javascript">
+        $(function () {
+
+            uploadpic("#train_pic", "#train_img");
+            function uploadpic(fileid, img) {
+                var oUpload = new UploadPic();
+                oUpload.init({
+                    input: $(fileid)[0],
+                    callback: function (base64) {
+                        $(img).attr('src', base64);
+                    }
+                });
+            }
+
+            $("#btnSave").live("click", function () {
+                var title = $("#title").val();
+                var img = $("#train_img").attr("src");
+                var address = $("#address").val();
+                var startTime = $("#startTime").val();
+                var endTime = $("#endTime").val();
+                var entryFee = $("#entryFee").val();
+                var upToOne = $("#upToOne").val();
+                var description = $("#description").val();
+                $.ajax({
+                    url: "/train/add", type: "post", data: { title: title,img:img,address:address,startTime:startTime,endTime:endTime,entryFee:entryFee,upToOne:upToOne,description:description },
+                    success: function (result) {
+                        if (result.status == "0")
+                        {
+                            alert(result.errorMsg);
+                        }
+                        else if (result.status == "1")
+                        {
+                            alert("添加成功！");
+                            //window.location.href = "/testpaper/list";
+                        }
+                        else {
+                            alert("未知错误");
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+        });
+    </script>
+}

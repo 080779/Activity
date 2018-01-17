@@ -229,6 +229,7 @@
     <Compile Include="Models\ActivityEditLoadModel.cs" />
     <Compile Include="Models\ActivityListModel.cs" />
     <Compile Include="Models\AddExercisesModel.cs" />
+    <Compile Include="Models\AdminManager\AddAdminUserViewModel.cs" />
     <Compile Include="Models\AdminUserLoginModel.cs" />
     <Compile Include="Models\AdminUserRegisterModel.cs" />
     <Compile Include="Models\AtivityAddModel.cs" />
@@ -236,6 +237,8 @@
     <Compile Include="Models\LoadAddExeModel.cs" />
     <Compile Include="Models\PrizeSetModel.cs" />
     <Compile Include="Models\PrizeWonViewModel.cs" />
+    <Compile Include="Models\Train\TrainAddModel.cs" />
+    <Compile Include="Models\Train\TrainListViewModel.cs" />
     <Compile Include="Models\UserListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -259,6 +262,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Activity\UserActList.cshtml" />
     <Content Include="Views\Home\SetPicAdminUrl.cshtml" />
+    <Content Include="Views\Home\Add.cshtml" />
+    <Content Include="Views\Train\Add.cshtml" />
+    <Content Include="Views\Train\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -268,7 +274,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Train\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chat.DTO\Chat.DTO.csproj">

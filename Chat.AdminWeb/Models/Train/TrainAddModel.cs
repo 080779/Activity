@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace Chat.DTO.DTO
+namespace Chat.AdminWeb.Models.Train
 {
-    public class TrainDTO:BaseDTO
+    public class TrainAddModel
     {
         /// <summary>
         /// 培训标题
@@ -20,10 +19,10 @@ namespace Chat.DTO.DTO
         /// 培训地址
         /// </summary>
         public string Address { get; set; }//培训地址
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
-        public string StatusName { get; set; }
-        public long VisitCount { get; set; }//访问量
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        //public long StatusId { get; set; }
+        //public long VisitCount { get; set; }//访问量
         /// <summary>
         /// 报名费用
         /// </summary>
@@ -32,10 +31,6 @@ namespace Chat.DTO.DTO
         /// 最多可报名
         /// </summary>
         public long UpToOne { get; set; }//最多可报名
-        /// <summary>
-        /// 已报名人数
-        /// </summary>
-        public long EntryCount { get; set; }
         /// <summary>
         /// 培训详情
         /// </summary>
