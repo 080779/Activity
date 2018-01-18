@@ -12,6 +12,7 @@ namespace Chat.IService.Interface
     {
         long AddNew(string typeName, string name, string imgUrl);
         IdNameDTO GetById(long id);
+        IdNameDTO GetByName(string name);
         IdNameDTO[] GetAll(string typeName);
         IdNameDTO[] GetAll();
     }

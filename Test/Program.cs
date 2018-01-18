@@ -19,30 +19,42 @@ namespace Test
     {
         static void Main(string[] args)
         {
+            DataTable dt = ExcelHelper.GetDataTable("D:/培训导入.xlsx");
+
+            IEntryService entryService = new EntryService();
+            bool b = entryService.EntryImport(3, 14, 38, dt);
+            Console.WriteLine(b);
+            Console.ReadKey();
+        }
+        static void Main5(string[] args)
+        {
             DataTable dt= ExcelHelper.GetDataTable("D:/培训导入.xlsx");
             
             IEntryService entryService = new EntryService();
             //dt.Rows.RemoveAt(0);
             foreach (DataRow row in dt.Rows)
             {
-                EntryDTO dto = new EntryDTO();
+                EntryImportDTO dto = new EntryImportDTO();
                 dto.Address = row["地址"].ToString();
                 dto.BankAccount = row["银行账号"].ToString();
                 dto.Contact = row["联系方式"].ToString();
                 dto.Duty = row["职务"].ToString();
                 dto.Ein = row["税号"].ToString();
-                dto.Gender = row["性别"].ToString() == "男";
+                dto.Gender = row["性别"].ToString();
                 dto.InvoiceUp = row["发票抬头"].ToString();
                 dto.Mobile = row["手机号"].ToString();
                 dto.Name = row["姓名"].ToString();
                 dto.OpenBank = row["开户行"].ToString();
-                dto.PayId = 1;
-                dto.StayId = 1;
-                dto.CityId = 1;
+                dto.PayName = row["支付方式"].ToString();
+                dto.StayName = row["住宿要求"].ToString();
+                dto.CityId = 22;
                 //dto.Workplace = "南宁市";
                 dto.WorkUnits = row["工作单位"].ToString();
-                long id = entryService.Add(dto);
-                Console.WriteLine(id);
+                dto.TrainId = 1;
+                dto.EntryChannelId = 38;
+                bool b = row["地址"].ToString()=="";
+                //long id = entryService.ImportAdd(dto);
+                Console.WriteLine(b);
             }
             //EntryDTO dto = new EntryDTO();
             //dto.Gender = true;

@@ -68,6 +68,33 @@ namespace Chat.Service.Service
             }
         }
 
+        public TrainDTO GetById(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
+                var train= cs.GetAll().SingleOrDefault(t => t.Id == id);
+                if(train==null)
+                {
+                    return null;
+                }
+                if (train.StartTime > DateTime.Now)
+                {
+                    train.StatusId = 34;
+                }
+                else if (train.StartTime <= DateTime.Now && train.EndTime >= DateTime.Now)
+                {
+                    train.StatusId = 35;
+                }
+                else if (train.EndTime < DateTime.Now)
+                {
+                    train.StatusId = 36;
+                }
+                dbc.SaveChanges();
+                return ToDTO(train);
+            }
+        }
+
         private TrainDTO ToDTO(TrainEntity entity)
         {
             TrainDTO dto = new TrainDTO();

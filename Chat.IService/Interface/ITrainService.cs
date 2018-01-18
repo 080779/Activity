@@ -11,5 +11,6 @@ namespace Chat.IService.Interface
     {
         long AddNew(string title, string img, string address, DateTime? startTime, DateTime? endTime, decimal entryFee, long upToOne, string description);
         TrainDTO[] GetAll();
+        TrainDTO GetById(long id);
     }
 }

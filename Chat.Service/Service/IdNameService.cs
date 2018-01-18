@@ -54,5 +54,19 @@ namespace Chat.Service.Service
                 return new IdNameDTO { Id = type.Id, CreateDateTime = type.CreateDateTime, ImgUrl = type.ImgUrl, Name = type.Name, TypeName = type.TypeName };
             }
         }
+
+        public IdNameDTO GetByName(string name)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<IdNameEntity> cs = new CommonService<IdNameEntity>(dbc);
+                var type = cs.GetAll().SingleOrDefault(i => i.Name.Contains(name));
+                if (type == null)
+                {
+                    return null;
+                }
+                return new IdNameDTO { Id = type.Id, CreateDateTime = type.CreateDateTime, ImgUrl = type.ImgUrl, Name = type.Name, TypeName = type.TypeName };
+            }
+        }
     }
 }

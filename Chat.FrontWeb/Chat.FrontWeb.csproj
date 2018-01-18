@@ -114,8 +114,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\common.css" />
+    <Content Include="css\main.css" />
     <Content Include="css\style-default.css" />
     <Content Include="Global.asax" />
+    <Content Include="Images\icon.png" />
+    <Content Include="Images\img.jpg" />
+    <Content Include="Images\infos.png" />
+    <Content Include="Images\right.png" />
     <Content Include="img\23e.png" />
     <Content Include="img\code.jpg" />
     <Content Include="img\active-complete.jpg" />
@@ -156,6 +161,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SYSExceptionFilter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TrainController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -179,6 +185,8 @@
     <Content Include="Views\Home\Prize.cshtml" />
     <Content Include="Views\Home\Result.cshtml" />
     <None Include="Properties\PublishProfiles\Answer.pubxml" />
+    <Content Include="Views\Train\List.cshtml" />
+    <Content Include="Views\Train\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
