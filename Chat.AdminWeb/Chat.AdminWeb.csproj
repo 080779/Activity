@@ -170,6 +170,7 @@
     <Content Include="Css\style.default.css" />
     <Content Include="Css\toggles.css" />
     <Content Include="Css\weather-icons.min.css" />
+    <Content Include="Css\wysiwyg-color.css" />
     <Content Include="Global.asax" />
     <Content Include="lib\My97DatePicker\calendar.js" />
     <Content Include="lib\My97DatePicker\lang\en.js" />
@@ -194,7 +195,9 @@
     <Content Include="Picture\zhb.png" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-wysihtml5.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\ckeditor.js" />
     <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\dropzone.min.js" />
     <Content Include="Scripts\jquery-1.11.1.min.js" />
@@ -206,11 +209,14 @@
     <Content Include="Scripts\modernizr.min.js" />
     <Content Include="Scripts\pace.min.js" />
     <Content Include="Scripts\retina.min.js" />
+    <Content Include="Scripts\wysihtml5-0.3.0.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\ActDescriptionAttribute.cs" />
+    <Compile Include="App_Start\ActionLogFilter.cs" />
     <Compile Include="App_Start\PermissionAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SYSAuthorizationFilter.cs" />
@@ -237,6 +243,9 @@
     <Compile Include="Models\LoadAddExeModel.cs" />
     <Compile Include="Models\PrizeSetModel.cs" />
     <Compile Include="Models\PrizeWonViewModel.cs" />
+    <Compile Include="Models\Train\EntryAddModel.cs" />
+    <Compile Include="Models\Train\EntryAddViewModel.cs" />
+    <Compile Include="Models\Train\EntryListViewModel.cs" />
     <Compile Include="Models\Train\TrainAddModel.cs" />
     <Compile Include="Models\Train\TrainListViewModel.cs" />
     <Compile Include="Models\UserListModel.cs" />
@@ -265,6 +274,8 @@
     <Content Include="Views\Home\Add.cshtml" />
     <Content Include="Views\Train\Add.cshtml" />
     <Content Include="Views\Train\List.cshtml" />
+    <Content Include="Views\Train\EntryAdd.cshtml" />
+    <Content Include="Views\Train\EntryList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

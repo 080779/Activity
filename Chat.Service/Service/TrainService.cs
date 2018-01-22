@@ -95,6 +95,15 @@ namespace Chat.Service.Service
             }
         }
 
+        //public bool IsFulled(long id)
+        //{
+        
+        //}
+
+        //public bool IsOvered(long id)
+        //{
+         //}
+
         private TrainDTO ToDTO(TrainEntity entity)
         {
             TrainDTO dto = new TrainDTO();

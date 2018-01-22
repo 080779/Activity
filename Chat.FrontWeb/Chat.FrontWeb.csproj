@@ -72,6 +72,14 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\NPOI.OOXML.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -154,6 +162,7 @@
     <Content Include="img\default\tm-bg.png" />
     <Content Include="img\zhb.jpg" />
     <Content Include="img\zhb.png" />
+    <Content Include="js\check.js" />
     <Content Include="js\jquery.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -171,6 +180,9 @@
     <Compile Include="Models\PrizeViewModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\TopicModel.cs" />
+    <Compile Include="Models\train\JoininInfoViewModel.cs" />
+    <Compile Include="Models\train\JoininModel.cs" />
+    <Compile Include="Models\train\JoininViewModel.cs" />
     <Compile Include="Models\user\AddUser.cs" />
     <Compile Include="Models\user\SearchUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -187,6 +199,8 @@
     <None Include="Properties\PublishProfiles\Answer.pubxml" />
     <Content Include="Views\Train\List.cshtml" />
     <Content Include="Views\Train\Details.cshtml" />
+    <Content Include="Views\Train\Joinin.cshtml" />
+    <Content Include="Views\Train\JoininInfo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

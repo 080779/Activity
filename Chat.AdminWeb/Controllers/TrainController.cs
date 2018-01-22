@@ -3,6 +3,8 @@ using Chat.DTO.DTO;
 using Chat.IService.Interface;
 using Chat.WebCommon;
 using CodeCarvings.Piczard;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +17,9 @@ namespace Chat.AdminWeb.Controllers
     public class TrainController : Controller
     {
         public ITrainService trainService { get; set; }
+        public IIdNameService idNameService { get; set; }
+        public IEntryService entryService { get; set; }
+
         public ActionResult List()
         {
             TrainDTO[] dtos = trainService.GetAll();
@@ -91,14 +96,55 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1" });
         }
 
+        public ActionResult EntryList(long id)
+        {
+            EntryListViewModel model = new EntryListViewModel();
+            model.TrainId = id;
+            model.Cities = idNameService.GetAll("市级");
+            model.Entries = entryService.GetByTrainId(id);
+            return View(model);
+        }
+
         public ActionResult Edit()
         {
             return View();
         }
 
-        public ActionResult EntryAdd()
+        public ActionResult EntryAdd(long id)
         {
-            return View();
+            EntryAddViewModel model = new EntryAddViewModel();
+            model.TrainId = id;
+            model.Cities = idNameService.GetAll("市级");
+            model.Pays = idNameService.GetAll("支付方式");
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EntryAdd(EntryAddModel model)
+        {
+            EntryDTO dto = new EntryDTO();
+            dto.Address = model.Address;
+            dto.BankAccount = model.BankAccount;
+            dto.CityId = model.CityId;
+            dto.Contact = model.Contact;
+            dto.Duty = model.Duty;
+            dto.Ein = model.Ein;
+            dto.EntryChannelId = 38;
+            dto.Gender = model.Gender==1;
+            dto.InvoiceUp = model.InvoiceUp;
+            dto.Mobile = model.Mobile;
+            dto.Name = model.Name;
+            dto.OpenBank = model.OpenBank;
+            dto.PayId = model.PayId;
+            dto.StayId = model.StayId;
+            dto.TrainId = model.TrainId;
+            dto.WorkUnits = model.WorkUnits;
+            long id=entryService.Add(dto);
+            if(id<=0)
+            {
+                return Json(new AjaxResult { Status = "0",ErrorMsg="新增报名用户失败" });
+            }
+            return Json(new AjaxResult { Status = "1"});
         }
 
         public ActionResult EntryEdit()
@@ -140,6 +186,125 @@ namespace Chat.AdminWeb.Controllers
             //jobNormal.SaveProcessedImageToFileSystem(file.InputStream, fullPath);
             jobNormal.SaveProcessedImageToFileSystem(imgBytes, fullPath);
             return path;
+        }
+
+        public ActionResult ExportExcel(long id)
+        {
+            IWorkbook wb = new XSSFWorkbook();
+
+            ICellStyle style1 = wb.CreateCellStyle();//样式
+            IFont font1 = wb.CreateFont();//字体
+            font1.FontName = "楷体";
+            font1.Boldweight = (short)FontBoldWeight.Normal;//字体加粗样式
+            style1.SetFont(font1);//样式里的字体设置具体的字体样式
+            style1.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;//文字水平对齐方式
+            style1.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;//文字垂直对齐方式
+            //设置边框
+            style1.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+            style1.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+            style1.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+            style1.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+
+            IdNameDTO[] cities = idNameService.GetAll("市级");
+            foreach (var city in cities)
+            {
+                ISheet sheet = wb.CreateSheet(city.Name);
+                //int[] columnWidth = { 10, 10, 20, 10 };
+                //for (int i = 0; i < columnWidth.Length; i++)
+                //{
+                //    //设置列宽度，256*字符数，因为单位是1/256个字符
+                //    sheet.SetColumnWidth(i, 256 * columnWidth[i]);
+                //}
+                int rowCount = 1;
+                var entries=entryService.GetByTrainIdCityId(id, city.Id);
+
+                string[] columnName = { "编号", "姓名", "性别", "工作单位", "职务", "手机号", "住宿要求", "支付方式", "发票抬头", "税号", "地址", "联系方式", "开户行", "银行账号" };
+                IRow row;
+                ICell cell;
+                row = sheet.CreateRow(0);
+                for (int j = 0; j < columnName.Length; j++)
+                {
+                    cell = row.CreateCell(j);//创建第j列
+                    cell.CellStyle = style1;
+                    ExcelHelper.SetCellValue(cell, columnName[j]);
+                }
+                if (entries != null)
+                {
+                    foreach(var entry in entries)
+                    {
+                        row = sheet.CreateRow(rowCount);
+                        cell = row.CreateCell(0);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.Id);
+                        sheet.AutoSizeColumn(0);
+                        cell = row.CreateCell(1);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.Name);
+                        sheet.AutoSizeColumn(1);
+                        cell = row.CreateCell(2);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.Gender);
+                        sheet.AutoSizeColumn(2);
+                        cell = row.CreateCell(3);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.WorkUnits);
+                        sheet.AutoSizeColumn(3);
+                        cell = row.CreateCell(4);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.Duty);
+                        sheet.AutoSizeColumn(4);
+                        cell = row.CreateCell(5);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.Mobile);
+                        sheet.AutoSizeColumn(5);
+                        cell = row.CreateCell(6);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.StayName);
+                        sheet.AutoSizeColumn(6);
+                        cell = row.CreateCell(7);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.PayName);
+                        sheet.AutoSizeColumn(7);
+                        cell = row.CreateCell(8);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.InvoiceUp);
+                        sheet.AutoSizeColumn(8);
+                        cell = row.CreateCell(9);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.Ein);
+                        sheet.AutoSizeColumn(9);
+                        cell = row.CreateCell(10);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.Address);
+                        sheet.AutoSizeColumn(10);
+                        cell = row.CreateCell(11);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.Contact);
+                        sheet.AutoSizeColumn(11);
+                        cell = row.CreateCell(12);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.OpenBank);
+                        sheet.AutoSizeColumn(12);
+                        cell = row.CreateCell(13);
+                        cell.CellStyle = style1;
+                        ExcelHelper.SetCellValue(cell, entry.BankAccount);
+                        sheet.AutoSizeColumn(13);
+                    }
+                }
+            }
+
+            var ms = new NpoiMemoryStream();
+            ms.AllowClose = false;
+            wb.Write(ms);
+            ms.Flush();
+            ms.Seek(0, SeekOrigin.Begin);
+            ms.AllowClose = true;
+            return File(ms, "application/vnd.ms-excel", "报名用户汇总.xls");
+        }
+
+        public ActionResult SearchEntry()
+        {
+            return Json(new AjaxResult { Status = "0", ErrorMsg = "培训主题不能为空" });
         }
     }
 }

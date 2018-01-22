@@ -39,6 +39,7 @@ namespace Chat.AdminWeb
             GlobalFilters.Filters.Add(new SYSExceptionFilter());
             GlobalFilters.Filters.Add(new SYSAuthorizationFilter());
             GlobalFilters.Filters.Add(new JsonNetActionFilter());
+            GlobalFilters.Filters.Add(new ActionLogFilter());
 
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);

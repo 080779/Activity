@@ -1,0 +1,107 @@
+﻿@model Chat.FrontWeb.Models.train.JoininInfoViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>报名结果</title>
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+</head>
+<body>
+    <div class="joininthumb">
+        <p>感谢您积极参与！</p>
+        <p>已为您成功报名！</p>
+    </div>
+    <div class="joininfo joinbox">
+        <div class="infos">
+            <h3><span></span>报名信息</h3>
+            <ul>
+                <li>
+                    <span>姓名</span>
+                    <div>
+                        <input type="text" value='@Model.Entry.Name  @(Model.Entry.Gender?"先生":"女士")' readonly="readonly" />
+                    </div>
+                </li>
+                <li>
+                    <span>手机</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.Mobile" readonly="readonly" />
+                    </div>
+                </li>
+                <li>
+                    <span>工作单位</span>
+                    <div>
+                        <textarea readonly="readonly">@Model.Entry.WorkUnits </textarea>
+                    </div>
+                </li>
+                <li>
+                    <span>工作地</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.CityName" readonly="readonly" />
+                    </div>
+                </li>
+                <li>
+                    <span>住宿要求</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.StayName" readonly="readonly" />
+                    </div>
+                </li>
+                <li>
+                    <span>支付方式</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.PayName" readonly="readonly" />
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="ticketinfo">
+            <h3><span></span>开票信息</h3>
+            <ul>
+                <li>
+                    <span>发票抬头</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.InvoiceUp" readonly="readonly" />
+                    </div>
+                </li>
+                <li>
+                    <span>税号</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.Ein" readonly="readonly" />
+                    </div>
+                </li>
+                <li>
+                    <span>地址</span>
+                    <div>
+                        <textarea readonly="readonly">@Model.Entry.Address</textarea>
+                    </div>
+                </li>
+                <li>
+                    <span>电话</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.Contact" readonly="readonly" />
+                    </div>
+                </li>
+                <li>
+                    <span>开户行</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.OpenBank" readonly="readonly" />
+                    </div>
+                </li>
+                <li>
+                    <span>银行账号</span>
+                    <div>
+                        <input type="text" value="@Model.Entry.BankAccount" readonly="readonly" />
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="subnav">
+        <ul>
+            <li><a href="/train/list">返回首页</a></li>
+            <li><a href="/train/details?id=@Model.TrainId">返回培训详情</a></li>
+        </ul>
+    </div>
+</body>
+</html>
+

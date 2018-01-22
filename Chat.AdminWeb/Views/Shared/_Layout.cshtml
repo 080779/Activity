@@ -12,6 +12,8 @@
     <link href="~/Css/style.css" rel="stylesheet">
     <link href="~/Css/style.calendar.css" rel="stylesheet">
     <link href="~/Picture/zhb.png" rel="shortcut icon" />
+    <link href="~/Css/wysiwyg-color.css" rel="stylesheet" />
+    <link href="~/Css/bootstrap-wysihtml5.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -29,7 +31,7 @@
                     <div class="btn-group btn-group-option">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <img class="img-circle avatar-img" alt="" src="~/Picture/admin.png">
-                            <span class="user-name">系统管理员</span>
+                            <span class="user-name">@ViewBag.AdminUserName</span>
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <ul class="dropdown-menu pull-right" role="menu">
@@ -52,16 +54,33 @@
                         <img class="img-circle" src="~/Picture/admin.png" alt="">
                     </a>
                     <div class="media-body">
-                        <h4 class="media-heading">系统管理员</h4>
+                        <h4 class="media-heading">@ViewBag.AdminUserName</h4>
                     </div>
                 </div><!-- media -->
 
-
-                <ul class="nav nav-pills nav-stacked" id="navMenu">
+                <ul class="nav nav-pills nav-stacked" id="menuNav">
+                    <li class="parent">
+                        <a href="javascript:;"><i class="fa fa-joomla"></i> <span>答题管理</span></a>
+                        <ul class="children">
+                            <li><a href="~/testpaper/list">试题管理</a></li>
+                            <li><a href="~/activity/list">答题活动管理</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="~/train/list"><i class="fa fa-book"></i> <span>培训管理</span></a></li>
+                    <li><a href="~/user/list"><i class="fa fa-user"></i> <span>用户管理</span></a></li>
+                    <li class="parent">
+                        <a href="javascript:;"><i class="fa fa-archive"></i> <span>系统管理</span></a>
+                        <ul class="children">
+                            <li><a href="~/home/logs">系统日志</a></li>
+                            <li><a href="~/home/adminusers">后台用户管理</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                @*<ul class="nav nav-pills nav-stacked" id="navMenu">
                     <li><a href="~/testpaper/list"><i class="fa fa-edit"></i> <span>试题管理</span></a></li>
                     <li><a href="~/activity/list"><i class="fa fa-joomla"></i> <span>答题活动管理</span></a></li>
                     <li><a href="~/user/list"><i class="fa fa-user"></i> <span>用户管理</span></a></li>
-                </ul>
+                </ul>*@
 
             </div><!-- leftpanel -->
             @RenderBody()
@@ -73,7 +92,21 @@
             <script src="~/Scripts/jquery.uploadimg.js" type="text/javascript" charset="utf-8"></script>
             <script src="~/Scripts/bootstrap-datepicker.js?1"></script>
             <script src="~/lib/My97DatePicker/WdatePicker.js"></script>
-
+            <script src="~/Scripts/ckeditor.js"></script>
+            <script src="~/Scripts/wysihtml5-0.3.0.min.js"></script>
+            <script src="~/Scripts/bootstrap-wysihtml5.js"></script>
+            <script type="text/javascript">
+                var menuNavLink = $("#menuNav a");
+                for (var i = 0; i < menuNavLink.length; i++) {
+                    if (menuNavLink.eq(i).attr("href").split('/')[1] == window.location.pathname.split('/')[1]) {
+                        menuNavLink.eq(i).parent("li").addClass("active");
+                        if (menuNavLink.eq(i).parent("li").parents("li").hasClass("parent")) {
+                            menuNavLink.eq(i).parent("li").parents("li").addClass("active");
+                        }
+                        break;
+                    }
+                }
+            </script>
             @RenderSection("FooterScript", false)
 </body>
 </html>

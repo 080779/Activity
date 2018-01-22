@@ -18,6 +18,7 @@ namespace Chat.AdminWeb.Controllers
         public IActivityService activityService { get; set; }
 
         [Permission("list")]
+        [ActDescription("试卷列表")]
         public ActionResult List()
         {
             TestPaperDTO[] dtos = testPaperService.GetAll();

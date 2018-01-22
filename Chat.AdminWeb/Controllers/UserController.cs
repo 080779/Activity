@@ -16,6 +16,7 @@ namespace Chat.AdminWeb.Controllers
         public IUserService userService { get; set; }
 
         [Permission("list")]
+        [ActDescription("答题获得用户列表")]
         public ActionResult List(int pageIndex=1)
         {
             UserListModel model = new UserListModel();

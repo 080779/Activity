@@ -21,7 +21,7 @@
             <div class="panel-body">
                 <div class="form-inline">
                     <div class="form-group mt10">
-                        <a class="btn btn-primary mr5" iconcls="icon-search" href="~/Activity/Add"><i class="fa fa-plus"></i> 创建答题活动</a>
+                        <a class="btn btn-primary mr5" iconcls="icon-search" href="~/Activity/Add"><i class="fa fa-plus"></i>创建答题活动</a>
                     </div>
                 </div>
             </div>
@@ -151,11 +151,6 @@
 {
 <script type="text/javascript">
         $(function () {
-            jQuery('.datepicker').datepicker({
-                autoclose: true,
-                todayHighlight: true,
-                format: 'yyyy-mm-dd'
-            });
 
             $('.Jsdel').click(function () {
                 $("#sureDel").val($(this).val());
@@ -240,29 +235,7 @@
                     error: function () { alert("网络错误"); $("#cancel").click(); }
                 });
             });
-            //导出开奖结果
-            //$("#sureSaveCel").click(function () {
-            //    var id = $(this).val();
-            //    $.ajax({
-            //        url: "/activity/createexcel", type: "post", data: { id: id },
-            //        success: function (result) {
-            //            if (result.status == "error") {
-            //                alert(result.errorMsg);
-            //                $("#cancelSave").click();
-            //            }
-            //            else if (result.status == "success") {
-            //                $("#cancelSave").click();
-            //                window.location.reload();
-            //            }
-            //            else {
-            //                alert("未知错误");
-            //                $("#cancelSave").click();
-            //            }
-            //        },
-            //        error: function () { alert("网络错误"); $("#cancel").click(); }
-            //    });
-            //});
-
+            
         })
 </script>    
 }

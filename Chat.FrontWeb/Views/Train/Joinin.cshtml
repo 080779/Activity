@@ -1,0 +1,181 @@
+﻿@model Chat.FrontWeb.Models.train.JoininViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>报名确认</title>
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+</head>
+<body>
+    <input type="hidden" id="trainId" value="@Model.TrainId" />
+    <div class="joinin joinbox">
+        <div class="infos">
+            <h3><span></span>报名信息</h3>
+            <ul>
+                <li>
+                    <span>姓名</span>
+                    <div>
+                        <input type="text" id="name" placeholder="请填写您的姓名" />
+                    </div>
+                </li>
+                <li>
+                    <span>性别</span>
+                    <div>
+                        <select id="gender">
+                            <option value="0">请选择性别</option>
+                            <option value="1">男</option>
+                            <option value="2">女</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <span>手机</span>
+                    <div>
+                        <input type="text" id="mobile" placeholder="请填写您的手机号码并保持通讯畅通" />
+                    </div>
+                </li>
+                <li>
+                    <span>工作单位</span>
+                    <div>
+                        <textarea id="workUnits" placeholder="请填写您的工作单位"></textarea>
+                    </div>
+                </li>
+                <li>
+                    <span>职务</span>
+                    <div>
+                        <input type="text" id="duty" placeholder="请填写您的职务" />
+                    </div>
+                </li>
+                <li>
+                    <span>工作地</span>
+                    <div>
+                        <select id="cityId">
+                            <option value="0">选择工作地</option>
+                            @foreach (var city in Model.Cities)
+                            {
+                                <option value="@city.Id">@city.Name</option>
+                            }
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <span>住宿</span>
+                    <div>
+                        <select id="stayId">
+                            <option value="0">请选择住宿</option>
+                            @foreach (var stay in Model.Staies)
+                            {
+                                <option value="@stay.Id">@stay.Name</option>
+                            }
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <span>支付方式</span>
+                    <div>
+                        <select id="payId">
+                            <option value="0">请选择支付</option>
+                            @foreach (var pay in Model.Paies)
+                            {
+                                <option value="@pay.Id">@pay.Name</option>
+                            }
+                        </select>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="ticketinfo">
+            <h3><span></span>开票信息</h3>
+            <ul>
+                <li>
+                    <span>发票抬头</span>
+                    <div>
+                        <input type="text" id="invoiceUp" placeholder="请填写发票抬头" />
+                    </div>
+                </li>
+                <li>
+                    <span>税号</span>
+                    <div>
+                        <input type="text" id="ein" placeholder="请填写税号" />
+                    </div>
+                </li>
+                <li>
+                    <span>详细地址</span>
+                    <div>
+                        <textarea id="address" placeholder="请填写地址"></textarea>
+                    </div>
+                </li>
+                <li>
+                    <span>联系方式</span>
+                    <div>
+                        <input type="text" id="contact" placeholder="请填写联系方式" />
+                    </div>
+                </li>
+                <li>
+                    <span>开户行</span>
+                    <div>
+                        <input type="text" id="openBank" placeholder="请填写开户行" />
+                    </div>
+                </li>
+                <li>
+                    <span>银行账号</span>
+                    <div>
+                        <input type="number" id="bankAccount" placeholder="请填写银行账号" />
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="subnav">
+        <ul>
+            <li><a href="/train/details?id=@Model.TrainId">返回活动详情</a></li>
+            <li><a id="save">确认报名</a></li>
+        </ul>
+    </div>
+    <script src="~/js/check.js"></script>
+    <script src="~/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("#save").click(function () {            
+            var name = $("#name").val();
+            var gender = $("#gender").val();
+            var mobile = $("#mobile").val();
+            var workUnits = $("#workUnits").val();
+            var duty = $("#duty").val();
+            var cityId = $("#cityId").val();
+            var stayId = $("#stayId").val();
+            var payId = $("#payId").val();
+            var invoiceUp = $("#invoiceUp").val();
+            var ein = $("#ein").val();
+            var address = $("#address").val();
+            var contact = $("#contact").val();
+            var openBank = $("#openBank").val();
+            var bankAccount = $("#bankAccount").val();
+            if (!checkjoinin(name, gender, mobile, workUnits, duty, cityId, stayId, payId, invoiceUp, ein, address, contact, openBank, bankAccount)) {
+                return;
+            }
+            var trainId = $("#trainId").val();
+            console.log(trainId);
+            $.ajax({
+                url: "/train/checkjoinin", type: "post",
+                data: { trainId: trainId, name: name, gender: gender, mobile: mobile, workUnits: workUnits, duty: duty, cityId: cityId, stayId: stayId, payId: payId, invoiceUp: invoiceUp, ein: ein, address: address, contact: contact, openBank: openBank, bankAccount: bankAccount },
+                success: function (result) {
+                    if(result.status=="1")
+                    {
+                        window.location.href = result.data;
+                    }
+                    else if(result.status=="0")
+                    {
+                        alert(result.errorMsg);
+                    }
+                    else
+                    {
+                        alert("未知错误");
+                    }
+                },
+                error: function () { alert("网络错误");}                
+            });
+        });
+    </script>
+</body>
+</html>

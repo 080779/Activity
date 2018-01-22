@@ -13,7 +13,10 @@ namespace Chat.IService.Interface
         long Add(EntryDTO dto);
         long ImportAdd(EntryImportDTO dto);
         bool EntryImport(long trainId,long cityId,long entryChannelId,DataTable dt);
+        bool IsJoinined(long trainId,string mobile);
         EntryListDTO[] GetAll();
         EntryListDTO[] GetByTrainId(long id);
+        EntryListDTO[] GetByTrainIdCityId(long id, long cityId);
+        EntryListDTO GetById(long id);
     }
 }

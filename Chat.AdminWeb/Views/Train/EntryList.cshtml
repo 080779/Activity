@@ -1,0 +1,257 @@
+﻿@model Chat.AdminWeb.Models.Train.EntryListViewModel
+@{
+    ViewBag.Title = "报名管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    #pager ul li {
+        float: left;
+        margin-left: 10px;
+        color: lightskyblue;
+        list-style-type: none;
+        width: 30px;
+        font-size: 8px;
+        margin: 0px;
+    }
+
+    .curPager {
+        color: brown;
+    }
+</style>
+<div class="mainpanel">
+    <div class="contentpanel">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-inline">
+                    <div class="form-group mt10">
+                        <a class="btn btn-primary mr5" iconcls="icon-search" href="~/Train/EntryAdd?id=@Model.TrainId"><i class="fa fa-plus"></i>新增报名人员</a>
+                        <button class="btn btn-primary mr5" data-toggle="modal" data-target="#myModal2" value=""><i class="fa fa-pencil"></i>市级表格导入</button>
+                        <a class="btn btn-primary mr5" iconcls="icon-search" href="~/Train/ExportExcel?id=@Model.TrainId"><i class="fa fa-laptop"></i>导出汇总表格</a>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="form-inline">
+                    <div class="form-group mt10">
+                        <select name="cityId" id="cityId" class="form-control">
+                            <option value="">选择工作地</option>
+                            @foreach (var city in Model.Cities)
+                            {
+                                <option value="@city.Id">@city.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group mt10">
+                        <select name="gender" id="gender" class="form-control">
+                            <option value="">性别</option>
+                            <option value="1">男</option>
+                            <option value="0">女</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt10">
+                        <select name="stayId" id="stayId" class="form-control">
+                            <option value="">住宿要求</option>
+                            <option value="32">单住</option>
+                            <option value="33">可合住</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt10">
+                        <select name="payId" id="payId" class="form-control">
+                            <option value="">支付方式</option>
+                            <option value="27">免费</option>
+                            <option value="28">到场付现</option>
+                            <option value="29">公对公转账</option>
+                            <option value="30">微信支付</option>
+                            <option value="31">支付宝支付</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt10">
+                        <select name="entryChannelId" id="entryChannelId" class="form-control">
+                            <option value="">报名渠道</option>
+                            <option value="34">待开始</option>
+                            <option value="35">进行中</option>
+                            <option value="36">已结束</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt10">
+                        <input type="text" id="txtStar" placeholder="请输入起始时间" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+                        <input type="text" id="txtEnd" placeholder="请输入结束时间" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+                    </div>
+                    <div class="form-group mt10">
+                        <input type="text" id="keyword" placeholder="请输入姓名或手机号" class="form-control">
+                    </div>
+                    <div class="form-group mt10">
+                        <a class="btn btn-primary mr5" id="search" iconcls="icon-search" href="javascript:;"><i class="fa fa-search"></i> 搜 索 </a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-primary mb30">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 80px;">编号</th>
+                            <th style="min-width: 80px;">工作地</th>
+                            <th style="min-width: 80px;">姓名</th>
+                            <th style="min-width: 80px;">性别</th>
+                            <th style="min-width: 80px;">工作单位</th>
+                            <th style="min-width: 80px;">职务</th>
+                            <th style="min-width: 80px;">联系方式</th>
+                            <th style="min-width: 80px;">住宿要求</th>
+                            <th style="min-width: 80px;">报名录入时间</th>
+                            <th style="min-width: 80px;">支付方式</th>
+                            <th style="min-width: 80px;">报名渠道</th>
+                            <th style="min-width: 120px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paperList">
+                        @foreach (var entry in Model.Entries)
+                        {
+                            <tr>
+                                <td data-attr="编号">@entry.Id</td>
+                                <td data-attr="工作地">@entry.CityName</td>
+                                <td data-attr="姓名">@entry.Name</td>
+                                <td data-attr="性别">@(entry.Gender?"男":"女")</td>
+                                <td data-attr="工作单位">@entry.WorkUnits</td>
+                                <td data-attr="职务">@entry.Duty</td>
+                                <td data-attr="联系方式">@entry.Contact</td>
+                                <td data-attr="住宿要求">@entry.StayName</td>
+                                <td data-attr="报名录入时间">@entry.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td data-attr="支付方式">@entry.PayName</td>
+                                <td data-attr="报名渠道">@entry.EntryChannelName</td>
+                                <td data-attr="操作">
+                                    <a href="~/train/entryedit?id=@entry.Id" class="btn btn-primary btn-sm">编辑</a>
+                                    <button data-toggle="modal" data-target="#myModal" value="@entry.Id" class="btn btn-danger btn-sm Jsdel">删除</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @*@{
+                        var pager = new Chat.WebCommon.DataPaging();
+                        pager.CurrentLinkClassName = "curPager";
+                        pager.MaxPagerCount = 10;
+                        pager.PageIndex = ViewBag.PageIndex;//这些数据，cshtml不知道，就必须让Action传递给我们
+                                                            //对于所有cshtml要用到，但是又获取不到的数据，都由Action来获取，然后放到ViewBag或者Model中传递给cshtml
+                        pager.PageSize = 10;
+                        pager.TotalCount = ViewBag.TotalCount;
+                        pager.UrlPattern = "/activity/list?&pageIndex={pn}";
+                    }*@
+                @*<div id="pager"><!--@Html.Raw(pager.GetPager())--></div>*@
+            </div>
+        </div>
+    </div><!-- contentpanel -->
+</div><!-- mainpanel -->
+        </div><!-- mainwrapper -->
+    </section>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal2">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">按市级导入</h4>
+            </div>
+            <div class="modal-body"><br />                
+                <select name="cityId">
+                    <option value="0">选择导入市级</option>                    
+                    <option value="1">南宁</option>
+                </select><br />                                
+            </div>
+            <div class="modal-body">
+                <input type="file" /><br />                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="cancelSave" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="sureSaveCel">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>确定删除该活动？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="cancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="sureDel">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section FooterScript
+{
+    <script type="text/javascript">
+        $(function () {
+
+            $('.Jsdel').click(function () {
+                $("#sureDel").val($(this).val());
+            });
+
+            //搜索
+            $("#search").click(function () {
+                var cityId = $("#cityId").val();
+                var gender = $("#gender").val();
+                var stayId = $("#stayId").val();
+                var payId = $("#payId").val();
+                var entryChannelId = $("#entryChannelId").val();
+                var startTime = $("#txtStar").val();
+                var endTime = $("#txtEnd").val();
+                var keyWord = $("#keyword").val();
+                $.ajax({
+                    url: "/train/searchentry", type: "post",
+                    data: { cityId: cityId, gender: gender, stayId: stayId, payId: payId, entryChannelId: entryChannelId, startTime: startTime, endTime: endTime, keyWord: keyWord },
+                    success: function (result) {
+                        if (result.status == "error") {
+                            alert(result.errorMsg);
+                        }
+                        else if (result.status == "success") {
+                            $("#paperList").empty();
+                            for (var i = 0; i < result.data.length; i++) {
+                                var iscurrent = result.data[i].isCurrent ? "是" : "否";
+                                $("#paperList").append('<tr><td data-attr="期数">' + result.data[i].num + result.data[i].id + '</td><td data-attr="活动名称">' + result.data[i].name + '</td><td data-attr="状态">' + result.data[i].statusName + '</td><td data-attr="是否当前活动">'+iscurrent+'</td><td data-attr="访问量">' + result.data[i].visitCount + '</td><td data-attr="答题次数">' + result.data[i].answerCount + '</td><td data-attr="获奖资格人数">' + result.data[i].havePrizeCount + '</td><td data-attr="获奖人数">' + result.data[i].prizeCount + '</td><td data-attr="创建时间">' + result.data[i].createDateTime + '</td><td data-attr="操作"><a href="/activity/edit?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">编辑</a><button value="' + result.data[i].id + '" class="btn btn-primary btn-sm current">设为当前</button><a href="/activity/prize?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">开奖处理</a><a href="/activity/createexcel?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">导出开奖结果</a><button data-toggle="modal" data-target="#myModal" value="' + result.data[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
+                            }
+                        }
+                        else {
+                            alert("未知错误");
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+
+            //删除
+            $("#sureDel").click(function () {
+                var id = $(this).val();
+                $.ajax({
+                    url: "/train/delentry", type: "post", data: { id: id },
+                    success: function (result) {
+                        if (result.status == "error") {
+                            alert(result.errorMsg);
+                            $("#cancel").click();
+                        }
+                        else if (result.status == "success") {
+                            $("#cancel").click();
+                            window.location.reload();
+                        }
+                        else {
+                            alert("未知错误");
+                            $("#cancel").click();
+                        }
+                    },
+                    error: function () { alert("网络错误"); $("#cancel").click(); }
+                });
+            });
+
+        })
+    </script>
+}

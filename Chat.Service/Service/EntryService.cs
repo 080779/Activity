@@ -45,6 +45,7 @@ namespace Chat.Service.Service
                 entity.WorkUnits = dto.WorkUnits;
                 dbc.Entries.Add(entity);
                 train.Entries.Add(entity);
+                train.EntryCount++;
                 dbc.SaveChanges();
                 return entity.Id;
             }                
@@ -167,6 +168,20 @@ namespace Chat.Service.Service
             }
         }
 
+        public bool IsJoinined(long trainId, string mobile)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
+                var train = cs.GetAll().SingleOrDefault(t=>t.Id==trainId);
+                if(train==null)
+                {
+                    return false;
+                }
+                return train.Entries.Where(e => e.IsDeleted == false).Any(e=>e.Mobile==mobile);
+            }                
+        }
+
         public EntryListDTO[] GetAll()
         {
             using (MyDbContext dbc = new MyDbContext())
@@ -187,6 +202,34 @@ namespace Chat.Service.Service
                     return null;
                 }
                 return train.Entries.Where(e=>e.IsDeleted==false).OrderByDescending(e => e.CreateDateTime).Take(20).ToList().Select(e => ToListDTO(e)).ToArray();
+            }
+        }
+
+        public EntryListDTO[] GetByTrainIdCityId(long id, long cityId)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
+                var train = cs.GetAll().SingleOrDefault(t => t.Id == id);
+                if (train == null)
+                {
+                    return null;
+                }
+                return train.Entries.Where(e => e.IsDeleted == false && e.CityId==cityId).OrderByDescending(e => e.CreateDateTime).ToList().Select(e => ToListDTO(e)).ToArray();
+            }
+        }
+
+        public EntryListDTO GetById(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<EntryEntity> cs = new CommonService<EntryEntity>(dbc);
+                var entry = cs.GetAll().SingleOrDefault(e => e.Id == id);
+                if (entry == null)
+                {
+                    return null;
+                }
+                return ToListDTO(entry);
             }
         }
         

@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
 </head>
 <body>
+    <input type="hidden" id="trainId" value="@Model.Id" />
     <div class="articlebox">
         <div class="articleder">
             <img src="/images/img.jpg" alt="" />
@@ -20,7 +21,7 @@
                 <li><span>培训状态</span><div><font class="green">@Model.StatusName</font> <!--<font class="red">已结束</font>--></div></li>
             </ul>
             <div class="prices">
-                <span>报名费用</span><div><span class="red">@(Model.EntryFee)元/人</span>已报名<font class="red">@(Model.EntryCount)/@(Model.UpToOne)</font></div>
+                <span>报名费用</span><div><span class="red">@(Model.EntryFee)元/人</span>已报名<font class="red">@if (Model.UpToOne != 0) { @Model.EntryCount<text>/</text>@Model.UpToOne<text>人</text>} else {@Model.EntryCount<text>人(不限人数)</text>}</font></div>
             </div>
         </div>
         <div class="articleinfo">
@@ -33,15 +34,28 @@
     <div class="subnav">
         <ul>
             <li><a href="/train/list">返回首页</a></li>
-            <li><a href="/train/joinin?id=@Model.Id">
-                @if(Model.StatusName=="已结束")
-                {
-                    <text>活动已结束，无法报名</text>
-                }
-                </a>
-            </li>
+            <li><a id="joinin">@if (Model.StatusName == "已结束") {<text>活动已结束，无法报名</text>} else if (Model.UpToOne != 0 && Model.EntryCount==Model.UpToOne) {<text>报名人数已满，无法报名</text>}else {<text>我要报名</text>}</a></li>
         </ul>
     </div>
+    <script src="~/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#joinin").click(function () {
+                var trainId = $("#trainId").val();
+                if ($(this).html() == "我要报名")
+                {
+                    $(this).attr("href", "/train/joinin?id="+trainId);
+                }
+                else if ($(this).html() == "报名人数已满，无法报名")
+                {
+                    alert("报名人数已满");
+                }
+                else if ($(this).html() == "活动已结束，无法报名") {
+                    alert("活动已结束");
+                }
+            });
+        })
+    </script>
 </body>
 </html>
 

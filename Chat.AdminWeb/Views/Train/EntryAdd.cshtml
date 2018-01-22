@@ -1,0 +1,171 @@
+﻿@model Chat.AdminWeb.Models.Train.EntryAddViewModel
+@{
+    ViewBag.Title = "新增报名人员";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="mainpanel">
+    <form class="form-horizontal" method="post" id="formAdd" enctype="multipart/form-data" action="~/activity/add">
+        <div class="contentpanel">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>报名信息</h4>
+                    <input type="hidden" id="trainId" value="@Model.TrainId" />
+                </div>                
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">姓名:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="name" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">性别:</label>
+                        <div class="col-sm-6">
+                            <input type="radio" name="gender" id="gender1" value="1" checked="checked" /><label for="gender1">男</label>&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="gender" id="gender0" value="0" /><label for="gender0">女</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">手机号:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="mobile" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工作地:</label>
+                        <div class="col-sm-6">
+                            <select name="cityId" id="cityId" class="form-control">
+                                <option value="">选择工作地</option>
+                                @foreach (var city in Model.Cities)
+                                {
+                                    <option value="@city.Id">@city.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工作单位:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="workUnits" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">职务:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="duty" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">住宿:</label>
+                        <div class="col-sm-6">
+                            <input type="radio" name="stayId" id="stayId32" value="32" checked="checked" /><label for="stayId32">单住</label>&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="stayId" id="stayId33" value="33" /><label for="stayId33">可合住</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">支付方式:</label>
+                        <div class="col-sm-6">
+                            <select name="payId" id="payId" class="form-control">
+                                <option value="">选择工作地</option>
+                                @foreach (var pay in Model.Pays)
+                                {
+                                    <option value="@pay.Id">@pay.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>开票信息</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">发票抬头:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="invoiceUp" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">税号:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="ein" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地址:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="address" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">联系方式:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="contact" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>                    
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">开户行:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="openBank" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">银行账号:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="bankAccount" placeholder="" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer" style="text-align:center">
+                    <button type="button" id="btnAdd" class="btn btn-primary mr5">确定</button>
+                </div>
+            </div>
+        </div><!-- contentpanel -->
+    </form>
+</div><!-- mainpanel -->
+        </div><!-- mainwrapper -->
+    </section>
+
+
+@section FooterScript
+{
+    <script type="text/javascript">
+        $(function(){
+            
+            $("#btnAdd").click(function () {
+                var trainId = $("#trainId").val();
+                var name = $("#name").val();
+                var gender = $("input[name='gender']:checked").val();
+                var mobile = $("#mobile").val();
+                var cityId = $("#cityId").val();
+                var workUnits = $("#workUnits").val();
+                var duty = $("#duty").val();
+                var stayId = $("input[name='stayId']:checked").val();
+                var payId = $("#payId").val();
+                var invoiceUp = $("#invoiceUp").val();
+                var ein = $("#ein").val();
+                var address = $("#address").val();
+                var contact = $("#contact").val();
+                var openBank = $("#openBank").val();
+                var bankAccount = $("#bankAccount").val();
+                $.ajax({
+                    url: "/train/entryadd", type: "post",
+                    data: { trainId: trainId, name: name, gender: gender, mobile: mobile, cityId: cityId, workUnits: workUnits, duty: duty, stayId: stayId, payId: payId, invoiceUp: invoiceUp, ein: ein, address: address,contact:contact, openBank: openBank, bankAccount: bankAccount },
+                    success: function (result) {
+                        if(result.status=="0")
+                        {
+                            alert(result.errorMsg);
+                        }
+                        else if(result.status=="1")
+                        {
+                            alert("成功");
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+        })
+    </script>
+}
