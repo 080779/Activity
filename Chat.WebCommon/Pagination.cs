@@ -12,34 +12,38 @@ namespace Chat.WebCommon
     public class Pagination
     {
         /// <summary>
-        /// 每页数据条数
+        /// 每页数据条数,默认10条
         /// </summary>
         public int PageSize { get; set; }
         /// <summary>
-        /// 总数据条数
+        /// 总数据条数，默认0
         /// </summary>
         public int TotalCount { get; set; }
         /// <summary>
-        /// 当前页码（从 1 开始）
+        /// 当前页码（从 1 开始），默认1
         /// </summary>
         public int PageIndex { get; set; }
         /// <summary>
-        /// 点击提交转向地址(ajax提交为一个js方法)
+        /// 点击提交转向地址(ajax提交为一个js方法)，默认javascript:getPage({pn});
         /// </summary>
         public string UrlPattern { get; set; }
         /// <summary>
-        /// 最多的页码数
+        /// 最多的页码数，默认10
         /// </summary>
         public int MaxPagerCount { get; set; }
         /// <summary>
-        /// 当前页标的〈a〉标签样式名
+        /// 当前页标的〈a〉标签样式名，默认curPager
         /// </summary>
         public string CurrentLinkClassName { get; set; }
 
         public Pagination()
         {
             this.PageSize = 10;
+            this.TotalCount = 0;
+            this.PageIndex = 1;
+            this.UrlPattern = "javascript:getPage({pn});";
             this.MaxPagerCount = 10;
+            this.CurrentLinkClassName = "curPager";
         }
         public string GetPagerHtml()
         {
@@ -61,6 +65,7 @@ namespace Chat.WebCommon
                 }
             }
             sb.AppendLine("<li>页</li></ul>");
+            sb.Append("<input type='text' id='setIndex' style='width: 45px; height: 20px'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' id='getPage' value='跳转' style='height: 23px'>");
             return sb.ToString();
         }
     }

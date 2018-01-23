@@ -197,6 +197,7 @@
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap-wysihtml5.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\check.js" />
     <Content Include="Scripts\ckeditor.js" />
     <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\dropzone.min.js" />
@@ -245,8 +246,11 @@
     <Compile Include="Models\PrizeWonViewModel.cs" />
     <Compile Include="Models\Train\EntryAddModel.cs" />
     <Compile Include="Models\Train\EntryAddViewModel.cs" />
+    <Compile Include="Models\Train\EntryEditModel.cs" />
+    <Compile Include="Models\Train\EntryEditViewModel.cs" />
     <Compile Include="Models\Train\EntryListViewModel.cs" />
     <Compile Include="Models\Train\TrainAddModel.cs" />
+    <Compile Include="Models\Train\TrainEditModel.cs" />
     <Compile Include="Models\Train\TrainListViewModel.cs" />
     <Compile Include="Models\UserListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -276,6 +280,8 @@
     <Content Include="Views\Train\List.cshtml" />
     <Content Include="Views\Train\EntryAdd.cshtml" />
     <Content Include="Views\Train\EntryList.cshtml" />
+    <Content Include="Views\Train\Edit.cshtml" />
+    <Content Include="Views\Train\EntryEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

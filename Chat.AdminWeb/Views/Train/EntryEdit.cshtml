@@ -1,4 +1,4 @@
-﻿@model Chat.AdminWeb.Models.Train.EntryAddViewModel
+﻿@model Chat.AdminWeb.Models.Train.EntryEditViewModel
 @{
     ViewBag.Title = "新增报名人员";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,26 +9,27 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4>报名信息</h4>
+                    <input type="hidden" id="entryId" value="@Model.Entry.Id" />
                     <input type="hidden" id="trainId" value="@Model.TrainId" />
-                </div>                
+                </div>
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">姓名:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="name" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="name" value="@Model.Entry.Name" placeholder="" maxlength="30" class="form-con  trol">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">性别:</label>
                         <div class="col-sm-6">
-                            <input type="radio" name="gender" id="gender1" value="true" checked="checked" /><label for="gender1">男</label>&nbsp;&nbsp;&nbsp;
-                            <input type="radio" name="gender" id="gender0" value="false" /><label for="gender0">女</label>
+                            <input type="radio" name="gender" id="gender1" value="1" checked="@Model.Entry.Gender" /><label for="gender1">男</label>&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="gender" id="gender0" value="0" checked="@(!Model.Entry.Gender)" /><label for="gender0">女</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">手机号:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="mobile" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="mobile" value="@Model.Entry.Mobile" placeholder="" maxlength="30" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
@@ -38,7 +39,7 @@
                                 <option value="">选择工作地</option>
                                 @foreach (var city in Model.Cities)
                                 {
-                                    <option value="@city.Id">@city.Name</option>
+                                    <option value="@city.Id" selected="@(Model.Entry.CityId==city.Id)">@city.Name</option>
                                 }
                             </select>
                         </div>
@@ -46,20 +47,20 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">工作单位:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="workUnits" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="workUnits" value="@Model.Entry.WorkUnits" placeholder="" maxlength="30" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">职务:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="duty" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="duty" value="@Model.Entry.Duty" placeholder="" maxlength="30" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">住宿:</label>
                         <div class="col-sm-6">
-                            <input type="radio" name="stayId" id="stayId32" value="32" checked="checked" /><label for="stayId32">单住</label>&nbsp;&nbsp;&nbsp;
-                            <input type="radio" name="stayId" id="stayId33" value="33" /><label for="stayId33">可合住</label>
+                            <input type="radio" name="stayId" id="stayId32" value="32" checked="@(Model.Entry.StayId==32)" /><label for="stayId32">单住</label>&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="stayId" id="stayId33" value="33" checked="@(Model.Entry.StayId==33)" /><label for="stayId33">可合住</label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -69,7 +70,7 @@
                                 <option value="">选择支付方式</option>
                                 @foreach (var pay in Model.Pays)
                                 {
-                                    <option value="@pay.Id">@pay.Name</option>
+                                    <option value="@pay.Id" selected="@(Model.Entry.PayId==pay.Id)">@pay.Name</option>
                                 }
                             </select>
                         </div>
@@ -84,37 +85,37 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发票抬头:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="invoiceUp" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="invoiceUp" value="@Model.Entry.InvoiceUp" placeholder="" maxlength="30" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">税号:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="ein" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="ein" value="@Model.Entry.Ein" placeholder="" maxlength="30" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">地址:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="address" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="address" value="@Model.Entry.Address" placeholder="" maxlength="30" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">联系方式:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="contact" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="contact" value="@Model.Entry.Contact" placeholder="" maxlength="30" class="form-control">
                         </div>
-                    </div>                    
+                    </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">开户行:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="openBank" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="openBank" value="@Model.Entry.OpenBank" placeholder="" maxlength="30" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">银行账号:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="bankAccount" placeholder="" maxlength="30" class="form-control">
+                            <input type="text" id="bankAccount" value="@Model.Entry.BankAccount" placeholder="" maxlength="30" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -134,8 +135,9 @@
 {
     <script type="text/javascript">
         $(function(){
-            
+
             $("#btnAdd").click(function () {
+                var id = $("#entryId").val();
                 var trainId = $("#trainId").val();
                 var name = $("#name").val();
                 var gender = $("input[name='gender']:checked").val();
@@ -152,8 +154,8 @@
                 var openBank = $("#openBank").val();
                 var bankAccount = $("#bankAccount").val();
                 $.ajax({
-                    url: "/train/entryadd", type: "post",
-                    data: { trainId: trainId, name: name, gender: gender, mobile: mobile, cityId: cityId, workUnits: workUnits, duty: duty, stayId: stayId, payId: payId, invoiceUp: invoiceUp, ein: ein, address: address,contact:contact, openBank: openBank, bankAccount: bankAccount },
+                    url: "/train/entryedit", type: "post",
+                    data: { id:id, trainId: trainId, name: name, gender: gender, mobile: mobile, cityId: cityId, workUnits: workUnits, duty: duty, stayId: stayId, payId: payId, invoiceUp: invoiceUp, ein: ein, address: address,contact:contact, openBank: openBank, bankAccount: bankAccount },
                     success: function (result) {
                         if(result.status=="0")
                         {

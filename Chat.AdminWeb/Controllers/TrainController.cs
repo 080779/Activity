@@ -20,11 +20,50 @@ namespace Chat.AdminWeb.Controllers
         public IIdNameService idNameService { get; set; }
         public IEntryService entryService { get; set; }
 
-        public ActionResult List()
+        public ActionResult List(int pageIndex=1)
         {
-            TrainDTO[] dtos = trainService.GetAll();
-            //TrainListViewModel model = new TrainListViewModel();
-            return View(dtos);
+            TrainSearchResult result= trainService.Search(null, null, null, null, (pageIndex-1)*20, 20);
+            TrainListViewModel model = new TrainListViewModel();
+            model.Trains = result.Trains;
+
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = pageIndex;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+            return View(model);
+        }
+
+        public ActionResult TrainSearch(long? statusId,DateTime? startTime,DateTime? endTime,string keyWord,int pageIndex=1)
+        {
+            TrainSearchResult result = trainService.Search(statusId, startTime, endTime, keyWord, (pageIndex - 1) * 20, 20);
+            TrainListViewModel model = new TrainListViewModel();
+            model.Trains = result.Trains;
+
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = pageIndex;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+            return Json(new AjaxResult { Status = "1", Data = model });
         }
 
         public ActionResult Add()
@@ -32,6 +71,7 @@ namespace Chat.AdminWeb.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Add(TrainAddModel model)
         {
             if(string.IsNullOrEmpty(model.Title))
@@ -40,7 +80,7 @@ namespace Chat.AdminWeb.Controllers
             }
             if(string.IsNullOrEmpty(model.Img))
             {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训主题不能为空" });
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训头图不能为空" });
             }
             string[] strs = model.Img.Split(',');
             string[] formats = strs[0].Replace(";base64", "").Split(':');
@@ -52,7 +92,7 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择正确的图片格式，支持png、jpg、jpeg、png格式" });
             }
-            string ext = format.Split('/')[1];
+            string ext = "."+format.Split('/')[1];
             try
             {
                 imgBytes = Convert.FromBase64String(img);
@@ -93,7 +133,115 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "培训添加失败" });
             }
-            return Json(new AjaxResult { Status = "1" });
+            return Json(new AjaxResult { Status = "1",Data="/train/list" });
+        }
+        
+        public ActionResult Edit(long id)
+        {
+            TrainDTO dto= trainService.GetById(id);
+            return View(dto);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult Edit(TrainEditModel model)
+        {
+            if(model.Id<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训活动不存在" });
+            }
+            if (string.IsNullOrEmpty(model.Title))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训主题不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Img))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训头图不能为空" });
+            }
+            string ext = "";
+            byte[] imgBytes=null;
+            if (!model.Img.Contains("/upload/"))
+            {
+                string[] strs = model.Img.Split(',');
+                string[] formats = strs[0].Replace(";base64", "").Split(':');
+                string img = strs[1];
+                string format = formats[1];
+                string[] imgFormats = { "image/png", "image/jpg", "image/jpeg", "image/bmp", "IMAGE/PNG", "IMAGE/JPG", "IMAGE/JPEG", "IMAGE/BMP" };
+                
+                if (!imgFormats.Contains(format))
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择正确的图片格式，支持png、jpg、jpeg、png格式" });
+                }
+                ext = "." + format.Split('/')[1];
+                try
+                {
+                    imgBytes = Convert.FromBase64String(img);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "图片解密错误" });
+                }
+            }           
+            if (string.IsNullOrEmpty(model.Address))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训地点不能为空" });
+            }
+            if (model.StartTime == null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训开始时间为空,或格式不正确" });
+            }
+            if (model.EndTime == null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训截止时间为空,或格式不正确" });
+            }
+            if (model.EndTime < model.StartTime)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训截止时间必须大于开始时间" });
+            }
+            if (model.EntryFee < 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训报名费用不能小于零" });
+            }
+            if (model.UpToOne < 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训最多可报名不能小于零" });
+            }
+            if (string.IsNullOrEmpty(model.Description))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "培训详情不能为空" });
+            }
+            if(model.Img.Contains("/upload/"))
+            {
+                if (!trainService.Update(model.Id,model.Title,model.Img, model.Address, model.StartTime, model.EndTime, model.EntryFee, model.UpToOne, model.Description))
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "培训编辑失败" });
+                }
+            }
+            else if(imgBytes==null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "图片解密错误" });
+            }
+            else
+            {
+                if (!trainService.Update(model.Id, model.Title, SaveImg(imgBytes, ext), model.Address, model.StartTime, model.EndTime, model.EntryFee, model.UpToOne, model.Description))
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "培训编辑失败" });
+                }
+            }            
+            return Json(new AjaxResult { Status = "1", Data = "/train/list" });
+        }
+
+        public ActionResult Delete(long id)
+        {
+            if(id<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg="参数错误" });
+            }
+            if(!trainService.Delete(id))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "删除失败" });
+            }
+            return Json(new AjaxResult { Status = "1", Data = "/train/list" });
         }
 
         public ActionResult EntryList(long id)
@@ -103,11 +251,6 @@ namespace Chat.AdminWeb.Controllers
             model.Cities = idNameService.GetAll("市级");
             model.Entries = entryService.GetByTrainId(id);
             return View(model);
-        }
-
-        public ActionResult Edit()
-        {
-            return View();
         }
 
         public ActionResult EntryAdd(long id)
@@ -122,6 +265,99 @@ namespace Chat.AdminWeb.Controllers
         [HttpPost]
         public ActionResult EntryAdd(EntryAddModel model)
         {
+            #region 数据验证
+            if (model.TrainId <= 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
+            }
+            TrainDTO train = trainService.GetById(model.TrainId);
+            if (train == null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
+            }
+            if (train.StatusName == "已结束")
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "活动已结束" });
+            }
+            if (train.UpToOne != 0)
+            {
+                if (train.EntryCount >= train.UpToOne)
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "报名人数已满" });
+                }
+            }
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "姓名不能为空" });
+            }
+            if (model.Gender==null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择性别" });
+            }
+            if (string.IsNullOrEmpty(model.Mobile))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "手机号不能为空" });
+            }
+
+            long phoneNum;
+            if (!long.TryParse(model.Mobile, out phoneNum))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "手机号必须是数字" });
+            }
+            if (model.Mobile.Length != 11)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "手机号必须是11位数字" });
+            }
+            if (entryService.IsJoinined(model.TrainId, model.Mobile))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "该手机号已报过名" });
+            }
+            if (string.IsNullOrEmpty(model.WorkUnits))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "工作单位不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Duty))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "职务不能为空" });
+            }
+            if (model.CityId == 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择工作地" });
+            }
+            if (model.StayId == 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择住宿" });
+            }
+            if (model.PayId == 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择支付方式" });
+            }
+            if (string.IsNullOrEmpty(model.InvoiceUp))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "发票不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Ein))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "税号不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Address))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "详细地址不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Contact))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "联系方式不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.OpenBank))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "开户行不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.BankAccount))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "银行账号不能为空" });
+            }
+            #endregion
+
             EntryDTO dto = new EntryDTO();
             dto.Address = model.Address;
             dto.BankAccount = model.BankAccount;
@@ -130,7 +366,7 @@ namespace Chat.AdminWeb.Controllers
             dto.Duty = model.Duty;
             dto.Ein = model.Ein;
             dto.EntryChannelId = 38;
-            dto.Gender = model.Gender==1;
+            dto.Gender = (bool)model.Gender;
             dto.InvoiceUp = model.InvoiceUp;
             dto.Mobile = model.Mobile;
             dto.Name = model.Name;
@@ -147,9 +383,136 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1"});
         }
 
-        public ActionResult EntryEdit()
+        public ActionResult EntryEdit(long id)
         {
-            return View();
+            EntryEditViewModel model = new EntryEditViewModel();
+            model.Cities = idNameService.GetAll("市级");
+            model.Pays = idNameService.GetAll("支付方式");
+            model.Entry = entryService.GetByEntryId(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EntryEdit(EntryEditModel model)
+        {
+            #region 数据验证
+            if(model.Id<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "报名用户不存在" });
+            }
+            if (model.TrainId <= 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
+            }
+            TrainDTO train = trainService.GetById(model.TrainId);
+            if (train == null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
+            }
+            if (train.StatusName == "已结束")
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "活动已结束" });
+            }
+            if (train.UpToOne != 0)
+            {
+                if (train.EntryCount >= train.UpToOne)
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "报名人数已满" });
+                }
+            }
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "姓名不能为空" });
+            }
+            if (model.Gender == null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择性别" });
+            }
+            if (string.IsNullOrEmpty(model.Mobile))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "手机号不能为空" });
+            }
+
+            long phoneNum;
+            if (!long.TryParse(model.Mobile, out phoneNum))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "手机号必须是数字" });
+            }
+            if (model.Mobile.Length != 11)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "手机号必须是11位数字" });
+            }
+            if (entryService.IsJoinined(model.TrainId, model.Mobile))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "该手机号已报过名" });
+            }
+            if (string.IsNullOrEmpty(model.WorkUnits))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "工作单位不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Duty))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "职务不能为空" });
+            }
+            if (model.CityId == 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择工作地" });
+            }
+            if (model.StayId == 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择住宿" });
+            }
+            if (model.PayId == 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择支付方式" });
+            }
+            if (string.IsNullOrEmpty(model.InvoiceUp))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "发票不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Ein))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "税号不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Address))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "详细地址不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.Contact))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "联系方式不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.OpenBank))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "开户行不能为空" });
+            }
+            if (string.IsNullOrEmpty(model.BankAccount))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "银行账号不能为空" });
+            }
+            #endregion
+
+            EntryDTO dto = new EntryDTO();
+            dto.Id = model.Id;
+            dto.Address = model.Address;
+            dto.BankAccount = model.BankAccount;
+            dto.CityId = model.CityId;
+            dto.Contact = model.Contact;
+            dto.Duty = model.Duty;
+            dto.Ein = model.Ein;
+            dto.Gender = (bool)model.Gender;
+            dto.InvoiceUp = model.InvoiceUp;
+            dto.Mobile = model.Mobile;
+            dto.Name = model.Name;
+            dto.OpenBank = model.OpenBank;
+            dto.PayId = model.PayId;
+            dto.StayId = model.StayId;
+            dto.WorkUnits = model.WorkUnits;
+            if(!entryService.Update(dto))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "编辑报名用户失败" });
+            }
+            return Json(new AjaxResult { Status = "1" });
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ namespace Chat.IService.Interface
     public interface IEntryService: IServiceSupport
     {
         long Add(EntryDTO dto);
+        bool Update(EntryDTO dto);
         long ImportAdd(EntryImportDTO dto);
         bool EntryImport(long trainId,long cityId,long entryChannelId,DataTable dt);
         bool IsJoinined(long trainId,string mobile);
@@ -18,5 +19,6 @@ namespace Chat.IService.Interface
         EntryListDTO[] GetByTrainId(long id);
         EntryListDTO[] GetByTrainIdCityId(long id, long cityId);
         EntryListDTO GetById(long id);
+        EntryDTO GetByEntryId(long id);
     }
 }

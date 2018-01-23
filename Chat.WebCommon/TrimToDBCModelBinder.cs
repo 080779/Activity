@@ -11,15 +11,15 @@ namespace Chat.WebCommon
     {
         //在mvc中ModelBinder负责把表单中的东西赋值到model上
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
-        {/*
+        {
            object value = base.BindModel(controllerContext, bindingContext);
            if(value is string)
             {
                 string strValue = (string)value;
                 return ToDBC(strValue).Trim();
             }
-            return value;*/
-            var valueResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
+            return value;
+            /*var valueResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
             if (valueResult == null)
             {
                 //如果值为null，不知道怎么处理，让父类去处理
@@ -35,7 +35,7 @@ namespace Chat.WebCommon
                 string value = ToDBC(rawValue.Trim());
                 object finalValue = Convert.ChangeType(value, bindingContext.ModelType);
                 return finalValue;
-            }
+            }*/
         }
         /// <summary>
         /// 中文输入法全角转半角

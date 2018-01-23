@@ -1,6 +1,6 @@
-﻿@model Chat.AdminWeb.Models.AdminManager.AddAdminUserViewModel
+﻿@model Chat.DTO.DTO.TrainDTO
 @{
-    ViewBag.Title = "新增培训";
+    ViewBag.Title = "编辑培训";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="mainpanel">
@@ -8,56 +8,46 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>基本信息</h4>
+                <input type="hidden" value="@Model.Id" id="trainId" />
             </div>
             <div class="panel-body">
                 <div class="form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">培训主题:</label>
                         <div class="col-sm-6">
-                            <input type="text" id="title" placeholder="" class="form-control">
+                            <input type="text" id="title" placeholder="" value="@Model.Title" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">培训头图:</label>
                         <div class="col-sm-6">
-                            <img src="" id="train_img" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
+                            <img src="@Model.Img" id="train_img" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
                             <input type="file" id="train_pic" /><p>请上传750*1334图片，支持格式“png、jpg、jpeg、bmp”</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">培训地点:</label>
                         <div class="col-sm-4">
-                            <input type="text" id="address" placeholder="" class="form-control">
+                            <input type="text" id="address" placeholder="" value="@Model.Address" class="form-control">
                         </div>
                     </div>
-
-                    @*培训主题：<input type="text" id="title" /><br />
-                    培训头图：<input type="file" id="train_pic" /><p>请上传750*1334图片，支持格式“png、jpg、jpeg、bmp”</p>
-                    <img src="" id="train_img" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
-                    培训地点：<input type="text" id="address" />
-                    开始时间：<input type="text" id="startTime" />
-                    结束时间：<input type="text" id="endTime" />
-                    报名费用：<input type="text" id="entryFee" />
-                    最多可报名：<input type="text" id="upToOne" />
-                    培训详情：<input type="text" id="description" />*@
-
                     <div class="form-group">
                         <label class="col-sm-3 control-label">开始时间:</label>
                         <div class="col-sm-4">
-                            <input type="text" id="startTime" placeholder="" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+                            <input type="text" id="startTime" placeholder="" value="@Model.StartTime" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">截止时间:</label>
                         <div class="col-sm-4">
-                            <input type="text" id="endTime" placeholder="" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+                            <input type="text" id="endTime" placeholder="" value="@Model.EndTime" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">报名费用:</label>
                         <div class="col-sm-4">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="entryFee" placeholder="">
+                                <input type="text" class="form-control" value="@Model.EntryFee" id="entryFee" placeholder="">
                                 <div class="input-group-addon">元/人</div>
                             </div>
                         </div>
@@ -67,7 +57,7 @@
                         <label class="col-sm-3 control-label">最多可报名:</label>
                         <div class="col-sm-4">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="upToOne" placeholder="">
+                                <input type="text" class="form-control" value="@Model.UpToOne" id="upToOne" placeholder="">
                                 <div class="input-group-addon">人</div>
                             </div>
                         </div>
@@ -76,7 +66,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">培训详情:</label>
                         <div class="col-sm-9">
-                            <textarea id="description" placeholder="" class="form-control" rows="10"></textarea>
+                            <textarea id="description" placeholder="" class="form-control" rows="10">@Html.Raw(Model.Description)</textarea>
                         </div>
                     </div>
                 </div>
@@ -111,6 +101,7 @@
             }
 
             $("#btnSave").live("click", function () {
+                var id = $("#trainId").val();
                 var title = $("#title").val();
                 var img = $("#train_img").attr("src");
                 var address = $("#address").val();
@@ -120,7 +111,7 @@
                 var upToOne = $("#upToOne").val();
                 var description = $("#description").val();
                 $.ajax({
-                    url: "/train/add", type: "post", data: { title: title,img:img,address:address,startTime:startTime,endTime:endTime,entryFee:entryFee,upToOne:upToOne,description:description },
+                    url: "/train/edit", type: "post", data: { id:id, title: title,img:img,address:address,startTime:startTime,endTime:endTime,entryFee:entryFee,upToOne:upToOne,description:description },
                     success: function (result) {
                         if (result.status == "0")
                         {
@@ -128,8 +119,8 @@
                         }
                         else if (result.status == "1")
                         {
-                            alert("添加成功！");
-                            window.location.href = result.data;
+                            alert("编辑成功！");
+                            //window.location.href =result.data;
                         }
                         else {
                             alert("未知错误");

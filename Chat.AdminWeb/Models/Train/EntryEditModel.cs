@@ -5,8 +5,9 @@ using System.Web;
 
 namespace Chat.AdminWeb.Models.Train
 {
-    public class EntryAddModel
+    public class EntryEditModel
     {
+        public long Id { get; set; }
         public long TrainId { get; set; }
         public string Name { get; set; }
         public bool? Gender { get; set; }

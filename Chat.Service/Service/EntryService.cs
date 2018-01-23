@@ -51,6 +51,38 @@ namespace Chat.Service.Service
             }                
         }
 
+        public bool Update(EntryDTO dto)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<EntryEntity> cs = new CommonService<EntryEntity>(dbc);
+                var entry = cs.GetAll().SingleOrDefault(e => e.Id == dto.Id);
+                if (entry == null)
+                {
+                    return false;
+                }
+
+                entry.Address = dto.Address;
+                entry.BankAccount = dto.BankAccount;
+                entry.Contact = dto.Contact;
+                entry.Duty = dto.Duty;
+                entry.Ein = dto.Ein;
+                entry.Gender = dto.Gender;
+                entry.InvoiceUp = dto.InvoiceUp;
+                entry.Mobile = dto.Mobile;
+                entry.Name = dto.Name;
+                entry.OpenBank = dto.OpenBank;
+                entry.PayId = dto.PayId;
+                entry.StayId = dto.StayId;
+                entry.CityId = dto.CityId;
+                //entry.EntryChannelId = dto.EntryChannelId;
+                //entity.Workplace = dto.Workplace;
+                entry.WorkUnits = dto.WorkUnits;
+                dbc.SaveChanges();
+                return true; 
+            }
+        }
+
         public long ImportAdd(EntryImportDTO dto)
         {
             using (MyDbContext dbc = new MyDbContext())
@@ -232,7 +264,21 @@ namespace Chat.Service.Service
                 return ToListDTO(entry);
             }
         }
-        
+
+        public EntryDTO GetByEntryId(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<EntryEntity> cs = new CommonService<EntryEntity>(dbc);
+                var entry = cs.GetAll().SingleOrDefault(e => e.Id == id);
+                if (entry == null)
+                {
+                    return null;
+                }
+                return ToDTO(entry);
+            }
+        }
+
         private EntryListDTO ToListDTO(EntryEntity entity)
         {
             EntryListDTO dto = new EntryListDTO();
@@ -252,6 +298,29 @@ namespace Chat.Service.Service
             dto.OpenBank = entity.OpenBank;
             dto.PayName = entity.Pays.Name;
             dto.StayName = entity.Stays.Name;
+            dto.WorkUnits = entity.WorkUnits;
+            return dto;
+        }
+
+        private EntryDTO ToDTO(EntryEntity entity)
+        {
+            EntryDTO dto = new EntryDTO();
+            dto.Address = entity.Address;
+            dto.BankAccount = entity.BankAccount;
+            dto.CityId = entity.CityId;
+            dto.Contact = entity.Contact;
+            dto.CreateDateTime = entity.CreateDateTime;
+            dto.Duty = entity.Duty;
+            dto.Ein = entity.Ein;
+            dto.EntryChannelId = entity.EntryChannelId;
+            dto.Gender = entity.Gender;
+            dto.Id = entity.Id;
+            dto.InvoiceUp = entity.InvoiceUp;
+            dto.Mobile = entity.Mobile;
+            dto.Name = entity.Name;
+            dto.OpenBank = entity.OpenBank;
+            dto.PayId = entity.PayId;
+            dto.StayId = entity.StayId;
             dto.WorkUnits = entity.WorkUnits;
             return dto;
         }
