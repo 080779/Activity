@@ -121,4 +121,20 @@ namespace Chat.DTO.DTO
         public string OpenBank { get; set; } //开户行
         public string BankAccount { get; set; } //银行账号
     }
+
+    public class EntryGetPageDTO
+    {
+        public long Id { get; set; }
+        public long? CityId { get; set; }
+        public bool? Gender { get; set; }
+        public long? StayId { get; set; }
+        public long? PayId { get; set; }
+        public long? EntryChannelId { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public string KeyWord { get; set; }
+        public int PageIndex { get; set; } = 1;
+        public int CurrentIndex { get; set; } = 0;
+        public int PageSize { get; set; } = 20;
+    }
 }

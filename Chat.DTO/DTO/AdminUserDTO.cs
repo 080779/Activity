@@ -12,6 +12,7 @@ namespace Chat.DTO.DTO
         public string Mobile { get; set; }
         public bool Gender { get; set; }
         public string Email { get; set; }
+        //public string RoleName { get; set; }
         //public long? CityId { get; set; }
         //public string CityName { get; set; }
         public int LoginErrorTimes { get; set; }

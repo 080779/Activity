@@ -228,7 +228,7 @@ namespace Chat.FrontWeb.Controllers
                     winUsers.Add(winUser);
                 }
                 model.Users = winUsers;
-                model.winCount = result.TotalCount;
+                model.winCount = (int)result.TotalCount;
             }
             else
             {

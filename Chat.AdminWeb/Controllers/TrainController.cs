@@ -7,6 +7,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -244,13 +245,58 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1", Data = "/train/list" });
         }
 
-        public ActionResult EntryList(long id)
+        public ActionResult EntryList(long id=0,int pageIndex=1)
         {
             EntryListViewModel model = new EntryListViewModel();
+            EntryGetPageDTO dto = new EntryGetPageDTO();
+            dto.Id = id;
+            EntrySearchResult result = entryService.GetPageByTrainId(dto);
             model.TrainId = id;
             model.Cities = idNameService.GetAll("市级");
-            model.Entries = entryService.GetByTrainId(id);
+            model.Entries = result.Entries;
+
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = pageIndex;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EntryList(EntryGetPageDTO dto)
+        {
+            EntryListViewModel model = new EntryListViewModel();
+            dto.CurrentIndex = (dto.PageIndex - 1) * dto.PageSize;
+            EntrySearchResult result = entryService.GetPageByTrainId(dto);
+            model.TrainId = dto.Id;
+            //model.Cities = idNameService.GetAll("市级");
+            model.Entries = result.Entries;
+
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = dto.PageIndex;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+            return Json(new AjaxResult { Status = "1", Data = model });
         }
 
         public ActionResult EntryAdd(long id)
@@ -312,6 +358,10 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "该手机号已报过名" });
             }
+            if (model.CityId == 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择工作地" });
+            }
             if (string.IsNullOrEmpty(model.WorkUnits))
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "工作单位不能为空" });
@@ -319,11 +369,7 @@ namespace Chat.AdminWeb.Controllers
             if (string.IsNullOrEmpty(model.Duty))
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "职务不能为空" });
-            }
-            if (model.CityId == 0)
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择工作地" });
-            }
+            }            
             if (model.StayId == 0)
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择住宿" });
@@ -380,15 +426,16 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0",ErrorMsg="新增报名用户失败" });
             }
-            return Json(new AjaxResult { Status = "1"});
+            return Json(new AjaxResult { Status = "1", Data = "/train/entrylist?id=" + model.TrainId });
         }
 
-        public ActionResult EntryEdit(long id)
+        public ActionResult EntryEdit(long id,long trainId)
         {
             EntryEditViewModel model = new EntryEditViewModel();
             model.Cities = idNameService.GetAll("市级");
             model.Pays = idNameService.GetAll("支付方式");
             model.Entry = entryService.GetByEntryId(id);
+            model.TrainId = trainId;
             return View(model);
         }
 
@@ -442,9 +489,13 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "手机号必须是11位数字" });
             }
-            if (entryService.IsJoinined(model.TrainId, model.Mobile))
+            //if (entryService.IsJoinined(model.TrainId, model.Mobile))
+            //{
+            //    return Json(new AjaxResult { Status = "0", ErrorMsg = "该手机号已报过名" });
+            //}
+            if (model.CityId == 0)
             {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "该手机号已报过名" });
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择工作地" });
             }
             if (string.IsNullOrEmpty(model.WorkUnits))
             {
@@ -453,11 +504,7 @@ namespace Chat.AdminWeb.Controllers
             if (string.IsNullOrEmpty(model.Duty))
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "职务不能为空" });
-            }
-            if (model.CityId == 0)
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择工作地" });
-            }
+            }            
             if (model.StayId == 0)
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择住宿" });
@@ -512,16 +559,62 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "编辑报名用户失败" });
             }
-            return Json(new AjaxResult { Status = "1" });
+            return Json(new AjaxResult { Status = "1" ,Data="/train/entrylist?id="+model.TrainId });
+        }
+
+        public ActionResult EntryDelete(long id=0,long trainId=0)
+        {
+            if (id <= 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "参数错误" });
+            }
+            if(trainId<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "参数错误" });
+            }
+            if (!entryService.Delete(id))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "删除失败" });
+            }
+            return Json(new AjaxResult { Status = "1", Data = "/train/entrylist?id="+trainId });
         }
 
         /// <summary>
         /// 报名导入
         /// </summary>
         /// <returns></returns>
-        public ActionResult EntryImport()
+        public ActionResult EntryImport(EntryImportModel model)
         {
-            return View();
+            if(model.Id<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "参数错误" });
+            }
+            if(model.CityId<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择导入市级" });
+            }
+            if(model.File==null || model.File.ContentLength<0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择要上传的文件" });
+            }
+            string[] excelFormats = { ".xlsx", ".xls" };
+            string md5 = CommonHelper.GetMD5(model.File.InputStream);
+            string ext = Path.GetExtension(model.File.FileName);
+            if(!excelFormats.Contains(ext))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请上传excel文件" });
+            }
+            string path = "/upload/" + DateTime.Now.ToString("yyyy/MM/dd") + "/" + md5 + ext;
+            string fullPath = HttpContext.Server.MapPath("~" + path);
+            new FileInfo(fullPath).Directory.Create();
+            model.File.SaveAs(fullPath);
+
+            DataTable dt = ExcelHelper.GetDataTable(fullPath);
+            if(!entryService.EntryImport(model.Id, model.CityId, 38, dt))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg="报名导入失败" });
+            }
+            return Json(new AjaxResult { Status = "1",Data="/train/entrylist?id="+model.Id });
         }
 
         private string SaveImg(byte[] imgBytes,string ext)

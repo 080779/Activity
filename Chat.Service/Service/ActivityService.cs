@@ -496,20 +496,14 @@ namespace Chat.Service.Service
                     items = items.Where(p => p.Name.Contains(keyWord) || p.Description.Contains(keyWord));
                 }
                 items = items.OrderByDescending(p => p.CreateDateTime);
-                int count = items.Count();
+                long count = items.LongCount();
                 ActivitySearchResult result = new ActivitySearchResult();
                 result.Activities= items.Skip(currentIndex).Take(pageSize).ToList().Select(p => ToDTO(p)).ToArray();
                 result.TotalCount = count;
                 return result;
             }
         }
-
-        public class ActivitySearchResult
-        {
-            public ActivityDTO[] Activities { get; set; }
-            public int TotalCount { get; set; }
-        }
-
+        
         public bool Delete(long id)
         {
             using (MyDbContext dbc = new MyDbContext())

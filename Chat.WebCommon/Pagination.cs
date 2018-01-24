@@ -18,7 +18,7 @@ namespace Chat.WebCommon
         /// <summary>
         /// 总数据条数，默认0
         /// </summary>
-        public int TotalCount { get; set; }
+        public long TotalCount { get; set; }
         /// <summary>
         /// 当前页码（从 1 开始），默认1
         /// </summary>

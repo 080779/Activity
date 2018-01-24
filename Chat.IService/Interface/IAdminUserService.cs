@@ -19,6 +19,8 @@ namespace Chat.IService.Interface
         //AdminUserDTO[] GetAll(long? cityId);
         //获取所有管理员
         AdminUserDTO[] GetAll();
+        //分页获取管理员
+        AdminUserSearchResult GetPage(DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize);
         //根据 id 获取 DTO
         AdminUserDTO GetById(long id);
         //根据手机号获取 DTO
@@ -35,5 +37,11 @@ namespace Chat.IService.Interface
         bool UpdatePassword(long id, string Password);
         void RecordLoginError(long id);//记录错误登录一次
         void ResetLoginError(long id);//重置登录错误信息
+    }
+
+    public class AdminUserSearchResult
+    {
+        public AdminUserDTO[] AdminUsers { get; set; }
+        public long TotalCount { get; set; }
     }
 }

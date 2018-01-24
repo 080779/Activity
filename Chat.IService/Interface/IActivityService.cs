@@ -43,4 +43,10 @@ namespace Chat.IService.Interface
         bool UpdateCount(long id, bool setVisitCount, bool setForwardCount, bool setAnswerCount, bool setHavePrizeCount, bool setPrizeCount);
         bool CheckHaveStatusId(long id);
     }
+
+    public class ActivitySearchResult
+    {
+        public ActivityDTO[] Activities { get; set; }
+        public long TotalCount { get; set; }
+    }
 }

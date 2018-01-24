@@ -31,6 +31,7 @@ namespace Chat.Service.Service
                     uexsit.Name = name;
                     uexsit.Gender = gender;
                     uexsit.Address = address;
+                    uexsit.ChangeTime = DateTime.Now;
                     dbc.SaveChanges();
                     return uexsit.Id;
                 }
@@ -51,6 +52,7 @@ namespace Chat.Service.Service
                 user.PassCount = 0;
                 user.WinCount = 0;
                 user.IsWon = false;
+                user.ChangeTime = DateTime.Now;
                 dbc.Users.Add(user);
                 dbc.SaveChanges();
                 return user.Id;
@@ -128,7 +130,7 @@ namespace Chat.Service.Service
                 }
 
                 UserSearchResult result = new UserSearchResult();
-                result.TotalCount = users.Count();
+                result.TotalCount = users.LongCount();
                 result.Users = users.OrderByDescending(u => u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
                 result.WinCount = users.Where(u => u.IsWon == true).Count();
                 return result;
@@ -156,7 +158,7 @@ namespace Chat.Service.Service
                             where a.Id == id && u.IsDeleted==false
                             select u;
                 UserSearchResult result = new UserSearchResult();
-                result.TotalCount = users.Count();
+                result.TotalCount = users.LongCount();
                 result.Users= users.OrderByDescending(u=>u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
                 return result;
             }
@@ -209,7 +211,7 @@ namespace Chat.Service.Service
                     users = users.Where(u => u.Name.Contains(keyWord) || u.Mobile.Contains(keyWord));
                 }
                 UserSearchResult result = new UserSearchResult();
-                result.TotalCount = users.Count();
+                result.TotalCount = users.LongCount();
                 result.Users = users.OrderByDescending(u=>u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
                 return result;
             }
@@ -251,7 +253,7 @@ namespace Chat.Service.Service
                             where a.Id == id && u.IsDeleted == false && u.IsWon==true
                             select u;
                 UserSearchResult result = new UserSearchResult();
-                result.TotalCount = users.Count();
+                result.TotalCount = users.LongCount();
                 result.Users = users.OrderByDescending(u=>u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
                 return result;
             }
@@ -273,7 +275,7 @@ namespace Chat.Service.Service
                 //            select u;
                 var users = activity.Users.Where(u => u.IsDeleted == false && u.IsWon == true).OrderByDescending(u=>u.CreateDateTime);
                 UserSearchResult result = new UserSearchResult();
-                result.TotalCount = users.Count();
+                result.TotalCount = users.LongCount();
                 if(pageSize==null)
                 {
                     result.Users = users.ToList().Select(u => ToDTO(u)).ToArray();
@@ -305,7 +307,7 @@ namespace Chat.Service.Service
                 {
                     users = users.Where(u=>u.Mobile.Substring(7).Contains(lastM));
                 }
-                result.TotalCount = users.Count();
+                result.TotalCount = users.LongCount();
                 result.Users = users.OrderByDescending(u => u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
                 return result;
             }
@@ -405,7 +407,7 @@ namespace Chat.Service.Service
                     items = items.Where(u => u.Name.Contains(keyWord) || u.Mobile.Contains(keyWord));
                 }
                 UserSearchResult result = new UserSearchResult();
-                result.TotalCount = items.Count();
+                result.TotalCount = items.LongCount();
                 result.Users= items.OrderByDescending(u=>u.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(u => ToDTO(u)).ToArray();
                 return result;
             }
@@ -540,6 +542,7 @@ namespace Chat.Service.Service
                 user.Name = name;
                 user.Gender = gender;
                 user.Address = address;
+                user.ChangeTime = DateTime.Now;
                 dbc.SaveChanges();
                 return true;
             }

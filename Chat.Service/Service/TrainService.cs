@@ -158,7 +158,7 @@ namespace Chat.Service.Service
                 {
                     trains = trains.Where(t => t.Title.Contains(keyWord));
                 }
-                result.TotalCount = trains.Count();
+                result.TotalCount = trains.LongCount();
                 result.Trains=trains.OrderByDescending(t => t.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().Select(t => ToDTO(t)).ToArray();
                 return result;
             }

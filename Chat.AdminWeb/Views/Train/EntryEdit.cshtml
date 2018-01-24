@@ -22,8 +22,8 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">性别:</label>
                         <div class="col-sm-6">
-                            <input type="radio" name="gender" id="gender1" value="1" checked="@Model.Entry.Gender" /><label for="gender1">男</label>&nbsp;&nbsp;&nbsp;
-                            <input type="radio" name="gender" id="gender0" value="0" checked="@(!Model.Entry.Gender)" /><label for="gender0">女</label>
+                            <input type="radio" name="gender" id="gender1" value="true" checked="@Model.Entry.Gender" /><label for="gender1">男</label>&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="gender" id="gender0" value="false" checked="@(!Model.Entry.Gender)" /><label for="gender0">女</label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -163,7 +163,8 @@
                         }
                         else if(result.status=="1")
                         {
-                            alert("成功");
+                            alert("报名用户编辑成功");
+                            window.location.href = result.data;
                         }
                     },
                     error: function () { alert("网络错误"); }

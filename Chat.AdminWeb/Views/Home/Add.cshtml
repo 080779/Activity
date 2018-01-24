@@ -7,32 +7,152 @@
     <div class="contentpanel">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4>新增管理员</h4>
+                <h4>账号设置</h4>
             </div>
             <div class="panel-body">
-                <form action="" class="form-horizontal">
+                <div class="form-horizontal">
                     <div class="form-group">
-                        登录名：<input type="text" id="name" /><br />
-                        初始登录密码：<input type="text" id="password" />
-                        确认密码：<input type="text" id="password1" />
-                        管理员等级：<input type="radio" name="manager" id="hallManager" checked="checked" value="@Model.Hall.Id" />厅级管理员<br />
-                        <input type="radio" name="manager" id="cityManager" />市级管理员
-                        <select id="city">
-                            <option value="selectCity">选择所属市级</option>
-                            @foreach (var role in Model.Citys)
-                            {
-                                <option value="@role.Id">@role.Name</option>
-                            }
-                        </select>
-                        <input type="button" id="btnSave" value="提交"/>
+                        <label class="col-sm-3 control-label">登录名:</label>
+                        <div class="col-sm-6">
+                            <input type="text" id="name" placeholder="" class="form-control">
+                        </div>
                     </div>
-                </form>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">初始登录密码:</label>
+                        <div class="col-sm-6">
+                            <input type="password" id="password" placeholder="" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>权限设置</h4>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">管理员等级:</label>
+                        <div class="col-sm-6">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="manager" id="manager1" value="option1" checked="checked" >厅级管理员（在培训活动管理-报名管理中，拥有全部功能操作权限）
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="manager" id="manager2" value="option2">市级管理员（在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格）
+                                </label>
+                            </div>
+                            <select id="cityId" class="form-control" style="width: 200px;">
+                                <option value="">选择所属市级</option>
+                                @foreach (var role in Model.Citys)
+                                {
+                                    <option value="@role.Id">@role.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <style type="text/css">
+                        .limit-checkbox {
+                            border-bottom: 1px solid #eee;
+                        }
+
+                        .limit-checkbox-two {
+                            padding-left: 30px;
+                        }
+                    </style>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">权限设置:</label>
+                        <div class="col-sm-6" style="border: 1px solid #eee; padding: 10px 20px 20px;">
+                            <div class="limit-checkbox">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="">答题管理
+                                    </label>
+                                </div>
+                                <div class="limit-checkbox-two">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">考卷管理
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">答题活动管理
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="limit-checkbox">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="">培训管理
+                                    </label>
+                                </div>
+                                <div class="limit-checkbox-two">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">培训管理
+                                        </label>
+                                    </div>
+                                    <div class="limit-checkbox-two">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" value="">报名管理
+                                            </label>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="limit-checkbox">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="">用户管理
+                                    </label>
+                                </div>
+                                <div class="limit-checkbox-two">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">用户管理
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="limit-checkbox">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="">系统设置
+                                    </label>
+                                </div>
+                                <div class="limit-checkbox-two">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">系统日志
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">后台用户管理
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer" style="text-align:center">
+                <button class="btn btn-primary mr5">确定</button>
+                <button class="btn btn-default">返回</button>
             </div>
         </div>
     </div><!-- contentpanel -->
 </div><!-- mainpanel -->
-        </div><!-- mainwrapper -->
-    </section>
+            </div><!-- mainwrapper -->
+        </section>
 @section FooterScript
 {
     <script type="text/javascript">

@@ -24,6 +24,7 @@
             <div class="panel-body">
                 <div class="form-inline">
                     <div class="form-group mt10">
+                        <input type="hidden" id="trainId" value="@Model.TrainId" />
                         <a class="btn btn-primary mr5" iconcls="icon-search" href="~/train/entryadd?id=@Model.TrainId"><i class="fa fa-plus"></i>新增报名人员</a>
                         <button class="btn btn-primary mr5" data-toggle="modal" data-target="#myModal2" value=""><i class="fa fa-pencil"></i>市级表格导入</button>
                         <a class="btn btn-primary mr5" iconcls="icon-search" href="~/train/exportexcel?id=@Model.TrainId"><i class="fa fa-laptop"></i>导出汇总表格</a>                        
@@ -46,8 +47,8 @@
                     <div class="form-group mt10">
                         <select name="gender" id="gender" class="form-control">
                             <option value="">性别</option>
-                            <option value="1">男</option>
-                            <option value="0">女</option>
+                            <option value="true">男</option>
+                            <option value="false">女</option>
                         </select>
                     </div>
                     <div class="form-group mt10">
@@ -70,9 +71,8 @@
                     <div class="form-group mt10">
                         <select name="entryChannelId" id="entryChannelId" class="form-control">
                             <option value="">报名渠道</option>
-                            <option value="34">待开始</option>
-                            <option value="35">进行中</option>
-                            <option value="36">已结束</option>
+                            <option value="37">微信公众号</option>
+                            <option value="38">后台录入</option>
                         </select>
                     </div>
                     <div class="form-group mt10">
@@ -80,7 +80,7 @@
                         <input type="text" id="txtEnd" placeholder="请输入结束时间" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
                     </div>
                     <div class="form-group mt10">
-                        <input type="text" id="keyword" placeholder="请输入姓名或手机号" class="form-control">
+                        <input type="text" id="keyWord" placeholder="请输入姓名或手机号" class="form-control">
                     </div>
                     <div class="form-group mt10">
                         <a class="btn btn-primary mr5" id="search" iconcls="icon-search" href="javascript:;"><i class="fa fa-search"></i> 搜 索 </a>
@@ -115,30 +115,20 @@
                                 <td data-attr="性别">@(entry.Gender?"男":"女")</td>
                                 <td data-attr="工作单位">@entry.WorkUnits</td>
                                 <td data-attr="职务">@entry.Duty</td>
-                                <td data-attr="联系方式">@entry.Contact</td>
+                                <td data-attr="联系方式">@entry.Mobile</td>
                                 <td data-attr="住宿要求">@entry.StayName</td>
                                 <td data-attr="报名录入时间">@entry.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
                                 <td data-attr="支付方式">@entry.PayName</td>
                                 <td data-attr="报名渠道">@entry.EntryChannelName</td>
                                 <td data-attr="操作">
-                                    <a href="~/train/entryedit?id=@entry.Id" class="btn btn-primary btn-sm">编辑</a>
+                                    <a href="~/train/entryedit?id=@entry.Id&trainId=@Model.TrainId" class="btn btn-primary btn-sm">编辑</a>
                                     <button data-toggle="modal" data-target="#myModal" value="@entry.Id" class="btn btn-danger btn-sm Jsdel">删除</button>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-                @*@{
-                        var pager = new Chat.WebCommon.DataPaging();
-                        pager.CurrentLinkClassName = "curPager";
-                        pager.MaxPagerCount = 10;
-                        pager.PageIndex = ViewBag.PageIndex;//这些数据，cshtml不知道，就必须让Action传递给我们
-                                                            //对于所有cshtml要用到，但是又获取不到的数据，都由Action来获取，然后放到ViewBag或者Model中传递给cshtml
-                        pager.PageSize = 10;
-                        pager.TotalCount = ViewBag.TotalCount;
-                        pager.UrlPattern = "/activity/list?&pageIndex={pn}";
-                    }*@
-                @*<div id="pager"><!--@Html.Raw(pager.GetPager())--></div>*@
+                <div id="pager">@Html.Raw(Model.Page)</div>
             </div>
         </div>
     </div><!-- contentpanel -->
@@ -154,13 +144,16 @@
                 <h4 class="modal-title">按市级导入</h4>
             </div>
             <div class="modal-body"><br />                
-                <select name="cityId">
+                <select name="importCityId" id="importCityId">
                     <option value="0">选择导入市级</option>                    
-                    <option value="1">南宁</option>
+                    @foreach (var city in Model.Cities)
+                    {
+                        <option value="@city.Id">@city.Name</option>
+                    }
                 </select><br />                                
             </div>
             <div class="modal-body">
-                <input type="file" /><br />                
+                <input type="file" id="upfile" /><br />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" id="cancelSave" data-dismiss="modal">取消</button>
@@ -191,14 +184,75 @@
 @section FooterScript
 {
     <script type="text/javascript">
+        function getPage(pageIndex) {
+            var id = $("#trainId").val();
+            var cityId = $("#cityId").val();
+            var gender = $("#gender").val();
+            var stayId = $("#stayId").val();
+            var payId = $("#payId").val();
+            var entryChannelId = $("#entryChannelId").val();
+            var startTime = $("#txtStar").val();
+            var endTime = $("#txtEnd").val();
+            var keyWord = $("#keyWord").val();
+            $.ajax({
+                url: "/train/entrylist", type: "post",
+                data: { pageIndex:pageIndex, id: id, cityId: cityId, gender: gender, stayId: stayId, payId:payId, entryChannelId: entryChannelId, startTime: startTime, endTime: endTime, keyWord: keyWord },
+                success: function (result) {
+                    $("#pager").empty();
+                    $("#pager").append(result.data.page);
+                    $("#paperList").empty();
+                    $("#paperList").append('<input type="hidden" id="index" value="' + pageIndex + '" />');
+
+                    for (var i = 0; i < result.data.entries.length; i++) {
+                        var gender = result.data.entries[i].gender == true ? "男" : "女";
+                        $("#paperList").append('<tr><td data-attr="编号">' + result.data.entries[i].id + '</td><td data-attr="工作地">' + result.data.entries[i].cityName + '</td><td data-attr="姓名">' + result.data.entries[i].name + '</td><td data-attr="性别">' + gender + '</td><td data-attr="工作单位">' + result.data.entries[i].workUnits + '</td><td data-attr="职务">' + result.data.entries[i].duty + '</td><td data-attr="联系方式">' + result.data.entries[i].mobile + '</td><td data-attr="住宿要求">' + result.data.entries[i].stayName + '</td><td data-attr="报名录入时间">' + result.data.entries[i].createDateTime + '</td><td data-attr="支付方式">' + result.data.entries[i].payName + '</td><td data-attr="报名渠道">' + result.data.entries[i].entryChannelName + '</td><td data-attr="操作"><a href="~/train/entryedit?id=' + result.data.entries[i].id + '&trainId=' + result.data.trainId + '" class="btn btn-primary btn-sm">编辑</a><button data-toggle="modal" data-target="#myModal" value="' + result.data.entries[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
+                    }
+                },
+                error: function () { alert("网络错误"); }
+            });
+        }
+
         $(function () {
 
             $('.Jsdel').click(function () {
                 $("#sureDel").val($(this).val());
             });
 
+            $("#sureSaveCel").live('click',function () {
+                var id=$("#trainId").val();
+                var cityId = $("#importCityId").val();
+                var formData = new FormData();
+                var name = $("#upfile").val();
+                formData.append("file", $("#upfile")[0].files[0]);
+                formData.append("name", name);
+                formData.append("id", id);
+                formData.append("cityId", cityId);
+                console.log(name);
+                $.ajax({
+                    url: "/train/entryimport", type: 'post', async: false, data: formData, processData: false, contentType: false,
+                    success: function (result) {
+                        if (result.status == "1") {
+                            alert("导入成功");
+                            window.location.href = result.data;
+                        }
+                        else if(result.status=='0')
+                        {
+                            alert(result.errorMsg);
+                            //$("#cancelSave").click();
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+
+            $("#getPage").live("click", function () {
+                var index = $("#setIndex").val();
+                getPage(index);
+            });
+
             //搜索
             $("#search").click(function () {
+                var id = $("#trainId").val();
                 var cityId = $("#cityId").val();
                 var gender = $("#gender").val();
                 var stayId = $("#stayId").val();
@@ -206,19 +260,21 @@
                 var entryChannelId = $("#entryChannelId").val();
                 var startTime = $("#txtStar").val();
                 var endTime = $("#txtEnd").val();
-                var keyWord = $("#keyword").val();
+                var keyWord = $("#keyWord").val();
                 $.ajax({
-                    url: "/train/searchentry", type: "post",
-                    data: { cityId: cityId, gender: gender, stayId: stayId, payId: payId, entryChannelId: entryChannelId, startTime: startTime, endTime: endTime, keyWord: keyWord },
+                    url: "/train/entrylist", type: "post",
+                    data: { id: id, cityId: cityId, gender: gender, stayId: stayId, payId: payId, entryChannelId: entryChannelId, startTime: startTime, endTime: endTime, keyWord: keyWord },
                     success: function (result) {
-                        if (result.status == "error") {
+                        $("#pager").empty();
+                        $("#pager").append(result.data.page);
+                        if (result.status == "0") {
                             alert(result.errorMsg);
                         }
-                        else if (result.status == "success") {
+                        else if (result.status == "1") {
                             $("#paperList").empty();
-                            for (var i = 0; i < result.data.length; i++) {
-                                var iscurrent = result.data[i].isCurrent ? "是" : "否";
-                                $("#paperList").append('<tr><td data-attr="期数">' + result.data[i].num + result.data[i].id + '</td><td data-attr="活动名称">' + result.data[i].name + '</td><td data-attr="状态">' + result.data[i].statusName + '</td><td data-attr="是否当前活动">'+iscurrent+'</td><td data-attr="访问量">' + result.data[i].visitCount + '</td><td data-attr="答题次数">' + result.data[i].answerCount + '</td><td data-attr="获奖资格人数">' + result.data[i].havePrizeCount + '</td><td data-attr="获奖人数">' + result.data[i].prizeCount + '</td><td data-attr="创建时间">' + result.data[i].createDateTime + '</td><td data-attr="操作"><a href="/activity/edit?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">编辑</a><button value="' + result.data[i].id + '" class="btn btn-primary btn-sm current">设为当前</button><a href="/activity/prize?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">开奖处理</a><a href="/activity/createexcel?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">导出开奖结果</a><button data-toggle="modal" data-target="#myModal" value="' + result.data[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
+                            for (var i = 0; i < result.data.entries.length; i++) {
+                                var gender = result.data.entries[i].gender == true ? "男" : "女";
+                                $("#paperList").append('<tr><td data-attr="编号">' + result.data.entries[i].id + '</td><td data-attr="工作地">' + result.data.entries[i].cityName + '</td><td data-attr="姓名">' + result.data.entries[i].name + '</td><td data-attr="性别">' + gender + '</td><td data-attr="工作单位">' + result.data.entries[i].workUnits + '</td><td data-attr="职务">' + result.data.entries[i].duty + '</td><td data-attr="联系方式">' + result.data.entries[i].mobile + '</td><td data-attr="住宿要求">' + result.data.entries[i].stayName + '</td><td data-attr="报名录入时间">' + result.data.entries[i].createDateTime + '</td><td data-attr="支付方式">' + result.data.entries[i].payName + '</td><td data-attr="报名渠道">' + result.data.entries[i].entryChannelName + '</td><td data-attr="操作"><a href="~/train/entryedit?id=' + result.data.entries[i].id + '&trainId=' + result.data.trainId + '" class="btn btn-primary btn-sm">编辑</a><button data-toggle="modal" data-target="#myModal" value="' + result.data.entries[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
                             }
                         }
                         else {
@@ -232,14 +288,15 @@
             //删除
             $("#sureDel").click(function () {
                 var id = $(this).val();
+                var trainId = $("#trainId").val();
                 $.ajax({
-                    url: "/train/delentry", type: "post", data: { id: id },
+                    url: "/train/entrydelete", type: "post", data: { id: id ,trainId:trainId },
                     success: function (result) {
-                        if (result.status == "error") {
+                        if (result.status == "0") {
                             alert(result.errorMsg);
                             $("#cancel").click();
                         }
-                        else if (result.status == "success") {
+                        else if (result.status == "1") {
                             $("#cancel").click();
                             window.location.reload();
                         }

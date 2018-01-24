@@ -13,17 +13,44 @@ namespace Chat.Service.Service
 {
     public class EntryService : IEntryService
     {
-        //public IIdNameService idNameService { get; set; }
-
         public long Add(EntryDTO dto)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
+                CommonService<UserEntity> ucs = new CommonService<UserEntity>(dbc);
                 var train= cs.GetAll().SingleOrDefault(t=>t.Id==dto.TrainId);
                 if(train==null)
                 {
                     return 0;
+                }
+
+                var user = ucs.GetAll().SingleOrDefault(u => u.Mobile == dto.Mobile);
+                if(user==null)
+                {
+                    user = new UserEntity();
+                    user.Mobile = dto.Mobile;
+                    user.Name = dto.Name;
+                    user.NickName = "dt_" + new Random().Next();
+                    user.PhotoUrl = "";
+                    user.Gender = dto.Gender;
+                    user.Address = dto.Address;
+                    user.LoginErrorTimes = 0;
+                    user.PasswordHash = "";
+                    user.PasswordSalt = "";
+                    user.PassCount = 0;
+                    user.WinCount = 0;
+                    user.IsWon = false;
+                    user.ChangeTime = DateTime.Now;
+                    dbc.Users.Add(user);
+                }
+                else
+                {
+                    user.Mobile = dto.Mobile;
+                    user.Name = dto.Name;
+                    user.Gender = dto.Gender;
+                    user.Address = dto.Address;
+                    user.ChangeTime = DateTime.Now;
                 }
 
                 EntryEntity entity = new EntryEntity();
@@ -56,10 +83,39 @@ namespace Chat.Service.Service
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<EntryEntity> cs = new CommonService<EntryEntity>(dbc);
+                CommonService<UserEntity> ucs = new CommonService<UserEntity>(dbc);
                 var entry = cs.GetAll().SingleOrDefault(e => e.Id == dto.Id);
                 if (entry == null)
                 {
                     return false;
+                }
+
+                var user = ucs.GetAll().SingleOrDefault(u => u.Mobile == dto.Mobile);
+                if (user == null)
+                {
+                    user = new UserEntity();
+                    user.Mobile = dto.Mobile;
+                    user.Name = dto.Name;
+                    user.NickName = "dt_" + new Random().Next();
+                    user.PhotoUrl = "";
+                    user.Gender = dto.Gender;
+                    user.Address = dto.Address;
+                    user.LoginErrorTimes = 0;
+                    user.PasswordHash = "";
+                    user.PasswordSalt = "";
+                    user.PassCount = 0;
+                    user.WinCount = 0;
+                    user.IsWon = false;
+                    user.ChangeTime = DateTime.Now;
+                    dbc.Users.Add(user);
+                }
+                else
+                {
+                    user.Mobile = dto.Mobile;
+                    user.Name = dto.Name;
+                    user.Gender = dto.Gender;
+                    user.Address = dto.Address;
+                    user.ChangeTime = DateTime.Now;
                 }
 
                 entry.Address = dto.Address;
@@ -83,16 +139,61 @@ namespace Chat.Service.Service
             }
         }
 
+        public bool Delete(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<EntryEntity> cs = new CommonService<EntryEntity>(dbc);
+                var entry = cs.GetAll().SingleOrDefault(e => e.Id == id);
+                if (entry == null)
+                {
+                    return false;
+                }
+                entry.IsDeleted = true;                
+                dbc.SaveChanges();
+                return true;
+            }
+        }
+
         public long ImportAdd(EntryImportDTO dto)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
                 CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
                 CommonService<IdNameEntity> ics = new CommonService<IdNameEntity>(dbc);
+                CommonService<UserEntity> ucs = new CommonService<UserEntity>(dbc);
                 var train = cs.GetAll().Include(t=>t.Entries).SingleOrDefault(t => t.Id == dto.TrainId);
                 if (train == null)
                 {
                     return 0;
+                }
+
+                var user = ucs.GetAll().SingleOrDefault(u => u.Mobile == dto.Mobile);
+                if (user == null)
+                {
+                    user = new UserEntity();
+                    user.Mobile = dto.Mobile;
+                    user.Name = dto.Name;
+                    user.NickName = "dt_" + new Random().Next();
+                    user.PhotoUrl = "";
+                    user.Gender = dto.Gender=="男";
+                    user.Address = dto.Address;
+                    user.LoginErrorTimes = 0;
+                    user.PasswordHash = "";
+                    user.PasswordSalt = "";
+                    user.PassCount = 0;
+                    user.WinCount = 0;
+                    user.IsWon = false;
+                    user.ChangeTime = DateTime.Now;
+                    dbc.Users.Add(user);
+                }
+                else
+                {
+                    user.Mobile = dto.Mobile;
+                    user.Name = dto.Name;
+                    user.Gender = dto.Gender=="男";
+                    user.Address = dto.Address;
+                    user.ChangeTime = DateTime.Now;
                 }
 
                 EntryEntity entity = new EntryEntity();
@@ -126,7 +227,9 @@ namespace Chat.Service.Service
                 CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
                 CommonService<IdNameEntity> ics = new CommonService<IdNameEntity>(dbc);
                 CommonService<EntryEntity> ecs = new CommonService<EntryEntity>(dbc);
+                CommonService<UserEntity> ucs = new CommonService<UserEntity>(dbc);
                 var train = cs.GetAll().Include(t => t.Entries).SingleOrDefault(t => t.Id == trainId);
+                
                 if (train == null)
                 {
                     return false;
@@ -145,6 +248,34 @@ namespace Chat.Service.Service
                     var entry = ecs.GetAll().SingleOrDefault(e => e.Mobile == moblie);
                     if(entry==null)
                     {
+                        UserEntity user = ucs.GetAll().SingleOrDefault(u => u.Mobile == moblie);
+                        if (user == null)
+                        {
+                            user = new UserEntity();
+                            user.Mobile = moblie;
+                            user.Name = row["姓名"].ToString();
+                            user.NickName = "dt_" + new Random().Next();
+                            user.PhotoUrl = "";
+                            user.Gender = row["性别"].ToString() == "男";
+                            user.Address = row["地址"].ToString();
+                            user.LoginErrorTimes = 0;
+                            user.PasswordHash = "";
+                            user.PasswordSalt = "";
+                            user.PassCount = 0;
+                            user.WinCount = 0;
+                            user.IsWon = false;
+                            user.ChangeTime = DateTime.Now;
+                            dbc.Users.Add(user);
+                        }
+                        else
+                        {
+                            user.Mobile = moblie;
+                            user.Name = row["姓名"].ToString();
+                            user.Gender = row["性别"].ToString() == "男";
+                            user.Address = row["地址"].ToString();
+                            user.ChangeTime = DateTime.Now;
+                        }
+
                         entity = new EntryEntity();
                         entity.Address = row["地址"].ToString();
                         entity.BankAccount = row["银行账号"].ToString();
@@ -170,6 +301,34 @@ namespace Chat.Service.Service
                     }
                     else
                     {
+                        UserEntity user = ucs.GetAll().SingleOrDefault(u => u.Mobile == moblie);
+                        if (user == null)
+                        {
+                            user = new UserEntity();
+                            user.Mobile = moblie;
+                            user.Name = row["姓名"].ToString();
+                            user.NickName = "dt_" + new Random().Next();
+                            user.PhotoUrl = "";
+                            user.Gender = row["性别"].ToString() == "男";
+                            user.Address = row["地址"].ToString();
+                            user.LoginErrorTimes = 0;
+                            user.PasswordHash = "";
+                            user.PasswordSalt = "";
+                            user.PassCount = 0;
+                            user.WinCount = 0;
+                            user.IsWon = false;
+                            user.ChangeTime = DateTime.Now;
+                            dbc.Users.Add(user);
+                        }
+                        else
+                        {
+                            user.Mobile = moblie;
+                            user.Name = row["姓名"].ToString();
+                            user.Gender = row["性别"].ToString() == "男";
+                            user.Address = row["地址"].ToString();
+                            user.ChangeTime = DateTime.Now;
+                        }
+
                         entry.Address = row["地址"].ToString();
                         entry.BankAccount = row["银行账号"].ToString();
                         entry.Contact = row["联系方式"].ToString();
@@ -192,7 +351,7 @@ namespace Chat.Service.Service
                         {
                             train.Entries.Add(entry);
                             train.EntryCount++;
-                        }                                         
+                        }
                     }
                 }                
                 dbc.SaveChanges();
@@ -234,6 +393,56 @@ namespace Chat.Service.Service
                     return null;
                 }
                 return train.Entries.Where(e=>e.IsDeleted==false).OrderByDescending(e => e.CreateDateTime).Take(20).ToList().Select(e => ToListDTO(e)).ToArray();
+            }
+        }
+
+        public EntrySearchResult GetPageByTrainId(EntryGetPageDTO dto)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<TrainEntity> tcs = new CommonService<TrainEntity>(dbc);
+                EntrySearchResult result = new EntrySearchResult();
+                var train = tcs.GetAll().SingleOrDefault(t=>t.Id==dto.Id);
+                if(train==null)
+                {
+                    return null;
+                }
+                var entries = train.Entries.Where(e=>e.IsDeleted==false);
+                if(dto.CityId!=null)
+                {
+                    entries = entries.Where(e => e.CityId == dto.CityId);
+                }
+                if (dto.Gender != null)
+                {
+                    entries = entries.Where(e => e.Gender == dto.Gender);
+                }
+                if (dto.StayId != null)
+                {
+                    entries = entries.Where(e => e.StayId == dto.StayId);
+                }
+                if (dto.PayId != null)
+                {
+                    entries = entries.Where(e => e.PayId == dto.PayId);
+                }
+                if (dto.EntryChannelId != null)
+                {
+                    entries = entries.Where(e => e.EntryChannelId == dto.EntryChannelId);
+                }
+                if (dto.StartTime != null)
+                {
+                    entries = entries.Where(e => e.CreateDateTime >dto.StartTime);
+                }
+                if (dto.EndTime != null)
+                {
+                    entries = entries.Where(e => e.CreateDateTime < dto.EndTime);
+                }
+                if (dto.KeyWord!= null)
+                {
+                    entries = entries.Where(e => e.Name.Contains(dto.KeyWord) || e.Mobile.Contains(dto.KeyWord));
+                }
+                result.TotalCount = entries.LongCount();
+                result.Entries = entries.OrderByDescending(e => e.CreateDateTime).Skip(dto.CurrentIndex).Take(dto.PageSize).ToList().Select(e => ToListDTO(e)).ToArray();
+                return result;
             }
         }
 

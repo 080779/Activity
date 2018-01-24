@@ -11,5 +11,6 @@ namespace Chat.AdminWeb.Models.Train
         public long TrainId { get; set; }
         public IdNameDTO[] Cities { get; set; }
         public EntryListDTO[] Entries { get; set; }
+        public string Page { get; set; }
     }
 }

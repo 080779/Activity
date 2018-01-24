@@ -1,6 +1,7 @@
 ﻿using Chat.AdminWeb.App_Start;
 using Chat.AdminWeb.Models;
 using Chat.AdminWeb.Models.AdminManager;
+using Chat.AdminWeb.Models.Home;
 using Chat.DTO.DTO;
 using Chat.IService.Interface;
 using Chat.WebCommon;
@@ -17,6 +18,7 @@ namespace Chat.AdminWeb.Controllers
         public IAdminUserService adminService { get; set; }
         public ISettingService settingService { get; set; }
         public IRoleService roleService { get; set; }
+        public IAdminLogService logService { get; set; }
 
         public ActionResult Login()
         {
@@ -101,12 +103,102 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "success"});
         }
 
+        public ActionResult List()
+        {
+            AdminUserSearchResult result = adminService.GetPage(null, null, null, 0, 20);
+            AdminUserViewModel model = new AdminUserViewModel();
+            model.AdminUsers = result.AdminUsers;
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = 1;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult list(DateTime? startTime, DateTime? endTime, string keyWord, int pageIndex)
+        {
+            AdminUserSearchResult result = adminService.GetPage(startTime, endTime, keyWord, (pageIndex - 1) * 20, 20);
+            AdminUserViewModel model = new AdminUserViewModel();
+            model.AdminUsers = result.AdminUsers;
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = pageIndex;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+            return Json(new AjaxResult { Status = "1", Data = model });
+        }
+
         public ActionResult Add()
         {
             AddAdminUserViewModel model = new AddAdminUserViewModel();
             model.Citys = roleService.GetByDescription("在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格");
             model.Hall = roleService.GetByName("厅级管理员");
             return View(model);
+        }
+
+        public ActionResult Logs()
+        {
+            AdminLogSearchResult result = logService.GetPage(null,null,null,0, 20);
+            AdminLogsViewModel model = new AdminLogsViewModel();
+            model.Logs = result.AdminLogs;
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = 1;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Logs(DateTime? startTime,DateTime? endTime,string keyWord, int pageIndex)
+        {
+            AdminLogSearchResult result = logService.GetPage(startTime,endTime,keyWord,(pageIndex-1)*20, 20);
+            AdminLogsViewModel model = new AdminLogsViewModel();
+            model.Logs = result.AdminLogs;
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = pageIndex;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+            return Json(new AjaxResult { Status = "1", Data = model });
         }
     }
 }

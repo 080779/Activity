@@ -241,6 +241,8 @@
     <Compile Include="Models\AdminUserRegisterModel.cs" />
     <Compile Include="Models\AtivityAddModel.cs" />
     <Compile Include="Models\AtivityEditModel.cs" />
+    <Compile Include="Models\Home\AdminLogsViewModel.cs" />
+    <Compile Include="Models\Home\AdminUserViewModel.cs" />
     <Compile Include="Models\LoadAddExeModel.cs" />
     <Compile Include="Models\PrizeSetModel.cs" />
     <Compile Include="Models\PrizeWonViewModel.cs" />
@@ -248,6 +250,7 @@
     <Compile Include="Models\Train\EntryAddViewModel.cs" />
     <Compile Include="Models\Train\EntryEditModel.cs" />
     <Compile Include="Models\Train\EntryEditViewModel.cs" />
+    <Compile Include="Models\Train\EntryImportModel.cs" />
     <Compile Include="Models\Train\EntryListViewModel.cs" />
     <Compile Include="Models\Train\TrainAddModel.cs" />
     <Compile Include="Models\Train\TrainEditModel.cs" />
@@ -282,6 +285,8 @@
     <Content Include="Views\Train\EntryList.cshtml" />
     <Content Include="Views\Train\Edit.cshtml" />
     <Content Include="Views\Train\EntryEdit.cshtml" />
+    <Content Include="Views\Home\logs.cshtml" />
+    <Content Include="Views\Home\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -77,7 +77,33 @@ namespace Chat.Service.Service
                 return cs.GetAll().ToList().Select(a => ToDTO(a)).ToArray();
             }
         }
-               
+
+        public AdminUserSearchResult GetPage(DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<AdminUserEntity> cs = new CommonService<AdminUserEntity>(dbc);
+                AdminUserSearchResult result = new AdminUserSearchResult();
+                var adminUsers = cs.GetAll();
+                if (startTime != null)
+                {
+                    adminUsers = adminUsers.Where(a => a.CreateDateTime > startTime);
+                }
+                if (endTime != null)
+                {
+                    adminUsers = adminUsers.Where(a => a.CreateDateTime < endTime);
+                }
+                if (!string.IsNullOrEmpty(keyWord))
+                {
+                    adminUsers = adminUsers.Where(a => a.Name.Contains(keyWord));
+                }
+                result.TotalCount = adminUsers.LongCount();
+                result.AdminUsers = adminUsers.Include(a => a.Roles).OrderByDescending(a => a.CreateDateTime).Skip(currentIndex).Take(pageSize).ToList().
+                    Select(a => new AdminUserDTO { CreateDateTime=a.CreateDateTime,Email=a.Email,Gender=a.Gender,Id=a.Id,LastLoginErrorDateTime=a.LastLoginErrorTime,LoginErrorTimes=a.LoginErrorTimes,Mobile=a.Mobile,Name=a.Name}).ToArray();
+                return result;
+            }
+        }
+
         public AdminUserDTO GetById(long id)
         {
             using (MyDbContext dbc = new MyDbContext())
