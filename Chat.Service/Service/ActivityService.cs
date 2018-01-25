@@ -588,6 +588,43 @@ namespace Chat.Service.Service
             }
         }
 
+        public ActivityDTO[] GetByUserId(string mobile)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                foreach (var activity in cs.GetAll())
+                {
+                    if (DateTime.Now < activity.StartTime)
+                    {
+                        activity.StatusId = 5;
+                    }
+                    else if (DateTime.Now >= activity.StartTime && DateTime.Now < activity.ExamEndTime)
+                    {
+                        activity.StatusId = 6;
+                    }
+                    else if (DateTime.Now >= activity.ExamEndTime && DateTime.Now < activity.RewardTime)
+                    {
+                        activity.StatusId = 7;
+                    }
+                    else
+                    {
+                        activity.StatusId = 8;
+                    }
+                }
+                dbc.SaveChanges();
+                CommonService<UserEntity> ucs = new CommonService<UserEntity>(dbc);
+                var user = ucs.GetAll().SingleOrDefault(u => u.Mobile == mobile);
+                if (user == null)
+                {
+                    user = new UserEntity();
+                }
+                //return dbc.Database.SqlQuery<ActivityDTO>("select top(10) a.ID,a.Num,a.Name,a.Description,a.ImgUrl,a.StatusId,i.Name as StatusName,a.PaperId,t.TestTitle as PaperTitle,a.PrizeName,a.PrizeImgUrl,a.WeChatUrl,a.VisitCount,a.ForwardCount,a.AnswerCount,a.HavePrizeCount,a.PrizeCount,a.StartTime,a.ExamEndTime,a.RewardTime from T_Activities as a left join t_idnames i on i.id=a.statusid left join T_TestPapers t on t.Id=a.PaperId, (select ActivityId from T_UserActivities where UserId=@id) as u where a.Id=u.ActivityId and a.IsDeleted=0", new SqlParameter("@id",id)).ToArray();
+                
+                return user.Activities.Where(a=>a.IsDeleted==false).OrderByDescending(a => a.CreateDateTime).Take(20).ToList().Select(a => ToDTO(a)).ToArray();
+            }
+        }
+
         public ActivityDTO[] GetPageData(int pageSize, int currentIndex)
         {
             using (MyDbContext dbc = new MyDbContext())

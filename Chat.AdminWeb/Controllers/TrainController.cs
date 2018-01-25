@@ -1,4 +1,5 @@
-﻿using Chat.AdminWeb.Models.Train;
+﻿using Chat.AdminWeb.App_Start;
+using Chat.AdminWeb.Models.Train;
 using Chat.DTO.DTO;
 using Chat.IService.Interface;
 using Chat.WebCommon;
@@ -21,6 +22,7 @@ namespace Chat.AdminWeb.Controllers
         public IIdNameService idNameService { get; set; }
         public IEntryService entryService { get; set; }
 
+        [Permission("train")]
         public ActionResult List(int pageIndex=1)
         {
             TrainSearchResult result= trainService.Search(null, null, null, null, (pageIndex-1)*20, 20);
@@ -44,6 +46,7 @@ namespace Chat.AdminWeb.Controllers
             return View(model);
         }
 
+        [Permission("train")]
         public ActionResult TrainSearch(long? statusId,DateTime? startTime,DateTime? endTime,string keyWord,int pageIndex=1)
         {
             TrainSearchResult result = trainService.Search(statusId, startTime, endTime, keyWord, (pageIndex - 1) * 20, 20);
@@ -67,11 +70,14 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1", Data = model });
         }
 
+        [Permission("train")]
         public ActionResult Add()
         {
             return View();
         }
+
         [HttpPost]
+        [Permission("train")]
         [ValidateInput(false)]
         public ActionResult Add(TrainAddModel model)
         {
@@ -136,7 +142,8 @@ namespace Chat.AdminWeb.Controllers
             }
             return Json(new AjaxResult { Status = "1",Data="/train/list" });
         }
-        
+
+        [Permission("train")]
         public ActionResult Edit(long id)
         {
             TrainDTO dto= trainService.GetById(id);
@@ -144,6 +151,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [HttpPost]
+        [Permission("train")]
         [ValidateInput(false)]
         public ActionResult Edit(TrainEditModel model)
         {
@@ -232,6 +240,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1", Data = "/train/list" });
         }
 
+        [Permission("train")]
         public ActionResult Delete(long id)
         {
             if(id<=0)
@@ -245,6 +254,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1", Data = "/train/list" });
         }
 
+        [Permission("entry")]
         public ActionResult EntryList(long id=0,int pageIndex=1)
         {
             EntryListViewModel model = new EntryListViewModel();
@@ -273,6 +283,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [HttpPost]
+        [Permission("entry")]
         public ActionResult EntryList(EntryGetPageDTO dto)
         {
             EntryListViewModel model = new EntryListViewModel();
@@ -299,6 +310,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1", Data = model });
         }
 
+        [Permission("entry")]
         public ActionResult EntryAdd(long id)
         {
             EntryAddViewModel model = new EntryAddViewModel();
@@ -309,6 +321,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [HttpPost]
+        [Permission("entry")]
         public ActionResult EntryAdd(EntryAddModel model)
         {
             #region 数据验证
@@ -429,6 +442,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1", Data = "/train/entrylist?id=" + model.TrainId });
         }
 
+        [Permission("entry")]
         public ActionResult EntryEdit(long id,long trainId)
         {
             EntryEditViewModel model = new EntryEditViewModel();
@@ -440,6 +454,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [HttpPost]
+        [Permission("entry")]
         public ActionResult EntryEdit(EntryEditModel model)
         {
             #region 数据验证
@@ -562,6 +577,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1" ,Data="/train/entrylist?id="+model.TrainId });
         }
 
+        [Permission("entry")]
         public ActionResult EntryDelete(long id=0,long trainId=0)
         {
             if (id <= 0)
@@ -579,6 +595,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "1", Data = "/train/entrylist?id="+trainId });
         }
 
+        [Permission("entry")]
         /// <summary>
         /// 报名导入
         /// </summary>
@@ -644,6 +661,7 @@ namespace Chat.AdminWeb.Controllers
             return path;
         }
 
+        [Permission("entry")]
         public ActionResult ExportExcel(long id)
         {
             IWorkbook wb = new XSSFWorkbook();
@@ -758,6 +776,7 @@ namespace Chat.AdminWeb.Controllers
             return File(ms, "application/vnd.ms-excel", "报名用户汇总.xls");
         }
 
+        [Permission("entry")]
         public ActionResult SearchEntry()
         {
             return Json(new AjaxResult { Status = "0", ErrorMsg = "培训主题不能为空" });

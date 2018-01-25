@@ -12,10 +12,23 @@ namespace Chat.DTO.DTO
         public string Mobile { get; set; }
         public bool Gender { get; set; }
         public string Email { get; set; }
-        //public string RoleName { get; set; }
+        public RoleDTO[] Roles { get; set; }
         //public long? CityId { get; set; }
         //public string CityName { get; set; }
         public int LoginErrorTimes { get; set; }
+        public DateTime? LastLoginErrorDateTime { get; set; }
+    }
+
+    public class AdminUserListDTO : BaseDTO
+    {
+        public string Name { get; set; }
+        public string Mobile { get; set; }
+        public bool Gender { get; set; }
+        public string Email { get; set; }
+        public string RoleName { get; set; }
+        //public long? CityId { get; set; }
+        //public string CityName { get; set; }
+        public string Creator { get; set; }
         public DateTime? LastLoginErrorDateTime { get; set; }
     }
 }

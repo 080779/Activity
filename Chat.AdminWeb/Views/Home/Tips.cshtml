@@ -1,0 +1,44 @@
+﻿@model string
+@{
+    ViewBag.Title = "权限提示";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    #pager ul li {
+        float: left;
+        margin-left: 10px;
+        color: lightskyblue;
+        list-style-type: none;
+        width: 30px;
+        font-size: 8px;
+        margin: 0px;
+    }
+
+    .curPager {
+        color: brown;
+    }
+</style>
+<div class="mainpanel">
+    <div class="contentpanel">
+        <div>
+        </div><br /><br />
+        <div class="panel panel-default" style="text-align:center">
+            <div class="panel-body">
+                <div class="form-inline">
+                    <div class="form-group mt10">
+                        <h3 style="color:#6699cc;border-bottom:1px solid #8cb2d9;padding-left:20px;">【 权限提示 】</h3>
+                        @*<h1>欢迎登录广西环保后台管理系统</h1>*@
+                        <br />很抱歉，@Model<br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- contentpanel -->
+</div><!-- mainpanel -->
+        </div><!-- mainwrapper -->
+    </section>
+
+@section FooterScript
+{
+
+}

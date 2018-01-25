@@ -13,6 +13,7 @@ namespace Chat.IService.Interface
         bool Update(long id, string title, string img, string address, DateTime? startTime, DateTime? endTime, decimal entryFee, long upToOne, string description);
         bool Delete(long id);
         TrainDTO[] GetAll();
+        TrainDTO[] GetByUserId(string mobile);
         TrainSearchResult Search(long? statusId,DateTime? startTime,DateTime? endTime,string keyWord,int currentIndex,int pageSize);
         TrainDTO GetById(long id);
     }

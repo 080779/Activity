@@ -1,31 +1,10 @@
-﻿@model Chat.AdminWeb.Models.AdminManager.AddAdminUserViewModel
+﻿@model Chat.AdminWeb.Models.Main.EditAdminUserViewModel
 @{
-    ViewBag.Title = "新增管理员";
+    ViewBag.Title = "编辑管理员";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="mainpanel">
     <div class="contentpanel">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4>账号设置</h4>
-            </div>
-            <div class="panel-body">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">登录名:</label>
-                        <div class="col-sm-6">
-                            <input type="text" id="name" placeholder="" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">初始登录密码:</label>
-                        <div class="col-sm-6">
-                            <input type="password" id="password" placeholder="" class="form-control">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>权限设置</h4>
@@ -37,19 +16,19 @@
                         <div class="col-sm-6">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="manager" id="manager1" value="option1" checked="checked" >厅级管理员（在培训活动管理-报名管理中，拥有全部功能操作权限）
+                                    <input type="radio" name="roleName" id="manager1" value="@Model.Hall.Name" checked="checked">厅级管理员（在培训活动管理-报名管理中，拥有全部功能操作权限）
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="manager" id="manager2" value="option2">市级管理员（在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格）
+                                    <input type="radio" name="roleName" id="manager2" value="">市级管理员（在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格）
                                 </label>
                             </div>
                             <select id="cityId" class="form-control" style="width: 200px;">
                                 <option value="">选择所属市级</option>
-                                @foreach (var role in Model.Citys)
+                                @foreach (var city in Model.Citys)
                                 {
-                                    <option value="@role.Id">@role.Name</option>
+                                    <option value="@(city.Name+"-")" selected="@(Model.RoleName==city.Name+"-")">@city.Name</option>
                                 }
                             </select>
                         </div>
@@ -66,22 +45,23 @@
                     </style>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">权限设置:</label>
+                        <input type="hidden" name="list" id="list" value="@Model.ListId" />
                         <div class="col-sm-6" style="border: 1px solid #eee; padding: 10px 20px 20px;">
                             <div class="limit-checkbox">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" value="">答题管理
+                                        <input type="checkbox" id="activityAll" value="">答题管理
                                     </label>
                                 </div>
                                 <div class="limit-checkbox-two">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="">考卷管理
+                                            <input type="checkbox" name="paper" id="paper" value="@Model.PaperId" checked="@(Model.PermissionIds.Contains(Model.PaperId))" class="activity">考卷管理
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="">答题活动管理
+                                            <input type="checkbox" name="activity" id="activity" value="@Model.ActivityId" checked="@(Model.PermissionIds.Contains(Model.ActivityId))" class="activity">答题活动管理
                                         </label>
                                     </div>
                                 </div>
@@ -89,34 +69,34 @@
                             <div class="limit-checkbox">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" value="">培训管理
+                                        <input type="checkbox" id="trainAll" value="">培训管理
                                     </label>
                                 </div>
                                 <div class="limit-checkbox-two">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="">培训管理
+                                            <input type="checkbox" name="train" id="train" value="@Model.TrainId" checked="@(Model.PermissionIds.Contains(Model.TrainId))" class="train">培训管理
                                         </label>
                                     </div>
                                     <div class="limit-checkbox-two">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" value="">报名管理
+                                                <input type="checkbox" name="entry" id="entry" value="@Model.EntryId" checked="@(Model.PermissionIds.Contains(Model.EntryId))" class="train">报名管理
                                             </label>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
                             <div class="limit-checkbox">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" value="">用户管理
+                                        <input type="checkbox" id="userAll" value="">用户管理
                                     </label>
                                 </div>
                                 <div class="limit-checkbox-two">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="">用户管理
+                                            <input type="checkbox" name="user" id="user" checked="@(Model.PermissionIds.Contains(Model.UserId))" value="@Model.UserId">用户管理
                                         </label>
                                     </div>
                                 </div>
@@ -124,28 +104,28 @@
                             <div class="limit-checkbox">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" value="">系统设置
+                                        <input type="checkbox" id="adminAll" value="">系统设置
                                     </label>
                                 </div>
                                 <div class="limit-checkbox-two">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="">系统日志
+                                            <input type="checkbox" id="log" class="admin" checked="@(Model.PermissionIds.Contains(Model.LogId))" value="@Model.LogId">系统日志
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="">后台用户管理
+                                            <input type="checkbox" id="adminUser" class="admin" checked="@(Model.PermissionIds.Contains(Model.AdminUserId))" value="@Model.AdminUserId">后台用户管理
                                         </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>    
                 </div>
             </div>
             <div class="panel-footer" style="text-align:center">
-                <button class="btn btn-primary mr5">确定</button>
+                <button class="btn btn-primary mr5" id="btnSave">确定</button>
                 <button class="btn btn-default">返回</button>
             </div>
         </div>
@@ -158,29 +138,61 @@
     <script type="text/javascript">
         $(function () {
 
-            $("#city").change(function () {
-                $("#cityManager").val($(this).val());
-                $("#cityManager").attr("checked", "checked");
+            $("#cityId").change(function () {
+                $("#manager2").val($(this).val());
+                $("#manager2").attr("checked", "checked");
+            });
+
+            $("#paper").live("change",function () {
+                if($(this).is(":checked"))
+                {
+                    $("#activityAll").attr("checked", "checked");
+                }
             });
 
             $("#btnSave").live("click", function () {
-                if ($("input[name='manager']:checked").val() == 'on' || $("input[name='manager']:checked").val() == 'selectCity')
-                {
-                    alert("请选择所属市级");
-                    return;
+                var name = $("#name").val();
+                var password = $("#password").val();
+                var roleName = $("input[name='roleName']:checked").val();
+                var list = $("#list").val();
+                var paper = 0;
+                var activity = 0;
+                var train = 0;
+                var entry = 0;
+                var user = 0;
+                var log = 0;
+                var adminUser = 0;
+                if ($("#paper").is(":checked")){
+                    paper = $("#paper").val();
                 }
-                var role = $("input[name='manager']:checked").val();
+                if ($("#activity").is(":checked")) {
+                    activity = $("#activity").val();
+                }
+                if ($("#train").is(":checked")) {
+                    train = $("#train").val();
+                }
+                if ($("#entry").is(":checked")) {
+                    entry = $("#entry").val();
+                }
+                if ($("#user").is(":checked")) {
+                    user = $("#user").val();
+                }
+                if ($("#log").is(":checked")) {
+                    log = $("#log").val();
+                }
+                if ($("#adminUser").is(":checked")) {
+                    adminUser = $("#adminUser").val();
+                }
+                var permissionIds = new Array(list, paper, activity, train, entry, user, log, adminUser);
                 $.ajax({
-                    url: "/home/add", type: "post", data: { role: role },
+                    url: "/main/add", type: "post", data: { name: name,password:password,roleName:roleName,permissionIds },
                     success: function (result) {
-                        if (result.status == "error")
-                        {
+                        if (result.status == "0") {
                             alert(result.errorMsg);
                         }
-                        else if (result.status == "success")
-                        {
-                            alert("添加成功！");
-                            window.location.href = "/testpaper/list";
+                        else if (result.status == "1") {
+                            alert("管理员添加成功！");
+                            window.location.href = "/main/list";
                         }
                         else {
                             alert("未知错误");
@@ -189,6 +201,7 @@
                     error: function () { alert("网络错误"); }
                 });
             });
+
         });
     </script>
 }

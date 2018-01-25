@@ -30,16 +30,16 @@
                             <option value="false">女</option>
                         </select>
                     </div>
-                    <div class="form-group mt10">
+                    @*<div class="form-group mt10">
                         <select id="isWon" class="form-control">
                             <option value="">是否获奖</option>
                             <option value="true">是</option>
                             <option value="false">否</option>
                         </select>
-                    </div>
+                    </div>*@
                     <div class="form-group mt10">
-                        <input type="text" id="txtStar" placeholder="请输入起始答题时间" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
-                        <input type="text" id="txtEnd" placeholder="请输入结束答题时间" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+                        <input type="text" id="txtStar" placeholder="请输入起始时间" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+                        <input type="text" id="txtEnd" placeholder="请输入结束时间" class="form-control Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
                     </div>
                     <div class="form-group mt10">
                         <input id="keyWord" type="text" placeholder="请输入用户名或手机号码" class="form-control">
@@ -59,6 +59,7 @@
                             <th style="min-width: 80px;">联系方式</th>
                             <th style="min-width: 80px;">详细地址</th>
                             <th style="min-width: 80px;">创建时间</th>
+                            <th style="min-width: 80px;">更新时间</th>
                             <th style="min-width: 80px;">操作</th>
                         </tr>
                     </thead>
@@ -72,7 +73,8 @@
                             <td data-attr="联系方式">@user.Mobile</td>
                             <td data-attr="详细地址">@user.Address</td>
                             <td data-attr="创建时间">@user.CreateDateTime</td>
-                            <td data-attr="操作"><a href="@Url.Action("useractlist","activity",new { id=user.Id})" class="btn btn-primary btn-sm">参与的活动</a><a href="@Url.Action("useractlist","activity",new { id=user.Id})" class="btn btn-primary btn-sm">参与的培训</a></td>
+                            <td data-attr="更新时间">@user.ChangeTime</td>
+                            <td data-attr="操作"><a href="@Url.Action("useractlist","user",new { mobile=user.Mobile})" class="btn btn-primary btn-sm">参与的活动</a><a href="@Url.Action("usertrainlist","user",new { mobile=user.Mobile})" class="btn btn-primary btn-sm">参与的培训</a></td>
                         </tr>
                     }
                     </tbody>
@@ -89,12 +91,12 @@
 <script type="text/javascript">
     function getPage(pageIndex) {
         var gender = $("#gender").val();
-        var isWon = $("#isWon").val();
+        //var isWon = $("#isWon").val();
         var startTime = $("#txtStar").val();
         var endTime = $("#txtEnd").val();
         var keyWord = $("#keyWord").val();
         $.ajax({
-            url: "/user/search?pageindex=" + pageIndex, type: "post", data: { gender: gender, isWon: isWon, startTime: startTime, endTime: endTime, keyWord: keyWord },
+            url: "/user/search?pageindex=" + pageIndex, type: "post", data: { gender: gender, startTime: startTime, endTime: endTime, keyWord: keyWord },
             success: function (result) {
                 if (result.status == "error") {
                     alert(result.errorMsg);
@@ -105,7 +107,11 @@
                     $("#paperList").empty();
                     for (var i = 0; i < result.data.users.length; i++) {
                         var gendern = result.data.users[i].gender ? "男" : "女";
-                        $("#paperList").append('<tr><td data-attr="编号">' + result.data.users[i].id + '</td><td data-attr="姓名">' + result.data.users[i].name + '</td><td data-attr="性别">' + gendern + '</td><td data-attr="联系方式">' + result.data.users[i].mobile + '</td><td data-attr="详细地址">' + result.data.users[i].address + '</td><td data-attr="创建时间">' + result.data.users[i].createDateTime + '</td><td data-attr="操作"><a href="/activity/useractlist?id=' + result.data.users[i].id + '" class="btn btn-primary btn-sm">参与的活动</a></td></tr>');
+                        var changeTime = result.data.users[i].changeTime;
+                        if (!changeTime && typeof (changeTime) != "undefined" && changeTime != 0) {
+                            changeTime = "";
+                        }
+                        $("#paperList").append('<tr><td data-attr="编号">' + result.data.users[i].id + '</td><td data-attr="姓名">' + result.data.users[i].name + '</td><td data-attr="性别">' + gendern + '</td><td data-attr="联系方式">' + result.data.users[i].mobile + '</td><td data-attr="详细地址">' + result.data.users[i].address + '</td><td data-attr="创建时间">' + result.data.users[i].createDateTime + '</td><td data-attr="更新时间">' + changeTime + '</td><td data-attr="操作"><a href="/user/useractlist?mobile=' + result.data.users[i].mobile + '" class="btn btn-primary btn-sm">参与的活动</a><a href="/user/usertrainlist?mobile=' + result.data.users[i].mobile + '" class="btn btn-primary btn-sm">参与的活动</a></td></tr>');
                     }
                 }
                 else {
@@ -142,7 +148,11 @@
                         $("#paperList").empty();
                         for (var i = 0; i < result.data.users.length; i++) {
                             var gendern = result.data.users[i].gender ? "男" : "女";
-                            $("#paperList").append('<tr><td data-attr="编号">' + result.data.users[i].id + '</td><td data-attr="姓名">' + result.data.users[i].name + '</td><td data-attr="性别">' + gendern + '</td><td data-attr="联系方式">' + result.data.users[i].mobile + '</td><td data-attr="详细地址">' + result.data.users[i].address + '</td><td data-attr="创建时间">' + result.data.users[i].createDateTime + '</td><td data-attr="操作"><a href="/activity/useractlist?id=' + result.data.users[i].id + '" class="btn btn-primary btn-sm">参与的活动</a></td></tr>');
+                            var changeTime = result.data.users[i].changeTime;
+                            if (!changeTime && typeof (changeTime) != "undefined" && changeTime != 0) {
+                                changeTime = "";
+                            }
+                            $("#paperList").append('<tr><td data-attr="编号">' + result.data.users[i].id + '</td><td data-attr="姓名">' + result.data.users[i].name + '</td><td data-attr="性别">' + gendern + '</td><td data-attr="联系方式">' + result.data.users[i].mobile + '</td><td data-attr="详细地址">' + result.data.users[i].address + '</td><td data-attr="创建时间">' + result.data.users[i].createDateTime + '</td><td data-attr="更新时间">' + changeTime + '</td><td data-attr="操作"><a href="/user/useractlist?mobile=' + result.data.users[i].mobile + '" class="btn btn-primary btn-sm">参与的活动</a><a href="/user/usertrainlist?mobile=' + result.data.users[i].mobile + '" class="btn btn-primary btn-sm">参与的活动</a></td></tr>');
                         }
                     }
                     else {

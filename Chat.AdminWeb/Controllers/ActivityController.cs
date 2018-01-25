@@ -23,8 +23,8 @@ namespace Chat.AdminWeb.Controllers
         public ITestPaperService paperService { get; set; }
         public IIdNameService idNameService { get; set; }
         public IUserService userService { get; set; }        
-
-        [Permission("list")]
+                
+        [Permission("activity")]
         [ActDescription("答题活动列表")]
         public ActionResult List(int pageIndex=1)
         {
@@ -35,16 +35,7 @@ namespace Chat.AdminWeb.Controllers
             return View(model);
         }
 
-        [Permission("list")]
-        public ActionResult UserActList(long id)
-        {
-            ActivityListModel model = new ActivityListModel();
-            ActivityDTO[] dtos = activityService.GetByUserId(id);
-            model.Activities = dtos;
-            return View(model);
-        }
-
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult Add()
         {
             ActivityAddLoadModel model = new ActivityAddLoadModel();
@@ -58,7 +49,7 @@ namespace Chat.AdminWeb.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult Add(AtivityAddModel model)
         {            
             if (model.imgUrl == null)
@@ -100,7 +91,7 @@ namespace Chat.AdminWeb.Controllers
             return View(model);
         }
         [HttpPost]
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult Edit(AtivityEditModel model)
         {
             string sImgPath = string.Empty;
@@ -132,7 +123,8 @@ namespace Chat.AdminWeb.Controllers
             //return Content(b.ToString());
             return Redirect("~/activity/list");
         }
-        [Permission("manager")]
+        [Permission("list")]
+        [Permission("activity")]
         public ActionResult AddJsonResp(ActivityAddJsonModel model)
         {
             if (string.IsNullOrEmpty(model.Name))
@@ -223,7 +215,8 @@ namespace Chat.AdminWeb.Controllers
             //}
             return Json(new AjaxResult { Status = "success" });
         }
-        [Permission("manager")]
+
+        [Permission("activity")]
         public ActionResult EditJsonResp(ActivityEditJsonModel model)
         {
             string sImgPath = string.Empty;
@@ -324,7 +317,8 @@ namespace Chat.AdminWeb.Controllers
             //}
             return Json(new AjaxResult { Status = "success" });
         }
-        [Permission("manager")]
+
+        [Permission("activity")]
         public ActionResult DelActivity(long id)
         {
             if (!activityService.Delete(id))
@@ -334,7 +328,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "success" });
         }
 
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult Prize(long id,int pageIndex=1)
         {
             PrizeSetModel model = new PrizeSetModel();
@@ -363,7 +357,7 @@ namespace Chat.AdminWeb.Controllers
             return View(model);
         }
         [HttpPost]
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult PrizeSearch(long id, DateTime? startTime, DateTime? endTime, string keyWord,int pageIndex=1)
         {
             if(id<=0)
@@ -399,7 +393,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [HttpPost]
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult PrizeWon(PrizeWonViewModel model)
         {
             if (ModelState.IsValid)
@@ -419,7 +413,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [HttpPost]
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult SetWon(long id, long activityId)
         {
             if (id <= 0)
@@ -437,7 +431,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "success" });
         }
         [HttpPost]
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult ReSetWon(long id, long activityId)
         {
             if(id<=0)
@@ -455,7 +449,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "success" });
         }
 
-        [Permission("manager")]
+        [Permission("activity")]
         public ActionResult CreateExcel(long id)
         {
             if(id<=0)
@@ -548,7 +542,7 @@ namespace Chat.AdminWeb.Controllers
             return File(ms, "application/vnd.ms-excel", "获奖用户信息.xls");
         }
 
-        [Permission("manager")]
+        [Permission("activity")]
         [HttpPost]
         public ActionResult PicUpload(long urlId, HttpPostedFileBase file)
         {    
@@ -615,6 +609,7 @@ namespace Chat.AdminWeb.Controllers
             return path;
         }
 
+        [Permission("activity")]
         public ActionResult Search(long? statusId,DateTime? startTime,DateTime? endTime,string keyWord)
         {
             ViewBag.PageIndex = 1;            
@@ -628,6 +623,7 @@ namespace Chat.AdminWeb.Controllers
             return Json("aa");
         }
 
+        [Permission("activity")]
         public ActionResult SetCurrent(long id,string yesOrNo)
         {
             if(id<=0)
@@ -652,6 +648,7 @@ namespace Chat.AdminWeb.Controllers
             }
         }
 
+        [Permission("activity")]
         public ActionResult RandSetWon(int count, long id)
         {
             if (count <= 0)

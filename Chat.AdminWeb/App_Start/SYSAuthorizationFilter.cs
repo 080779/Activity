@@ -42,7 +42,8 @@ namespace Chat.AdminWeb.App_Start
                     }
                     else
                     {
-                        filterContext.Result = new ContentResult() { Content = "没有" + permissionService.GetByName(attr.Permission).Description + "这个权限" };
+                        //filterContext.Result = new ContentResult() { Content = "没有" + permissionService.GetByName(attr.Permission).Description + "这个权限" };
+                        filterContext.Result = new RedirectResult("/home/tips?message="+ "没有" + permissionService.GetByName(attr.Permission).Description + "这个权限" ); 
                     }
                     return;
                 }

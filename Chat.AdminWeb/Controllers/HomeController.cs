@@ -18,7 +18,18 @@ namespace Chat.AdminWeb.Controllers
         public IAdminUserService adminService { get; set; }
         public ISettingService settingService { get; set; }
         public IRoleService roleService { get; set; }
-        public IAdminLogService logService { get; set; }
+
+        [Permission("list")]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [Permission("list")]
+        public ActionResult Tips(string message)
+        {
+            return View((object)message);
+        }
 
         public ActionResult Login()
         {
@@ -38,7 +49,7 @@ namespace Chat.AdminWeb.Controllers
             if (adminService.CheckLogin(model.Name, model.Password))
             {
                 Session["AdminUserId"] = adminService.GetByName(model.Name).Id;
-                return Json(new AjaxResult { Status = "redirect",Data="/testpaper/list" });
+                return Json(new AjaxResult { Status = "redirect",Data="/home/index" });
             }
             else
             {
@@ -72,6 +83,7 @@ namespace Chat.AdminWeb.Controllers
             return Redirect("/home/login");
         }
 
+        [Permission("manager")]
         public ActionResult LoadManager()
         {
             long? id = (long?)Session["AdminUserId"];
@@ -96,109 +108,11 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "地址不能为空" });
             }
-            if(!settingService.UpdateValue("前端奖品图片地址", value))
+            if (!settingService.UpdateValue("前端奖品图片地址", value))
             {
                 return Json(new AjaxResult { Status = "error", ErrorMsg = "地址设置不成功" });
             }
             return Json(new AjaxResult { Status = "success"});
-        }
-
-        public ActionResult List()
-        {
-            AdminUserSearchResult result = adminService.GetPage(null, null, null, 0, 20);
-            AdminUserViewModel model = new AdminUserViewModel();
-            model.AdminUsers = result.AdminUsers;
-            //分页
-            Pagination pager = new Pagination();
-            pager.PageIndex = 1;
-            pager.PageSize = 20;
-            pager.TotalCount = result.TotalCount;
-
-            if (result.TotalCount <= 20)
-            {
-                model.Page = "";
-            }
-            else
-            {
-                model.Page = pager.GetPagerHtml();
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult list(DateTime? startTime, DateTime? endTime, string keyWord, int pageIndex)
-        {
-            AdminUserSearchResult result = adminService.GetPage(startTime, endTime, keyWord, (pageIndex - 1) * 20, 20);
-            AdminUserViewModel model = new AdminUserViewModel();
-            model.AdminUsers = result.AdminUsers;
-            //分页
-            Pagination pager = new Pagination();
-            pager.PageIndex = pageIndex;
-            pager.PageSize = 20;
-            pager.TotalCount = result.TotalCount;
-
-            if (result.TotalCount <= 20)
-            {
-                model.Page = "";
-            }
-            else
-            {
-                model.Page = pager.GetPagerHtml();
-            }
-            return Json(new AjaxResult { Status = "1", Data = model });
-        }
-
-        public ActionResult Add()
-        {
-            AddAdminUserViewModel model = new AddAdminUserViewModel();
-            model.Citys = roleService.GetByDescription("在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格");
-            model.Hall = roleService.GetByName("厅级管理员");
-            return View(model);
-        }
-
-        public ActionResult Logs()
-        {
-            AdminLogSearchResult result = logService.GetPage(null,null,null,0, 20);
-            AdminLogsViewModel model = new AdminLogsViewModel();
-            model.Logs = result.AdminLogs;
-            //分页
-            Pagination pager = new Pagination();
-            pager.PageIndex = 1;
-            pager.PageSize = 20;
-            pager.TotalCount = result.TotalCount;
-
-            if (result.TotalCount <= 20)
-            {
-                model.Page = "";
-            }
-            else
-            {
-                model.Page = pager.GetPagerHtml();
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Logs(DateTime? startTime,DateTime? endTime,string keyWord, int pageIndex)
-        {
-            AdminLogSearchResult result = logService.GetPage(startTime,endTime,keyWord,(pageIndex-1)*20, 20);
-            AdminLogsViewModel model = new AdminLogsViewModel();
-            model.Logs = result.AdminLogs;
-            //分页
-            Pagination pager = new Pagination();
-            pager.PageIndex = pageIndex;
-            pager.PageSize = 20;
-            pager.TotalCount = result.TotalCount;
-
-            if (result.TotalCount <= 20)
-            {
-                model.Page = "";
-            }
-            else
-            {
-                model.Page = pager.GetPagerHtml();
-            }
-            return Json(new AjaxResult { Status = "1", Data = model });
-        }
+        }                
     }
 }

@@ -78,7 +78,16 @@ namespace Chat.Service.Service
 
         public PermissionDTO[] GetByRoleId(long roleId)
         {
-            throw new NotImplementedException();
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<RoleEntity> cs = new CommonService<RoleEntity>(dbc);
+                var role = cs.GetAll().SingleOrDefault(r=>r.Id==roleId);
+                if(role==null)
+                {
+                    role = new RoleEntity();
+                }
+                return role.Permissions.Where(p => p.IsDeleted == false).ToList().Select(p => new PermissionDTO { Name = p.Name, Description = p.Description, CreateDateTime = p.CreateDateTime, Id = p.Id, LevelList = p.LevelList }).ToArray();
+            }
         }
 
         public bool MarkDeleted(long id)

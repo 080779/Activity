@@ -117,6 +117,39 @@ namespace Chat.Service.Service
                 dbc.SaveChanges();
                 return cs.GetAll().Include(t => t.Status).Include(t => t.Entries).OrderByDescending(t => t.CreateDateTime).Take(20).ToList().Select(t => ToDTO(t)).ToArray();
             }
+        }        
+
+        public TrainDTO[] GetByUserId(string mobile)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
+                foreach (var train in cs.GetAll())
+                {
+                    if (train.StartTime > DateTime.Now)
+                    {
+                        train.StatusId = 34;
+                    }
+                    else if (train.StartTime <= DateTime.Now && train.EndTime >= DateTime.Now)
+                    {
+                        train.StatusId = 35;
+                    }
+                    else if (train.EndTime < DateTime.Now)
+                    {
+                        train.StatusId = 36;
+                    }
+                }
+                dbc.SaveChanges();
+                CommonService<EntryEntity> ecs = new CommonService<EntryEntity>(dbc);
+                var entry = ecs.GetAll().SingleOrDefault(u => u.Mobile == mobile);
+                if (entry == null)
+                {
+                    entry = new EntryEntity();
+                }
+                //return dbc.Database.SqlQuery<ActivityDTO>("select top(10) a.ID,a.Num,a.Name,a.Description,a.ImgUrl,a.StatusId,i.Name as StatusName,a.PaperId,t.TestTitle as PaperTitle,a.PrizeName,a.PrizeImgUrl,a.WeChatUrl,a.VisitCount,a.ForwardCount,a.AnswerCount,a.HavePrizeCount,a.PrizeCount,a.StartTime,a.ExamEndTime,a.RewardTime from T_Activities as a left join t_idnames i on i.id=a.statusid left join T_TestPapers t on t.Id=a.PaperId, (select ActivityId from T_UserActivities where UserId=@id) as u where a.Id=u.ActivityId and a.IsDeleted=0", new SqlParameter("@id",id)).ToArray();
+
+                return entry.Trains.Where(a => a.IsDeleted == false).OrderByDescending(a => a.CreateDateTime).Take(20).ToList().Select(a => ToDTO(a)).ToArray();
+            }
         }
 
         public TrainSearchResult Search(long? statusId, DateTime? startTime, DateTime? endTime, string keyWord,int currentIndex,int pageSize)

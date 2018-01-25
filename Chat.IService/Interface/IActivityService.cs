@@ -22,6 +22,7 @@ namespace Chat.IService.Interface
         bool Delete(long id);
         bool AddUserId(long activityId, long userId);
         ActivityDTO[] GetByUserId(long id);
+        ActivityDTO[] GetByUserId(string mobile);
         bool SetCurrent(long id);
         bool ResetCurrent(long id);
         ActivityDTO GetIsCurrent();

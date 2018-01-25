@@ -17,7 +17,7 @@ namespace Chat.AdminWeb.Controllers
         public IExercisesService exercisesService { get; set; }
         public IActivityService activityService { get; set; }
 
-        [Permission("list")]
+        [Permission("paper")]
         [ActDescription("试卷列表")]
         public ActionResult List()
         {
@@ -25,7 +25,7 @@ namespace Chat.AdminWeb.Controllers
             return View(dtos);
         }
 
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult AddEditExe(long testPaperId)
         {
             LoadAddExeModel model = new Models.LoadAddExeModel();
@@ -41,7 +41,7 @@ namespace Chat.AdminWeb.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult AddEditExe(AddExercisesModel model)
         {
             if (string.IsNullOrEmpty(model.Title))
@@ -81,7 +81,7 @@ namespace Chat.AdminWeb.Controllers
         /// </summary>
         /// <param name="exeId"></param>
         /// <returns></returns>
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult LoadExe(long exeId)
         {
             ExercisesDTO dto = exercisesService.GetById(exeId);
@@ -99,7 +99,7 @@ namespace Chat.AdminWeb.Controllers
         /// <param name="exeId"></param>
         /// <returns></returns>
         [HttpPost]
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult DelExe(long paperId,long exeId)
         {
             if (exeId <= 0)
@@ -118,7 +118,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "success", Data = loadmodel });
         }
 
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult AddPaper()
         {
             return View();
@@ -129,7 +129,7 @@ namespace Chat.AdminWeb.Controllers
         /// </summary>
         /// <param name="testTitle"></param>
         /// <returns></returns>
-        [Permission("manager")]
+        [Permission("paper")]
         [HttpPost]
         public ActionResult AddPaper(string testTitle)
         {
@@ -141,7 +141,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status="success"});
         }
 
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult EditPaper(long id)
         {
             TestPaperDTO dto = testPaperService.GetById(id);
@@ -155,7 +155,7 @@ namespace Chat.AdminWeb.Controllers
         /// <param name="title"></param>
         /// <returns></returns>
         [HttpPost]
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult EditPaper(long id,string title)
         {
             if (string.IsNullOrEmpty(title))
@@ -174,7 +174,7 @@ namespace Chat.AdminWeb.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult DelPaper(long id)
         {
             if(activityService.CheckByPaperId(id))
@@ -188,7 +188,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status="success"});
         }
         [HttpPost]
-        [Permission("manager")]
+        [Permission("paper")]
         public ActionResult Search(DateTime? startTime,DateTime? endTime,string keyWord)
         {
             return Json(new AjaxResult { Status="success",Data=testPaperService.Search(startTime,endTime,keyWord)});

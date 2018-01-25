@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Chat.AdminWeb.Models.AdminManager
+namespace Chat.AdminWeb.Models.Main
 {
-    public class AddAdminUserViewModel
+    public class EditAdminUserViewModel
     {
         public RoleDTO Hall { get; set; }
         public IdNameDTO[] Citys { get; set; }
@@ -18,5 +18,7 @@ namespace Chat.AdminWeb.Models.AdminManager
         public long UserId { get; set; }
         public long LogId { get; set; }
         public long AdminUserId { get; set; }
+        public string RoleName { get; set; }
+        public List<long> PermissionIds { get; set; }
     }
 }

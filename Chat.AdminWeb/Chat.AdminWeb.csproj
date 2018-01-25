@@ -224,6 +224,8 @@
     <Compile Include="App_Start\SYSExceptionFilter.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\TestPaperController.cs" />
     <Compile Include="Controllers\TrainController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -244,6 +246,9 @@
     <Compile Include="Models\Home\AdminLogsViewModel.cs" />
     <Compile Include="Models\Home\AdminUserViewModel.cs" />
     <Compile Include="Models\LoadAddExeModel.cs" />
+    <Compile Include="Models\Main\AddAdminUserModel.cs" />
+    <Compile Include="Models\Main\EditAdminUserModel.cs" />
+    <Compile Include="Models\Main\EditAdminUserViewModel.cs" />
     <Compile Include="Models\PrizeSetModel.cs" />
     <Compile Include="Models\PrizeWonViewModel.cs" />
     <Compile Include="Models\Train\EntryAddModel.cs" />
@@ -256,6 +261,7 @@
     <Compile Include="Models\Train\TrainEditModel.cs" />
     <Compile Include="Models\Train\TrainListViewModel.cs" />
     <Compile Include="Models\UserListModel.cs" />
+    <Compile Include="Models\User\TrainListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -276,17 +282,21 @@
     <Content Include="lib\My97DatePicker\skin\Thumbs.db" />
     <None Include="Properties\PublishProfiles\AnswerAdmin.pubxml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Activity\UserActList.cshtml" />
+    <Content Include="Views\User\UserActList.cshtml" />
     <Content Include="Views\Home\SetPicAdminUrl.cshtml" />
-    <Content Include="Views\Home\Add.cshtml" />
+    <Content Include="Views\Main\Add.cshtml" />
     <Content Include="Views\Train\Add.cshtml" />
     <Content Include="Views\Train\List.cshtml" />
     <Content Include="Views\Train\EntryAdd.cshtml" />
     <Content Include="Views\Train\EntryList.cshtml" />
     <Content Include="Views\Train\Edit.cshtml" />
     <Content Include="Views\Train\EntryEdit.cshtml" />
-    <Content Include="Views\Home\logs.cshtml" />
-    <Content Include="Views\Home\List.cshtml" />
+    <Content Include="Views\Log\logs.cshtml" />
+    <Content Include="Views\Main\List.cshtml" />
+    <Content Include="Views\User\UserTrainList.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Tips.cshtml" />
+    <Content Include="Views\Main\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

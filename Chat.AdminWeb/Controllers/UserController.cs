@@ -1,5 +1,6 @@
 ﻿using Chat.AdminWeb.App_Start;
 using Chat.AdminWeb.Models;
+using Chat.AdminWeb.Models.User;
 using Chat.DTO.DTO;
 using Chat.IService.Interface;
 using Chat.WebCommon;
@@ -14,8 +15,10 @@ namespace Chat.AdminWeb.Controllers
     public class UserController : Controller
     {
         public IUserService userService { get; set; }
+        public IActivityService activityService { get; set; }
+        public ITrainService trainService { get; set; }
 
-        [Permission("list")]
+        [Permission("user")]
         [ActDescription("答题获得用户列表")]
         public ActionResult List(int pageIndex=1)
         {
@@ -43,11 +46,29 @@ namespace Chat.AdminWeb.Controllers
             return View(model);
         }
 
-        [Permission("manager")]
-        public ActionResult Search(bool? gender, bool? isWon, DateTime? startTime, DateTime? endTime, string keyWord,int pageIndex=1)
+        [Permission("user")]
+        public ActionResult UserActList(string mobile)
+        {
+            ActivityListModel model = new ActivityListModel();
+            ActivityDTO[] dtos = activityService.GetByUserId(mobile);
+            model.Activities = dtos;
+            return View(model);
+        }
+
+        [Permission("user")]
+        public ActionResult UserTrainList(string mobile)
+        {
+            TrainListViewModel model = new TrainListViewModel();
+            TrainDTO[] dtos = trainService.GetByUserId(mobile);
+            model.Trains = dtos;
+            return View(model);
+        }
+
+        [Permission("user")]
+        public ActionResult Search(bool? gender, DateTime? startTime, DateTime? endTime, string keyWord,int pageIndex=1)
         {
             UserListModel model = new UserListModel();
-            UserSearchResult result = userService.Search(gender,isWon, startTime, endTime, keyWord, (pageIndex - 1) * 20, 20);
+            UserSearchResult result = userService.Search(gender,null, startTime, endTime, keyWord, (pageIndex - 1) * 20, 20);
 
             Pagination pager = new Pagination();
             pager.CurrentLinkClassName = "curPager";
@@ -71,7 +92,7 @@ namespace Chat.AdminWeb.Controllers
             return Json(new AjaxResult { Status = "success", Data = model });            
         }
 
-        [Permission("manager")]
+        [Permission("user")]
         public ActionResult Del(long id)
         {
             //

@@ -1,0 +1,57 @@
+﻿@model Chat.AdminWeb.Models.User.TrainListViewModel
+@{
+    ViewBag.Title = "用户参与培训活动管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="mainpanel">
+    <div class="contentpanel">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-primary mb30">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 80px;">编号</th>
+                            <th style="min-width: 80px;">培训主题</th>
+                            <th style="min-width: 80px;">状态</th>
+                            <th style="min-width: 80px;">报名费用</th>
+                            <th style="min-width: 80px;">访问量</th>
+                            <th style="min-width: 80px;">已报名人数</th>
+                            <th style="min-width: 80px;">报名人数上限</th>
+                            <th style="min-width: 80px;">创建时间</th>
+                            <th style="min-width: 80px;">开始时间</th>
+                            <th style="min-width: 80px;">截止时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paperList">
+                        @foreach (var train in Model.Trains)
+                        {
+                            <tr>
+                                <td data-attr="编号">@train.Id</td>
+                                <td data-attr="培训主题">@train.Title</td>
+                                <td data-attr="状态">@train.StatusName</td>
+                                <td data-attr="报名费用">@train.EntryFee</td>
+                                <td data-attr="访问量">@train.VisitCount</td>
+                                <td data-attr="已报名人数">@train.EntryCount</td>
+                                <td data-attr="报名人数上限">@train.UpToOne</td>
+                                <td data-attr="创建时间">@train.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td data-attr="开始时间">@train.StartTime</td>
+                                <td data-attr="截止时间">@train.EndTime</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>                
+            </div>
+        </div>
+    </div><!-- contentpanel -->
+</div><!-- mainpanel -->
+        </div><!-- mainwrapper -->
+    </section>
+
+
+@section FooterScript
+{
+   
+}

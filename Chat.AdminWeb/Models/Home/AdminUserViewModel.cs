@@ -8,7 +8,7 @@ namespace Chat.AdminWeb.Models.Home
 {
     public class AdminUserViewModel
     {
-        public AdminUserDTO[] AdminUsers { get; set; }
+        public List<AdminUserListDTO> AdminUsers { get; set; }
         public string Page { get; set; }
     }
 }
