@@ -194,6 +194,7 @@ namespace Chat.AdminWeb.Controllers
         public ActionResult Edit(long id)
         {
             EditAdminUserViewModel model = new EditAdminUserViewModel();
+            model.Id = id;
             model.Citys = idNameservice.GetAll("市级");
             model.Hall = roleService.GetByName("厅级管理员-");
             model.ActivityId = perService.GetByName("activity").Id;

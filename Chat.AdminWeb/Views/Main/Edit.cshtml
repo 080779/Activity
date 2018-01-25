@@ -12,11 +12,12 @@
             <div class="panel-body">
                 <div class="form-horizontal">
                     <div class="form-group">
+                        <input type="hidden" id="userId" value="@Model.Id" />
                         <label class="col-sm-3 control-label">管理员等级:</label>
                         <div class="col-sm-6">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="roleName" id="manager1" value="@Model.Hall.Name" checked="checked">厅级管理员（在培训活动管理-报名管理中，拥有全部功能操作权限）
+                                    <input type="radio" name="roleName" id="manager1" value="@Model.Hall.Name" checked="@(Model.Hall.Name==Model.RoleName)">厅级管理员（在培训活动管理-报名管理中，拥有全部功能操作权限）
                                 </label>
                             </div>
                             <div class="radio">
@@ -28,7 +29,7 @@
                                 <option value="">选择所属市级</option>
                                 @foreach (var city in Model.Citys)
                                 {
-                                    <option value="@(city.Name+"-")" selected="@(Model.RoleName==city.Name+"-")">@city.Name</option>
+                                    <option value="@(city.Name+"-")" selected="@(city.Name+"-"==Model.RoleName)">@city.Name</option>
                                 }
                             </select>
                         </div>
@@ -151,8 +152,6 @@
             });
 
             $("#btnSave").live("click", function () {
-                var name = $("#name").val();
-                var password = $("#password").val();
                 var roleName = $("input[name='roleName']:checked").val();
                 var list = $("#list").val();
                 var paper = 0;
@@ -183,15 +182,16 @@
                 if ($("#adminUser").is(":checked")) {
                     adminUser = $("#adminUser").val();
                 }
+                var id= $("#userId").val();
                 var permissionIds = new Array(list, paper, activity, train, entry, user, log, adminUser);
                 $.ajax({
-                    url: "/main/add", type: "post", data: { name: name,password:password,roleName:roleName,permissionIds },
+                    url: "/main/edit", type: "post", data: { id:id, roleName:roleName,permissionIds },
                     success: function (result) {
                         if (result.status == "0") {
                             alert(result.errorMsg);
                         }
                         else if (result.status == "1") {
-                            alert("管理员添加成功！");
+                            alert("管理员编辑成功！");
                             window.location.href = "/main/list";
                         }
                         else {

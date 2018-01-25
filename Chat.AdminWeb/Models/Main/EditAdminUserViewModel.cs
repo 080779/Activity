@@ -8,6 +8,7 @@ namespace Chat.AdminWeb.Models.Main
 {
     public class EditAdminUserViewModel
     {
+        public long Id { get; set; }
         public RoleDTO Hall { get; set; }
         public IdNameDTO[] Citys { get; set; }
         public long ListId { get; set; }
