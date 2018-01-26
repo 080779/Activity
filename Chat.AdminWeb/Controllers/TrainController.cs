@@ -21,8 +21,11 @@ namespace Chat.AdminWeb.Controllers
         public ITrainService trainService { get; set; }
         public IIdNameService idNameService { get; set; }
         public IEntryService entryService { get; set; }
+        public IAdminUserService userService { get; set; }
+        public IRoleService roleService { get; set; }
 
         [Permission("train")]
+        [ActDescription("培训活动列表")]
         public ActionResult List(int pageIndex=1)
         {
             TrainSearchResult result= trainService.Search(null, null, null, null, (pageIndex-1)*20, 20);
@@ -79,6 +82,7 @@ namespace Chat.AdminWeb.Controllers
         [HttpPost]
         [Permission("train")]
         [ValidateInput(false)]
+        [ActDescription("新增培训活动")]
         public ActionResult Add(TrainAddModel model)
         {
             if(string.IsNullOrEmpty(model.Title))
@@ -153,6 +157,7 @@ namespace Chat.AdminWeb.Controllers
         [HttpPost]
         [Permission("train")]
         [ValidateInput(false)]
+        [ActDescription("编辑培训活动")]
         public ActionResult Edit(TrainEditModel model)
         {
             if(model.Id<=0)
@@ -241,11 +246,17 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("train")]
+        [ActDescription("删除培训活动")]
         public ActionResult Delete(long id)
         {
             if(id<=0)
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg="参数错误" });
+            }
+            TrainDTO train = trainService.GetById(id);
+            if(train.EntryCount>0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "该培训已产生报名，无法删除。" });
             }
             if(!trainService.Delete(id))
             {
@@ -255,6 +266,17 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("entry")]
+        public ActionResult EntryCheck(long id=0,int pageIndex=1)
+        {
+            if(id<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg="参数错误"});
+            }
+            return Json(new AjaxResult { Status = "1", Data = "/train/entrylist?id="+id+"&pageindex="+pageIndex });
+        }
+
+        [Permission("entry")]
+        [ActDescription("培训活动报名用户列表")]
         public ActionResult EntryList(long id=0,int pageIndex=1)
         {
             EntryListViewModel model = new EntryListViewModel();
@@ -322,29 +344,10 @@ namespace Chat.AdminWeb.Controllers
 
         [HttpPost]
         [Permission("entry")]
+        [ActDescription("新增培训活动报名用户")]
         public ActionResult EntryAdd(EntryAddModel model)
         {
-            #region 数据验证
-            if (model.TrainId <= 0)
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
-            }
-            TrainDTO train = trainService.GetById(model.TrainId);
-            if (train == null)
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
-            }
-            if (train.StatusName == "已结束")
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "活动已结束" });
-            }
-            if (train.UpToOne != 0)
-            {
-                if (train.EntryCount >= train.UpToOne)
-                {
-                    return Json(new AjaxResult { Status = "0", ErrorMsg = "报名人数已满" });
-                }
-            }
+            #region 数据验证            
             if (string.IsNullOrEmpty(model.Name))
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "姓名不能为空" });
@@ -415,6 +418,26 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "银行账号不能为空" });
             }
+            if (model.TrainId <= 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
+            }
+            TrainDTO train = trainService.GetById(model.TrainId);
+            if (train == null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
+            }
+            if (train.StatusName == "已结束")
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "活动已结束，无法新增报名用户" });
+            }
+            if (train.UpToOne != 0)
+            {
+                if (train.EntryCount >= train.UpToOne)
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "报名人数已满,无法新增报名用户" });
+                }
+            }
             #endregion
 
             EntryDTO dto = new EntryDTO();
@@ -443,6 +466,32 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("entry")]
+        public ActionResult EntryAddCheck(long id)
+        {
+            if (id <= 0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
+            }
+            TrainDTO train = trainService.GetById(id);
+            if (train == null)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
+            }
+            if (train.StatusName == "已结束")
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "活动已结束" });
+            }
+            if (train.UpToOne != 0)
+            {
+                if (train.EntryCount >= train.UpToOne)
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "报名人数已满,无法新增报名用户" });
+                }
+            }
+            return Json(new AjaxResult { Status="1",Data="/train/entryadd?id="+id });
+        }
+
+        [Permission("entry")]
         public ActionResult EntryEdit(long id,long trainId)
         {
             EntryEditViewModel model = new EntryEditViewModel();
@@ -455,6 +504,7 @@ namespace Chat.AdminWeb.Controllers
 
         [HttpPost]
         [Permission("entry")]
+        [ActDescription("编辑培训活动报名用户")]
         public ActionResult EntryEdit(EntryEditModel model)
         {
             #region 数据验证
@@ -470,17 +520,6 @@ namespace Chat.AdminWeb.Controllers
             if (train == null)
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "未知培训" });
-            }
-            if (train.StatusName == "已结束")
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "活动已结束" });
-            }
-            if (train.UpToOne != 0)
-            {
-                if (train.EntryCount >= train.UpToOne)
-                {
-                    return Json(new AjaxResult { Status = "0", ErrorMsg = "报名人数已满" });
-                }
             }
             if (string.IsNullOrEmpty(model.Name))
             {
@@ -578,6 +617,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("entry")]
+        [ActDescription("删除培训活动报名用户")]
         public ActionResult EntryDelete(long id=0,long trainId=0)
         {
             if (id <= 0)
@@ -600,6 +640,7 @@ namespace Chat.AdminWeb.Controllers
         /// 报名导入
         /// </summary>
         /// <returns></returns>
+        [ActDescription("导入报名用户")]
         public ActionResult EntryImport(EntryImportModel model)
         {
             if(model.Id<=0)
@@ -614,7 +655,24 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择要上传的文件" });
             }
-            string[] excelFormats = { ".xlsx", ".xls" };
+            long id = Convert.ToInt64(Session["AdminUserId"]);
+            TrainDTO train = trainService.GetById(model.Id);
+            if(train.UpToOne!=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "该培训活动有报名人数上限，导入可能会导致数据溢出，请将活动报名上限设为不限再导入" });
+            }
+            string roleName = roleService.GetByAdminUserId(id).First().Name;
+            string[] roleCities = new[] { "南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "玉林市", "贵港市", "百色市", "河池市", "贺州市", "来宾市", "崇左市", "厅机关处室、直属单位" };
+            string roleCity = roleName.Split('-')[0];
+            if (roleCities.Contains(roleCity))
+            {
+                if(idNameService.GetById(model.CityId).Name!=roleCity)
+                {
+                    return Json(new AjaxResult { Status = "0", ErrorMsg = "你是"+roleCity+"的管理员，只能导入"+roleCity+"的数据" });
+                }
+            }
+            
+            string[] excelFormats = { ".xlsx", ".xls" ,".XLSX",".XLS"};
             string md5 = CommonHelper.GetMD5(model.File.InputStream);
             string ext = Path.GetExtension(model.File.FileName);
             if(!excelFormats.Contains(ext))
@@ -627,7 +685,7 @@ namespace Chat.AdminWeb.Controllers
             model.File.SaveAs(fullPath);
 
             DataTable dt = ExcelHelper.GetDataTable(fullPath);
-            if(!entryService.EntryImport(model.Id, model.CityId, 38, dt))
+            if(!entryService.EntryImport(model.Id, model.CityId, idNameService.GetByName("后台录入").Id, dt))
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg="报名导入失败" });
             }
@@ -655,15 +713,34 @@ namespace Chat.AdminWeb.Controllers
             //imgWatermark.Alpha = 50;//透明度，需要水印图片是背景透明的 png 图片
             ImageProcessingJob jobNormal = new ImageProcessingJob();
             //jobNormal.Filters.Add(imgWatermark);//添加水印
-            jobNormal.Filters.Add(new FixedResizeConstraint(600, 600));//限制图片的大小，避免生成
+            jobNormal.Filters.Add(new FixedResizeConstraint(517, 216));//限制图片的大小，避免生成
             //jobNormal.SaveProcessedImageToFileSystem(file.InputStream, fullPath);
             jobNormal.SaveProcessedImageToFileSystem(imgBytes, fullPath);
             return path;
         }
 
         [Permission("entry")]
-        public ActionResult ExportExcel(long id)
+        public ActionResult ExportCheck(long id)
         {
+            if(id<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "参数错误" });
+            }
+            long userId = Convert.ToInt64(Session["AdminUserId"]);
+            string roleName = roleService.GetByAdminUserId(userId).First().Name;
+            string[] roleCities = new[] { "南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "玉林市", "贵港市", "百色市", "河池市", "贺州市", "来宾市", "崇左市", "厅机关处室、直属单位" };
+            string roleCity = roleName.Split('-')[0];
+            if (roleCities.Contains(roleCity))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "你是市级管理员，没有导出数据的权限" });
+            }
+            return Json(new AjaxResult { Status = "1", Data="/train/exportexcel?id="+id });
+        }
+
+        [Permission("entry")]
+        [ActDescription("导出培训活动所有报名用户")]
+        public ActionResult ExportExcel(long id)
+        {            
             IWorkbook wb = new XSSFWorkbook();
 
             ICellStyle style1 = wb.CreateCellStyle();//样式
@@ -690,7 +767,7 @@ namespace Chat.AdminWeb.Controllers
                 //    sheet.SetColumnWidth(i, 256 * columnWidth[i]);
                 //}
                 int rowCount = 1;
-                var entries=entryService.GetByTrainIdCityId(id, city.Id);
+                EntryListDTO[] entries=entryService.GetByTrainIdCityId(id, city.Id);
 
                 string[] columnName = { "编号", "姓名", "性别", "工作单位", "职务", "手机号", "住宿要求", "支付方式", "发票抬头", "税号", "地址", "联系方式", "开户行", "银行账号" };
                 IRow row;
@@ -717,7 +794,7 @@ namespace Chat.AdminWeb.Controllers
                         sheet.AutoSizeColumn(1);
                         cell = row.CreateCell(2);
                         cell.CellStyle = style1;
-                        ExcelHelper.SetCellValue(cell, entry.Gender);
+                        ExcelHelper.SetCellValue(cell, entry.Gender?"男":"女");
                         sheet.AutoSizeColumn(2);
                         cell = row.CreateCell(3);
                         cell.CellStyle = style1;

@@ -20,6 +20,7 @@ namespace Chat.AdminWeb.Controllers
         public IRoleService roleService { get; set; }
 
         [Permission("list")]
+        [ActDescription("登录了广西环保后台系统")]
         public ActionResult Index()
         {
             return View();

@@ -84,7 +84,7 @@
                                 <td data-attr="开始时间">@train.StartTime</td>
                                 <td data-attr="截止时间">@train.EndTime</td>
                                 <td data-attr="操作">
-                                    <a href="/train/EntryList?id=@train.Id" class="btn btn-primary btn-sm">报名管理</a>    
+                                    <button value="@train.Id" class="btn btn-primary btn-sm entry">报名管理</button>    
                                     <a href="~/train/edit?id=@train.Id" class="btn btn-primary btn-sm">编辑</a>                                                                   
                                     <button data-toggle="modal" data-target="#myModal" value="@train.Id" class="btn btn-danger btn-sm Jsdel">删除</button>
                                 </td>
@@ -135,7 +135,7 @@
                     $("#paperList").append('<input type="hidden" id="index" value="' + pageIndex + '" />');
 
                     for (var i = 0; i < result.data.trains.length; i++) {
-                        $("#paperList").append('<tr><td data-attr="编号">'+result.data.trains[i].id+'</td><td data-attr="培训主题">'+result.data.trains[i].title+'</td><td data-attr="状态">'+result.data.trains[i].statusName+'</td><td data-attr="报名费用">'+result.data.trains[i].entryFee+'</td><td data-attr="访问量">'+result.data.trains[i].visitCount+'</td><td data-attr="已报名人数">'+result.data.trains[i].entryCount+'</td><td data-attr="报名人数上限">'+result.data.trains[i].upToOne+'</td><td data-attr="创建时间">'+result.data.trains[i].createDateTime+'</td><td data-attr="开始时间">'+result.data.trains[i].startTime+'</td><td data-attr="截止时间">'+result.data.trains[i].endTime+'</td><td data-attr="操作"><a href="/train/EntryList?id='+result.data.trains[i].id+'" class="btn btn-primary btn-sm">报名管理</a><a href="~/train/edit?id='+result.data.trains[i].id+'" class="btn btn-primary btn-sm">编辑</a><button data-toggle="modal" data-target="#myModal" value="'+result.data.trains[i].id+'" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
+                        $("#paperList").append('<tr><td data-attr="编号">' + result.data.trains[i].id + '</td><td data-attr="培训主题">' + result.data.trains[i].title + '</td><td data-attr="状态">' + result.data.trains[i].statusName + '</td><td data-attr="报名费用">' + result.data.trains[i].entryFee + '</td><td data-attr="访问量">' + result.data.trains[i].visitCount + '</td><td data-attr="已报名人数">' + result.data.trains[i].entryCount + '</td><td data-attr="报名人数上限">' + result.data.trains[i].upToOne + '</td><td data-attr="创建时间">' + result.data.trains[i].createDateTime + '</td><td data-attr="开始时间">' + result.data.trains[i].startTime + '</td><td data-attr="截止时间">' + result.data.trains[i].endTime + '</td><td data-attr="操作"><button value="' + result.data.trains[i].id + '" class="btn btn-primary btn-sm entry">报名管理</button><a href="~/train/edit?id=' + result.data.trains[i].id + '" class="btn btn-primary btn-sm">编辑</a><button data-toggle="modal" data-target="#myModal" value="' + result.data.trains[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
                     }
                 },
                 error: function () { alert("网络错误"); }
@@ -151,7 +151,7 @@
             $('.excelSave').click(function () {
                 $("#sureSaveCel").val($(this).val());
             });
-                        
+
             $("#getPage").live("click",function () {
                 var index = $("#setIndex").val();
                 getPage(index);
@@ -174,8 +174,27 @@
                         else if (result.status == "1") {
                             $("#paperList").empty();
                             for (var i = 0; i < result.data.trains.length; i++) {
-                                $("#paperList").append('<tr><td data-attr="编号">' + result.data.trains[i].id + '</td><td data-attr="培训主题">' + result.data.trains[i].title + '</td><td data-attr="状态">' + result.data.trains[i].statusName + '</td><td data-attr="报名费用">' + result.data.trains[i].entryFee + '</td><td data-attr="访问量">' + result.data.trains[i].visitCount + '</td><td data-attr="已报名人数">' + result.data.trains[i].entryCount + '</td><td data-attr="报名人数上限">' + result.data.trains[i].upToOne + '</td><td data-attr="创建时间">' + result.data.trains[i].createDateTime + '</td><td data-attr="开始时间">' + result.data.trains[i].startTime + '</td><td data-attr="截止时间">' + result.data.trains[i].endTime + '</td><td data-attr="操作"><a href="/train/EntryList?id=' + result.data.trains[i].id + '" class="btn btn-primary btn-sm">报名管理</a><a href="~/train/edit?id=' + result.data.trains[i].id + '" class="btn btn-primary btn-sm">编辑</a><button data-toggle="modal" data-target="#myModal" value="' + result.data.trains[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
+                                $("#paperList").append('<tr><td data-attr="编号">' + result.data.trains[i].id + '</td><td data-attr="培训主题">' + result.data.trains[i].title + '</td><td data-attr="状态">' + result.data.trains[i].statusName + '</td><td data-attr="报名费用">' + result.data.trains[i].entryFee + '</td><td data-attr="访问量">' + result.data.trains[i].visitCount + '</td><td data-attr="已报名人数">' + result.data.trains[i].entryCount + '</td><td data-attr="报名人数上限">' + result.data.trains[i].upToOne + '</td><td data-attr="创建时间">' + result.data.trains[i].createDateTime + '</td><td data-attr="开始时间">' + result.data.trains[i].startTime + '</td><td data-attr="截止时间">' + result.data.trains[i].endTime + '</td><td data-attr="操作"><button value="' + result.data.trains[i].id + '" class="btn btn-primary btn-sm entry">报名管理</button><a href="~/train/edit?id=' + result.data.trains[i].id + '" class="btn btn-primary btn-sm">编辑</a><button data-toggle="modal" data-target="#myModal" value="' + result.data.trains[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
                             }
+                        }
+                        else {
+                            alert("未知错误");
+                        }
+                    },
+                    error: function () { alert("网络错误"); }
+                });
+            });
+
+            $(".entry").live("click", function () {
+                var id = $(this).val();
+                $.ajax({
+                    url: "/train/entrycheck", type: "post", data: { id: id },
+                    success: function (result) {
+                        if (result.status == "0") {
+                            alert(result.errorMsg);
+                        }
+                        else if (result.status == "1") {
+                            window.location.href = result.data;
                         }
                         else {
                             alert("未知错误");

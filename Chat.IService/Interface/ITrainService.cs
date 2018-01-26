@@ -16,6 +16,7 @@ namespace Chat.IService.Interface
         TrainDTO[] GetByUserId(string mobile);
         TrainSearchResult Search(long? statusId,DateTime? startTime,DateTime? endTime,string keyWord,int currentIndex,int pageSize);
         TrainDTO GetById(long id);
+        bool SetVisitCount(long id);
     }
     public class TrainSearchResult
     {

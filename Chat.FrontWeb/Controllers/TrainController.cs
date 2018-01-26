@@ -18,16 +18,22 @@ namespace Chat.FrontWeb.Controllers
         public ITrainService trainService { get; set; }
         public IIdNameService idNameService { get; set; }
         public IEntryService entryService { get; set; }
+        public ISettingService settingService { get; set; }
 
         public ActionResult List()
         {
-            TrainDTO[] dtos= trainService.GetAll();
-            return View(dtos);
+            TrainListViewModel model = new TrainListViewModel();
+            model.Trains= trainService.GetAll();
+            model.Link = settingService.GetValue("前端奖品图片地址");
+            return View(model);
         }
         public ActionResult Details(long id)
         {
-            TrainDTO dto = trainService.GetById(id);
-            return View(dto);
+            JoinInDetailsViewModel model = new JoinInDetailsViewModel();
+            model.Train= trainService.GetById(id);
+            model.Link = settingService.GetValue("前端奖品图片地址");
+            trainService.SetVisitCount(id);//增加访问次数
+            return View(model);
         }
         public ActionResult Joinin(long id)
         {

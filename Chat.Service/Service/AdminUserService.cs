@@ -83,7 +83,7 @@ namespace Chat.Service.Service
             }
         }
 
-        public bool Update(long id,string roleName, List<long> permissionIds)
+        public bool Update(long id,string roleName,string description ,List<long> permissionIds)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -98,6 +98,7 @@ namespace Chat.Service.Service
                 {
                     var role = user.Roles.Where(r => r.IsDeleted == false).First();
                     role.Name = roleName + user.Id;
+                    role.Description = description;
                     role.AdminUsers.Add(user);
                     role.Permissions.Clear();
                     var pms = pcs.GetAll().Where(p => permissionIds.Contains(p.Id)).ToArray();

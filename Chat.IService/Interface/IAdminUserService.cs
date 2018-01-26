@@ -14,7 +14,7 @@ namespace Chat.IService.Interface
     {
         long AddAdminUser(string name, string mobile, bool gender, string email, string password);
         bool AddNew(int id, string name, string password, string roleName, string description, List<long> permissionIds);
-        bool Update(long id, string roleName, List<long> permissionIds);
+        bool Update(long id, string roleName, string description, List<long> permissionIds);
         //void UpdateAdminUser(AdminUserDTO user);
         void UpdateAdminUser(long id, String name, String email, long? cityId);
         //获取 cityId 这个城市下的管理员

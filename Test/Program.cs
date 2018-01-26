@@ -19,7 +19,7 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            string[] roleCities = new[] { "南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "玉林市", "贵港市", "百色市", "河驰市", "贺州市", "来宾市", "崇左市", "厅机关处室、直属单位" };
+            string[] roleCities = new[] { "南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "玉林市", "贵港市", "百色市", "河池市", "贺州市", "来宾市", "崇左市", "厅机关处室、直属单位" };
             IAdminUserService adminService = new AdminUserService();
             //long[] perIds = new long[] { 5, 6, 7, 8 };
             //bool b= adminService.AddNew(1, "南宁管理员", "111111", "南宁市", "在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格", perIds);

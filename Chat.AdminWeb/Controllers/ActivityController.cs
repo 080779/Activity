@@ -28,10 +28,24 @@ namespace Chat.AdminWeb.Controllers
         [ActDescription("答题活动列表")]
         public ActionResult List(int pageIndex=1)
         {
+            ActivitySearchResult result = activityService.Search(null, null, null, null, (pageIndex - 1) * 20, 20);
             ActivityListModel model = new ActivityListModel();
-            model.Activities = activityService.GetPageData(10, (pageIndex - 1) * 2);
-            ViewBag.PageIndex = pageIndex;
-            ViewBag.TotalCount =(int)activityService.GetTotalCount();
+            model.Activities = result.Activities;
+
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = pageIndex;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
             return View(model);
         }
 
@@ -50,6 +64,7 @@ namespace Chat.AdminWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [Permission("activity")]
+        [ActDescription("添加答题活动")]
         public ActionResult Add(AtivityAddModel model)
         {            
             if (model.imgUrl == null)
@@ -92,6 +107,7 @@ namespace Chat.AdminWeb.Controllers
         }
         [HttpPost]
         [Permission("activity")]
+        [ActDescription("编辑答题活动")]
         public ActionResult Edit(AtivityEditModel model)
         {
             string sImgPath = string.Empty;
@@ -319,6 +335,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("activity")]
+        [ActDescription("删除答题活动")]
         public ActionResult DelActivity(long id)
         {
             if (!activityService.Delete(id))
@@ -329,6 +346,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("activity")]
+        [ActDescription("开奖处理答题活动列表")]
         public ActionResult Prize(long id,int pageIndex=1)
         {
             PrizeSetModel model = new PrizeSetModel();
@@ -414,6 +432,7 @@ namespace Chat.AdminWeb.Controllers
 
         [HttpPost]
         [Permission("activity")]
+        [ActDescription("开奖处理答题活动设为获奖")]
         public ActionResult SetWon(long id, long activityId)
         {
             if (id <= 0)
@@ -432,6 +451,7 @@ namespace Chat.AdminWeb.Controllers
         }
         [HttpPost]
         [Permission("activity")]
+        [ActDescription("开奖处理答题活动设为未获奖")]
         public ActionResult ReSetWon(long id, long activityId)
         {
             if(id<=0)
@@ -450,6 +470,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("activity")]
+        [ActDescription("导出答题活动获奖用户")]
         public ActionResult CreateExcel(long id)
         {
             if(id<=0)
@@ -610,12 +631,27 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("activity")]
-        public ActionResult Search(long? statusId,DateTime? startTime,DateTime? endTime,string keyWord)
+        public ActionResult Search(long? statusId,DateTime? startTime,DateTime? endTime,string keyWord,int pageIndex=1)
         {
-            ViewBag.PageIndex = 1;            
-            ActivityDTO[] dtos = activityService.Search(statusId, startTime, endTime, keyWord);
-            ViewBag.TotalCount = dtos.Count();
-            return Json(new AjaxResult { Status = "success", Data = dtos });
+            ActivitySearchResult result = activityService.Search(statusId, startTime, endTime, keyWord, (pageIndex - 1) * 20, 20);
+            ActivityListModel model = new ActivityListModel();
+            model.Activities = result.Activities;
+
+            //分页
+            Pagination pager = new Pagination();
+            pager.PageIndex = pageIndex;
+            pager.PageSize = 20;
+            pager.TotalCount = result.TotalCount;
+
+            if (result.TotalCount <= 20)
+            {
+                model.Page = "";
+            }
+            else
+            {
+                model.Page = pager.GetPagerHtml();
+            }
+            return Json(new AjaxResult { Status = "1", Data = model });
         }
 
         public ActionResult SetData()
@@ -624,6 +660,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("activity")]
+        [ActDescription("设为当前答题活动")]
         public ActionResult SetCurrent(long id,string yesOrNo)
         {
             if(id<=0)
@@ -649,6 +686,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("activity")]
+        [ActDescription("开奖处理答题活动随机设置获奖用户")]
         public ActionResult RandSetWon(int count, long id)
         {
             if (count <= 0)

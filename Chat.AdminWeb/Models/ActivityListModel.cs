@@ -9,7 +9,6 @@ namespace Chat.AdminWeb.Models
     public class ActivityListModel
     {
         public ActivityDTO[] Activities { get; set; }
-        public int TotalCount { get; set; }
-        public int PageIndex { get; set; }
+        public string Page { get; set; }
     }
 }

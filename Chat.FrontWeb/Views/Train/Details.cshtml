@@ -1,40 +1,39 @@
-﻿@model Chat.DTO.DTO.TrainDTO
+﻿@model Chat.FrontWeb.Models.train.JoinInDetailsViewModel
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>@Model.Title</title>
+    <title>@Model.Train.Title</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
 </head>
 <body>
-    <input type="hidden" id="trainId" value="@Model.Id" />
+    <input type="hidden" id="trainId" value="@Model.Train.Id" />
     <div class="articlebox">
         <div class="articleder">
-            <img src="/images/img.jpg" alt="" />
-            <h2>@Model.Title</h2>
+            <img src="@(Model.Link + Model.Train.Img)" alt="" />
+            <h2>@Model.Train.Title</h2>
         </div>
         <div class="articleattr">
             <ul class="attrs">
-                <li><span>培训时间</span><div>@Model.StartTime ~ @Model.EndTime</div></li>
-                <li><span>培训地点</span><div>@Model.Address</div></li>
-                <li><span>培训状态</span><div><font class="green">@Model.StatusName</font> <!--<font class="red">已结束</font>--></div></li>
+                <li><span>培训时间</span><div>@Model.Train.StartTime ~ @Model.Train.EndTime</div></li>
+                <li><span>培训地点</span><div>@Model.Train.Address</div></li>
+                <li><span>培训状态</span><div><font class="green">@Model.Train.StatusName</font> <!--<font class="red">已结束</font>--></div></li>
             </ul>
             <div class="prices">
-                <span>报名费用</span><div><span class="red">@(Model.EntryFee)元/人</span>已报名<font class="red">@if (Model.UpToOne != 0) { @Model.EntryCount<text>/</text>@Model.UpToOne<text>人</text>} else {@Model.EntryCount<text>人(不限人数)</text>}</font></div>
+                <span>报名费用</span><div><span class="red">@if (Model.Train.EntryFee == 0) { <text>免费</text>} else { @Model.Train.EntryFee<text> 元 / 人 </text>}</span>已报名<font class="red">@if (Model.Train.UpToOne != 0) { @Model.Train.EntryCount<text>/</text>@Model.Train.UpToOne<text>人</text>} else {@Model.Train.EntryCount<text>人(不限人数)</text>}</font></div>
             </div>
         </div>
         <div class="articleinfo">
             <div class="articleinfo-con">
-                <p>@Model.Description</p>
-                <p>@Model.Description</p>
+                <p>@Html.Raw(Model.Train.Description)</p>
             </div>
         </div>
     </div>
     <div class="subnav">
         <ul>
             <li><a href="/train/list">返回首页</a></li>
-            <li><a id="joinin">@if (Model.StatusName == "已结束") {<text>活动已结束，无法报名</text>} else if (Model.UpToOne != 0 && Model.EntryCount==Model.UpToOne) {<text>报名人数已满，无法报名</text>}else {<text>我要报名</text>}</a></li>
+            <li><a id="joinin">@if (Model.Train.StatusName == "已结束") {<text>活动已结束，无法报名</text>} else if (Model.Train.UpToOne != 0 && Model.Train.EntryCount ==Model.Train.UpToOne) {<text>报名人数已满，无法报名</text>}else {<text>我要报名</text>}</a></li>
         </ul>
     </div>
     <script src="~/js/jquery.min.js"></script>

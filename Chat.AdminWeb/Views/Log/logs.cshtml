@@ -75,7 +75,7 @@
             var endTime = $("#txtEnd").val();
             var keyWord = $("#keyWord").val();
             $.ajax({
-                url: "/home/logs?pageindex=" + pageIndex, type: "post", data: { startTime: startTime, endTime: endTime, keyWord: keyWord },
+                url: "/log/logs?pageindex=" + pageIndex, type: "post", data: { startTime: startTime, endTime: endTime, keyWord: keyWord },
                 success: function (result) {
                     $("#pager").empty();
                     $("#pager").append(result.data.page);
@@ -103,7 +103,7 @@
                 var endTime = $("#txtEnd").val();
                 var keyWord = $("#keyWord").val();
                 $.ajax({
-                    url: "/home/logs", type: "post", data: { startTime: startTime, endTime: endTime, keyWord: keyWord,pageIndex:1 },
+                    url: "/log/logs", type: "post", data: { startTime: startTime, endTime: endTime, keyWord: keyWord,pageIndex:1 },
                     success: function (result) {
                         $("#pager").empty();
                         $("#pager").append(result.data.page);

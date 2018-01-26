@@ -21,7 +21,7 @@
                         <label class="col-sm-3 control-label">培训头图:</label>
                         <div class="col-sm-6">
                             <img src="" id="train_img" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
-                            <input type="file" id="train_pic" /><p>请上传750*1334图片，支持格式“png、jpg、jpeg、bmp”</p>
+                            <input type="file" id="train_pic" /><p>请上传517*216图片，支持格式“png、jpg、jpeg、bmp”</p>
                         </div>
                     </div>
                     <div class="form-group">
@@ -83,7 +83,7 @@
             </div>
             <div class="panel-footer" style="text-align:center">
                 <button id="btnSave" class="btn btn-primary mr5">确定</button>
-                <a href="/train/list" class="btn btn-default">返回</a>
+                <a href="Javascript:window.history.go(-1)" class="btn btn-default">返回</a>
             </div>
 
         </div>
@@ -128,7 +128,7 @@
                         }
                         else if (result.status == "1")
                         {
-                            alert("添加成功！");
+                            alert("培训添加成功！");
                             window.location.href = result.data;
                         }
                         else {

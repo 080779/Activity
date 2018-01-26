@@ -73,7 +73,7 @@
             </div>
             <div class="panel-footer" style="text-align:center">
                 <button id="btnSave" class="btn btn-primary mr5">确定</button>
-                <a href="/train/list" class="btn btn-default">返回</a>
+                <a href="Javascript:window.history.go(-1)" class="btn btn-default">返回</a>
             </div>
 
         </div>
@@ -119,8 +119,8 @@
                         }
                         else if (result.status == "1")
                         {
-                            alert("编辑成功！");
-                            //window.location.href =result.data;
+                            alert("培训编辑成功！");
+                            window.location.href =result.data;
                         }
                         else {
                             alert("未知错误");

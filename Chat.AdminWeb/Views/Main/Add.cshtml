@@ -139,7 +139,7 @@
             </div>
             <div class="panel-footer" style="text-align:center">
                 <button class="btn btn-primary mr5" id="btnSave">确定</button>
-                <button class="btn btn-default">返回</button>
+                <a href="Javascript:window.history.go(-1)" class="btn btn-default">返回</a>
             </div>
         </div>              
     </div><!-- contentpanel -->
@@ -154,6 +154,18 @@
             $("#cityId").change(function () {
                 $("#manager2").val($(this).val());
                 $("#manager2").attr("checked", "checked");
+            });
+
+            $("#entry").change(function () {
+                if ($("#entry").is(":checked")) {
+                    $("#train").attr("checked", "checked")
+                }
+            });
+
+            $("#train").change(function () {
+                if ($("#train").is(":checked")==false) {
+                    $("#entry").attr("checked", false);
+                }
             });
 
             $("#btnSave").live("click", function () {

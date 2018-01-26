@@ -1,4 +1,4 @@
-﻿@model Chat.DTO.DTO.TrainDTO[]
+﻿@model Chat.FrontWeb.Models.train.TrainListViewModel
 
 <!DOCTYPE html>
 <html>
@@ -11,11 +11,11 @@
 <body>
     <div class="listbox">
         <ul class="infolist">
-            @foreach (var train in Model)
+            @foreach (var train in Model.Trains)
             {
                 <li>
                     <a href="/train/details?id=@train.Id">
-                        <img src="/images/img.jpg" alt="" />
+                        <img src="@(Model.Link + train.Img)" alt="" />
                         <h2>@train.Title</h2>
                         <p><span>培训时间</span>@train.StartTime ~ @train.EndTime</p>
                         <p><span>培训地点</span>@train.Address</p>

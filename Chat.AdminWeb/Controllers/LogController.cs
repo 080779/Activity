@@ -15,6 +15,7 @@ namespace Chat.AdminWeb.Controllers
         public IAdminLogService logService { get; set; }
 
         [Permission("log")]
+        [ActDescription("系统日志列表")]
         public ActionResult Logs()
         {
             AdminLogSearchResult result = logService.GetPage(null, null, null, 0, 20);

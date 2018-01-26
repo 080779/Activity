@@ -19,7 +19,7 @@ namespace Chat.AdminWeb.Controllers
         public ITrainService trainService { get; set; }
 
         [Permission("user")]
-        [ActDescription("答题获得用户列表")]
+        [ActDescription("用户列表")]
         public ActionResult List(int pageIndex=1)
         {
             UserListModel model = new UserListModel();
@@ -47,6 +47,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("user")]
+        [ActDescription("用户参与的答题活动列表")]
         public ActionResult UserActList(string mobile)
         {
             ActivityListModel model = new ActivityListModel();
@@ -56,6 +57,7 @@ namespace Chat.AdminWeb.Controllers
         }
 
         [Permission("user")]
+        [ActDescription("用户参与的培训活动列表")]
         public ActionResult UserTrainList(string mobile)
         {
             TrainListViewModel model = new TrainListViewModel();

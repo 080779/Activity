@@ -180,9 +180,11 @@
     <Compile Include="Models\PrizeViewModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\TopicModel.cs" />
+    <Compile Include="Models\train\JoinInDetailsViewModel.cs" />
     <Compile Include="Models\train\JoininInfoViewModel.cs" />
     <Compile Include="Models\train\JoininModel.cs" />
     <Compile Include="Models\train\JoininViewModel.cs" />
+    <Compile Include="Models\train\TrainListViewModel.cs" />
     <Compile Include="Models\user\AddUser.cs" />
     <Compile Include="Models\user\SearchUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

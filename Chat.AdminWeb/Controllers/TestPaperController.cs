@@ -18,7 +18,7 @@ namespace Chat.AdminWeb.Controllers
         public IActivityService activityService { get; set; }
 
         [Permission("paper")]
-        [ActDescription("试卷列表")]
+        [ActDescription("试卷管理列表")]
         public ActionResult List()
         {
             TestPaperDTO[] dtos = testPaperService.GetAll();
@@ -131,6 +131,7 @@ namespace Chat.AdminWeb.Controllers
         /// <returns></returns>
         [Permission("paper")]
         [HttpPost]
+        [ActDescription("添加新试卷")]
         public ActionResult AddPaper(string testTitle)
         {
             if(string.IsNullOrEmpty(testTitle))
@@ -156,6 +157,7 @@ namespace Chat.AdminWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [Permission("paper")]
+        [ActDescription("编辑试卷")]
         public ActionResult EditPaper(long id,string title)
         {
             if (string.IsNullOrEmpty(title))
@@ -175,6 +177,7 @@ namespace Chat.AdminWeb.Controllers
         /// <returns></returns>
         [HttpPost]
         [Permission("paper")]
+        [ActDescription("删除试卷")]
         public ActionResult DelPaper(long id)
         {
             if(activityService.CheckByPaperId(id))

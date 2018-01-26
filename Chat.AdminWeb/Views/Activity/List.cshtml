@@ -5,14 +5,17 @@
 }
 <style type="text/css">
     #pager ul li {
-            float:left;margin-left:10px;color:lightskyblue;
-            list-style-type:none;  
-            width:30px;
-            font-size:8px;
-            margin:0px; 
+        float: left;
+        margin-left: 10px;
+        color: lightskyblue;
+        list-style-type: none;
+        width: 30px;
+        font-size: 8px;
+        margin: 0px;
     }
-    .curPager { 
-        color:brown;
+
+    .curPager {
+        color: brown;
     }
 </style>
 <div class="mainpanel">
@@ -93,17 +96,7 @@
                         }
                     </tbody>
                 </table>
-                @{
-                    var pager = new Chat.WebCommon.DataPaging();
-                    pager.CurrentLinkClassName = "curPager";
-                    pager.MaxPagerCount = 10;
-                    pager.PageIndex = ViewBag.PageIndex;//这些数据，cshtml不知道，就必须让Action传递给我们
-                                                        //对于所有cshtml要用到，但是又获取不到的数据，都由Action来获取，然后放到ViewBag或者Model中传递给cshtml
-                    pager.PageSize = 10;
-                    pager.TotalCount = ViewBag.TotalCount;
-                    pager.UrlPattern = "/activity/list?&pageIndex={pn}";
-                }
-                <div id="pager"><!--@Html.Raw(pager.GetPager())--></div>
+                <div id="pager">@Html.Raw(Model.Page)</div>
             </div>            
         </div>
     </div><!-- contentpanel -->
@@ -150,92 +143,117 @@
 @section FooterScript
 {
 <script type="text/javascript">
-        $(function () {
 
-            $('.Jsdel').click(function () {
-                $("#sureDel").val($(this).val());
-            });
+    function getPage(pageIndex) {
+        var statusId = $("#status").val();
+        var startTime = $("#txtStar").val();
+        var endTime = $("#txtEnd").val();
+        var keyWord = $("#keyword").val();
+        $.ajax({
+            url: "/activity/search?pageindex=" + pageIndex, type: "post", data: { statusId: statusId, startTime: startTime, endTime: endTime, keyWord: keyWord },
+            success: function (result) {
+                $("#pager").empty();
+                $("#pager").append(result.data.page);
+                $("#paperList").empty();
+                $("#paperList").append('<input type="hidden" id="index" value="' + pageIndex + '" />');
 
-            $('.excelSave').click(function () {
-                $("#sureSaveCel").val($(this).val());
-            });
+                for (var i = 0; i < result.data.activities.length; i++) {
+                    var iscurrent = result.data.activities[i].isCurrent ? "是" : "否";
+                    $("#paperList").append('<tr><td data-attr="期数">' + result.data.activities[i].num + result.data.activities[i].id + '</td><td data-attr="活动名称">' + result.data.activities[i].name + '</td><td data-attr="状态">' + result.data.activities[i].statusName + '</td><td data-attr="是否当前活动">' + iscurrent + '</td><td data-attr="访问量">' + result.data.activities[i].visitCount + '</td><td data-attr="答题次数">' + result.data.activities[i].answerCount + '</td><td data-attr="获奖资格人数">' + result.data.activities[i].havePrizeCount + '</td><td data-attr="获奖人数">' + result.data.activities[i].prizeCount + '</td><td data-attr="创建时间">' + result.data.activities[i].createDateTime + '</td><td data-attr="操作"><a href="/activity/edit?id=' + result.data.activities[i].id + '" class="btn btn-primary btn-sm">编辑</a><button value="' + result.data.activities[i].id + '" class="btn btn-primary btn-sm current">设为当前</button><a href="/activity/prize?id=' + result.data.activities[i].id + '" class="btn btn-primary btn-sm">开奖处理</a><a href="/activity/createexcel?id=' + result.data.activities[i].id + '" class="btn btn-primary btn-sm">导出开奖结果</a><button data-toggle="modal" data-target="#myModal" value="' + result.data.activities[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
+                }
+            },
+            error: function () { alert("网络错误"); }
+        });
+    }
 
-            //设为当前,动态加载数据获取事件需要这样写           
-            $('.current').live('click', function () {
-                var id = $(this).val();
-                var yesorno = $(this).text();
-                $.ajax({
-                    url: "/activity/setcurrent", type: "post", data: { id: id,yesorno:yesorno},
-                    success: function (result) {
-                        if (result.status == "error") {
-                            alert(result.errorMsg);
-                        }
-                        else if (result.status == "successis") {
-                            alert("设为当前活动设置成功！");
-                            $("#search").click();
-                        }
-                        else if (result.status == "successno") {
-                            alert("取消当前活动设置成功！");
-                            $("#search").click();
-                        }
-                        else {
-                            alert("未知错误");
-                        }
-                    },
-                    error: function () { alert("网络错误"); }
-                });
-            });
+    $(function () {
 
-            //搜索
-            $("#search").click(function () {
-                var statusId = $("#status").val();
-                var startTime = $("#txtStar").val();
-                var endTime = $("#txtEnd").val();
-                var keyWord = $("#keyword").val();
-                $.ajax({
-                    url: "/activity/search", type: "post", data: {statusId:statusId, startTime: startTime, endTime: endTime, keyWord: keyWord },
-                    success: function (result) {
-                        if (result.status == "error") {
-                            alert(result.errorMsg);
-                        }
-                        else if (result.status == "success") {
-                            $("#paperList").empty();
-                            for (var i = 0; i < result.data.length; i++) {
-                                var iscurrent = result.data[i].isCurrent ? "是" : "否";
-                                $("#paperList").append('<tr><td data-attr="期数">' + result.data[i].num + result.data[i].id + '</td><td data-attr="活动名称">' + result.data[i].name + '</td><td data-attr="状态">' + result.data[i].statusName + '</td><td data-attr="是否当前活动">'+iscurrent+'</td><td data-attr="访问量">' + result.data[i].visitCount + '</td><td data-attr="答题次数">' + result.data[i].answerCount + '</td><td data-attr="获奖资格人数">' + result.data[i].havePrizeCount + '</td><td data-attr="获奖人数">' + result.data[i].prizeCount + '</td><td data-attr="创建时间">' + result.data[i].createDateTime + '</td><td data-attr="操作"><a href="/activity/edit?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">编辑</a><button value="' + result.data[i].id + '" class="btn btn-primary btn-sm current">设为当前</button><a href="/activity/prize?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">开奖处理</a><a href="/activity/createexcel?id=' + result.data[i].id + '" class="btn btn-primary btn-sm">导出开奖结果</a><button data-toggle="modal" data-target="#myModal" value="' + result.data[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
-                            }
-                        }
-                        else {
-                            alert("未知错误");
-                        }
-                    },
-                    error: function () { alert("网络错误"); }
-                });
-            });
+        $('.Jsdel').click(function () {
+            $("#sureDel").val($(this).val());
+        });
 
-            //删除
-            $("#sureDel").click(function () {
-                var id = $(this).val();
-                $.ajax({
-                    url: "/activity/delactivity", type: "post", data: { id: id },
-                    success: function (result) {
-                        if (result.status == "error") {
-                            alert(result.errorMsg);
-                            $("#cancel").click();
-                        }
-                        else if (result.status == "success") {
-                            $("#cancel").click();
-                            window.location.reload();
-                        }
-                        else {
-                            alert("未知错误");
-                            $("#cancel").click();
-                        }
-                    },
-                    error: function () { alert("网络错误"); $("#cancel").click(); }
-                });
+        $('.excelSave').click(function () {
+            $("#sureSaveCel").val($(this).val());
+        });
+
+        //设为当前,动态加载数据获取事件需要这样写           
+        $('.current').live('click', function () {
+            var id = $(this).val();
+            var yesorno = $(this).text();
+            $.ajax({
+                url: "/activity/setcurrent", type: "post", data: { id: id, yesorno: yesorno },
+                success: function (result) {
+                    if (result.status == "error") {
+                        alert(result.errorMsg);
+                    }
+                    else if (result.status == "successis") {
+                        alert("设为当前活动设置成功！");
+                        $("#search").click();
+                    }
+                    else if (result.status == "successno") {
+                        alert("取消当前活动设置成功！");
+                        $("#search").click();
+                    }
+                    else {
+                        alert("未知错误");
+                    }
+                },
+                error: function () { alert("网络错误"); }
             });
-            
-        })
+        });
+
+        //搜索
+        $("#search").click(function () {
+            var statusId = $("#status").val();
+            var startTime = $("#txtStar").val();
+            var endTime = $("#txtEnd").val();
+            var keyWord = $("#keyword").val();
+            $.ajax({
+                url: "/activity/search", type: "post", data: { statusId: statusId, startTime: startTime, endTime: endTime, keyWord: keyWord,pageIndex:1 },
+                success: function (result) {
+                    $("#pager").empty();
+                    $("#pager").append(result.data.page);
+                    if (result.status == "0") {
+                        alert(result.errorMsg);
+                    }
+                    else if (result.status == "1") {
+                        $("#paperList").empty();
+                        for (var i = 0; i < result.data.activities.length; i++) {
+                            var iscurrent = result.data.activities[i].isCurrent ? "是" : "否";
+                            $("#paperList").append('<tr><td data-attr="期数">' + result.data.activities[i].num + result.data.activities[i].id + '</td><td data-attr="活动名称">' + result.data.activities[i].name + '</td><td data-attr="状态">' + result.data.activities[i].statusName + '</td><td data-attr="是否当前活动">' + iscurrent + '</td><td data-attr="访问量">' + result.data.activities[i].visitCount + '</td><td data-attr="答题次数">' + result.data.activities[i].answerCount + '</td><td data-attr="获奖资格人数">' + result.data.activities[i].havePrizeCount + '</td><td data-attr="获奖人数">' + result.data.activities[i].prizeCount + '</td><td data-attr="创建时间">' + result.data.activities[i].createDateTime + '</td><td data-attr="操作"><a href="/activity/edit?id=' + result.data.activities[i].id + '" class="btn btn-primary btn-sm">编辑</a><button value="' + result.data.activities[i].id + '" class="btn btn-primary btn-sm current">设为当前</button><a href="/activity/prize?id=' + result.data.activities[i].id + '" class="btn btn-primary btn-sm">开奖处理</a><a href="/activity/createexcel?id=' + result.data.activities[i].id + '" class="btn btn-primary btn-sm">导出开奖结果</a><button data-toggle="modal" data-target="#myModal" value="' + result.data.activities[i].id + '" class="btn btn-danger btn-sm Jsdel">删除</button></td></tr>');
+                        }
+                    }
+                    else {
+                        alert("未知错误");
+                    }
+                },
+                error: function () { alert("网络错误"); }
+            });
+        });
+
+        //删除
+        $("#sureDel").click(function () {
+            var id = $(this).val();
+            $.ajax({
+                url: "/activity/delactivity", type: "post", data: { id: id },
+                success: function (result) {
+                    if (result.status == "error") {
+                        alert(result.errorMsg);
+                        $("#cancel").click();
+                    }
+                    else if (result.status == "success") {
+                        $("#cancel").click();
+                        window.location.reload();
+                    }
+                    else {
+                        alert("未知错误");
+                        $("#cancel").click();
+                    }
+                },
+                error: function () { alert("网络错误"); $("#cancel").click(); }
+            });
+        });
+
+    })
 </script>    
 }

@@ -38,7 +38,7 @@ namespace Chat.AdminWeb.App_Start
                 {
                     if (filterContext.HttpContext.Request.IsAjaxRequest())
                     {
-                        filterContext.Result = new JsonNetResult { Data = new AjaxResult { Status = "error", ErrorMsg = "没有" + permissionService.GetByName(attr.Permission).Description + "这个权限" } };
+                        filterContext.Result = new JsonNetResult { Data = new AjaxResult { Status = "0", ErrorMsg = "没有" + permissionService.GetByName(attr.Permission).Description + "这个权限" } };
                     }
                     else
                     {

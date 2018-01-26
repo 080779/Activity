@@ -23,11 +23,12 @@ namespace Chat.AdminWeb.Controllers
         public IIdNameService idNameservice { get; set; }
 
         [Permission("adminUser")]
+        [ActDescription("后台用户管理列表")]
         public ActionResult List()
         {
             AdminUserSearchResult result = adminService.GetPage(null, null, null, 0, 20);
             AdminUserViewModel model = new AdminUserViewModel();
-            string[] roleCities = new[] { "南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "玉林市", "贵港市", "百色市", "河驰市", "贺州市", "来宾市", "崇左市", "厅机关处室、直属单位" };
+            string[] roleCities = new[] { "南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "玉林市", "贵港市", "百色市", "河池市", "贺州市", "来宾市", "崇左市", "厅机关处室、直属单位" };
 
             List<AdminUserListDTO> AdminUsers = new List<AdminUserListDTO>();
             foreach (var list in result.AdminUsers)
@@ -83,7 +84,7 @@ namespace Chat.AdminWeb.Controllers
         {
             AdminUserSearchResult result = adminService.GetPage(startTime, endTime, keyWord, (pageIndex - 1) * 20, 20);
             AdminUserViewModel model = new AdminUserViewModel();
-            string[] roleCities = new[] { "南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "玉林市", "贵港市", "百色市", "河驰市", "贺州市", "来宾市", "崇左市", "厅机关处室、直属单位" };
+            string[] roleCities = new[] { "南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "玉林市", "贵港市", "百色市", "河池市", "贺州市", "来宾市", "崇左市", "厅机关处室、直属单位" };
 
             List<AdminUserListDTO> AdminUsers = new List<AdminUserListDTO>();
             foreach (var list in result.AdminUsers)
@@ -153,6 +154,7 @@ namespace Chat.AdminWeb.Controllers
 
         [Permission("adminUser")]
         [HttpPost]
+        [ActDescription("创建新管理员")]
         public ActionResult Add(AddAdminUserModel model)
         {
             if(string.IsNullOrEmpty(model.Name))
@@ -182,7 +184,7 @@ namespace Chat.AdminWeb.Controllers
             }
             int id = Convert.ToInt32(Session["AdminUserId"]);
             string description = roleService.GetByName(model.RoleName).Description;
-            bool b=adminService.AddNew(id, model.Name, model.Password, model.RoleName, "在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格", lists);
+            bool b=adminService.AddNew(id, model.Name, model.Password, model.RoleName,description, lists);
             if(!b)
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "新增管理员用户失败" });
@@ -218,11 +220,38 @@ namespace Chat.AdminWeb.Controllers
         
         [Permission("adminUser")]
         [HttpPost]
+        [ActDescription("编辑管理员")]
         public ActionResult Edit(EditAdminUserModel model)
         {
-            return View(model);
+            if(model.Id<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "参数错误" });
+            }
+            if (string.IsNullOrEmpty(model.RoleName))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择所属市级" });
+            }
+            List<long> lists = new List<long>();
+            for (int i = 0; i < model.PermissionIds.Length; i++)
+            {
+                if (model.PermissionIds[i] == 0)
+                {
+                    continue;
+                }
+                lists.Add(model.PermissionIds[i]);
+            }
+            string description = roleService.GetByName(model.RoleName).Description;
+            bool b = adminService.Update(model.Id, model.RoleName, description, lists);
+            if (!b)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "编辑管理员用户失败" });
+            }
+            return Json(new AjaxResult { Status = "1" });
         }
 
+        [Permission("adminUser")]
+        [HttpPost]
+        [ActDescription("删除管理员")]
         public ActionResult Delete(long id)
         {
             if(id<=0)

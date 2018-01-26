@@ -19,6 +19,7 @@ namespace Chat.IService.Interface
         ActivityDTO GetByStatus(string statusName);
         bool Update(long id, string name, string description, string imgUrl, DateTime? startTime, DateTime? examEndTime, DateTime? rewardTime, long paperId, string prizeName, string prizeImgUrl);
         ActivityDTO[] Search(long? statusId, DateTime? startTime, DateTime? endTime, string keyWord);
+        ActivitySearchResult Search(long? statusId, DateTime? startTime, DateTime? endTime, string keyWord, int currentIndex, int pageSize);
         bool Delete(long id);
         bool AddUserId(long activityId, long userId);
         ActivityDTO[] GetByUserId(long id);

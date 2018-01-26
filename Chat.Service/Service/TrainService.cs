@@ -115,7 +115,7 @@ namespace Chat.Service.Service
                     }
                 }
                 dbc.SaveChanges();
-                return cs.GetAll().Include(t => t.Status).Include(t => t.Entries).OrderByDescending(t => t.CreateDateTime).Take(20).ToList().Select(t => ToDTO(t)).ToArray();
+                return cs.GetAll().Include(t => t.Status).Include(t => t.Entries).OrderByDescending(t => t.CreateDateTime).ToList().Select(t => ToDTO(t)).ToArray();
             }
         }        
 
@@ -223,6 +223,22 @@ namespace Chat.Service.Service
                 return ToDTO(train);
             }
         }        
+
+        public bool SetVisitCount(long id)
+        {
+            using(MyDbContext dbc=new MyDbContext())
+            {
+                CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
+                var train = cs.GetAll().SingleOrDefault(t=>t.Id==id);
+                if(train==null)
+                {
+                    return false;
+                }
+                train.VisitCount++;
+                dbc.SaveChanges();
+                return true;
+            }            
+        }
 
         private TrainDTO ToDTO(TrainEntity entity)
         {
