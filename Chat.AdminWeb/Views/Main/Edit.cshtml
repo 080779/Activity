@@ -22,7 +22,7 @@
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="roleName" id="manager2" value="">市级管理员（在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格）
+                                    <input type="radio" name="roleName" id="manager2" value="@Model.RoleName">市级管理员（在培训活动管理-报名管理-按市级表格导入时，只能导入所在市，且不能导出汇总表格）
                                 </label>
                             </div>
                             <select id="cityId" class="form-control" style="width: 200px;">
@@ -50,9 +50,7 @@
                         <div class="col-sm-6" style="border: 1px solid #eee; padding: 10px 20px 20px;">
                             <div class="limit-checkbox">
                                 <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="activityAll" value="">答题管理
-                                    </label>
+                                    <h5>答题管理</h5>
                                 </div>
                                 <div class="limit-checkbox-two">
                                     <div class="checkbox">
@@ -69,9 +67,7 @@
                             </div>
                             <div class="limit-checkbox">
                                 <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="trainAll" value="">培训管理
-                                    </label>
+                                    <h5>培训管理</h5>
                                 </div>
                                 <div class="limit-checkbox-two">
                                     <div class="checkbox">
@@ -90,9 +86,7 @@
                             </div>
                             <div class="limit-checkbox">
                                 <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="userAll" value="">用户管理
-                                    </label>
+                                    <h5>用户管理</h5>
                                 </div>
                                 <div class="limit-checkbox-two">
                                     <div class="checkbox">
@@ -104,9 +98,7 @@
                             </div>
                             <div class="limit-checkbox">
                                 <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="adminAll" value="">系统设置
-                                    </label>
+                                    <h5>系统设置</h5>
                                 </div>
                                 <div class="limit-checkbox-two">
                                     <div class="checkbox">
@@ -142,13 +134,6 @@
             $("#cityId").change(function () {
                 $("#manager2").val($(this).val());
                 $("#manager2").attr("checked", "checked");
-            });
-
-            $("#paper").live("change",function () {
-                if($(this).is(":checked"))
-                {
-                    $("#activityAll").attr("checked", "checked");
-                }
             });
 
             $("#btnSave").live("click", function () {
@@ -202,6 +187,10 @@
                 });
             });
 
+            if($("#cityId").val()==$("#manager2").val())
+            {
+                $("#manager2").attr("checked", "checked");
+            }
         });
     </script>
 }

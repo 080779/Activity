@@ -206,7 +206,7 @@ namespace Chat.AdminWeb.Controllers
             model.UserId = perService.GetByName("user").Id;
             model.TrainId = perService.GetByName("train").Id;
             RoleDTO dto= roleService.GetByAdminUserId(id).First();
-            model.RoleName = dto.Name;
+            model.RoleName = dto.Name.Split('-')[0]+"-";
             List<long> lists = new List<long>();
             foreach(var per in perService.GetByRoleId(dto.Id))
             {
@@ -221,6 +221,19 @@ namespace Chat.AdminWeb.Controllers
         public ActionResult Edit(EditAdminUserModel model)
         {
             return View(model);
+        }
+
+        public ActionResult Delete(long id)
+        {
+            if(id<=0)
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "参数错误" });
+            }
+            if(!adminService.MarkDeleted(id))
+            {
+                return Json(new AjaxResult { Status = "0", ErrorMsg = "后台管理员用户删除失败" });
+            }
+            return Json(new AjaxResult { Status ="1"});
         }
     }
 }

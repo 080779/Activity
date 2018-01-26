@@ -187,6 +187,28 @@
                 });
             });
 
+            //删除
+            $("#sureDel").click(function () {
+                var id = $(this).val();
+                $.ajax({
+                    url: "/main/delete", type: "post", data: { id: id },
+                    success: function (result) {
+                        if (result.status == "0") {
+                            alert(result.errorMsg);
+                            $("#cancel").click();
+                        }
+                        else if (result.status == "1") {
+                            $("#cancel").click();
+                            window.location.reload();
+                        }
+                        else {
+                            alert("未知错误");
+                            $("#cancel").click();
+                        }
+                    },
+                    error: function () { alert("网络错误"); $("#cancel").click(); }
+                });
+            });
         })
     </script>
 }
