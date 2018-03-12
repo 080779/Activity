@@ -244,6 +244,8 @@ namespace Chat.Service.Service
                     {
                         continue;
                     }
+                    string[] stays = { "单住", "可合住" };
+                    string[] pays = { "免费", "到场付现", "公对公转账", "微信支付", "支付宝支付" };
                     moblie = row["手机号"].ToString();
                     var entry = ecs.GetAll().SingleOrDefault(e => e.Mobile == moblie);
                     if(entry==null)
@@ -275,7 +277,14 @@ namespace Chat.Service.Service
                             user.Address = row["地址"].ToString();
                             user.ChangeTime = DateTime.Now;
                         }
-
+                        if(!pays.Contains(row["支付方式"].ToString()))
+                        {
+                            continue;
+                        }
+                        if(!stays.Contains(row["住宿要求"].ToString()))
+                        {
+                            continue;
+                        }
                         entity = new EntryEntity();
                         entity.Address = row["地址"].ToString();
                         entity.BankAccount = row["银行账号"].ToString();
@@ -328,7 +337,14 @@ namespace Chat.Service.Service
                             user.Address = row["地址"].ToString();
                             user.ChangeTime = DateTime.Now;
                         }
-
+                        if (!pays.Contains(row["支付方式"].ToString()))
+                        {
+                            continue;
+                        }
+                        if (!stays.Contains(row["住宿要求"].ToString()))
+                        {
+                            continue;
+                        }
                         entry.Address = row["地址"].ToString();
                         entry.BankAccount = row["银行账号"].ToString();
                         entry.Contact = row["联系方式"].ToString();
@@ -538,15 +554,15 @@ namespace Chat.Service.Service
         {            
             if(row["地址"].ToString()=="")
             {
-                return false;
+                row["地址"] = "";
             }
             if (row["银行账号"].ToString() == "")
             {
-                return false;
+                row["银行账号"] = "";
             }
             if (row["联系方式"].ToString() == "")
             {
-                return false;
+                row["联系方式"] = "";
             }
             if (row["职务"].ToString() == "")
             {
@@ -554,7 +570,7 @@ namespace Chat.Service.Service
             }
             if (row["税号"].ToString() == "")
             {
-                return false;
+                row["税号"] = "";
             }
             if (row["性别"].ToString() == "")
             {
@@ -562,7 +578,7 @@ namespace Chat.Service.Service
             }
             if (row["发票抬头"].ToString() == "")
             {
-                return false;
+                row["发票抬头"] = "";
             }
             if (row["手机号"].ToString() == "")
             {
@@ -584,7 +600,7 @@ namespace Chat.Service.Service
             }
             if (row["开户行"].ToString() == "")
             {
-                return false;
+                row["开户行"] = "";
             }
             if (row["支付方式"].ToString() == "")
             {

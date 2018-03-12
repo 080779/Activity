@@ -14,33 +14,31 @@
     <div class="index-bg">
         <div class="index-wrap">
             <div class="index-title">@Model.Name</div>
-            <div class="index-dec"><span>@Html.Raw(Model.Description.Replace("{{br}}", @"<br>"))</span></div>
+            <div class="index-dec">@Html.Raw(Model.Description.Replace("{{br}}", @"<br>"))</div>
         </div>
         <div class="index-wrap">
-            <dl class="index-dl index-dlbg">
+            <dl class="index-dl">
                 <dt>活动开始时间</dt>
                 <dd>@Model.StartTime</dd>
             </dl>
-            <dl class="index-dl index-dlbg">
+            <dl class="index-dl">
                 <dt>答题截止时间</dt>
                 <dd>@Model.ExamEndTime</dd>
             </dl>
-            <dl class="index-dl index-dlbg">
+            <dl class="index-dl">
                 <dt>开奖时间</dt>
                 <dd>@Model.RewardTime</dd>
             </dl>
         </div>
         <div class="index-wrap">
-            <div class="index-dlbg2">
-                <dl class="index-dl">
-                    <dt>当前参与人数</dt>
-                    <dd>@(Model.AnswerCount)人</dd>
-                </dl>
-                <dl class="index-dl">
-                    <dt>活动状态</dt>
-                    <dd class="txt-foces">@Model.StatusName</dd>
-                </dl>
-            </div>
+            <dl class="index-dl">
+                <dt>当前参与人数</dt>
+                <dd>@(Model.AnswerCount)人</dd>
+            </dl>
+            <dl class="index-dl">
+                <dt>活动状态</dt>
+                <dd class="txt-foces">@Model.StatusName</dd>                
+            </dl>            
             <input type="hidden" id="status" value="@Model.StatusName" />
         </div>
     </div>
@@ -130,7 +128,7 @@
                         else if (result.status == "tip" && result.errorMsg == "待开奖") {
                             $("#mask-over").css("display", "block");
                         }
-                        else if (result.status == "tip" && result.errorMsg == "已结束") {
+                        else if (result.status == "tip" && result.errorMsg == "活动结束正开奖") {
                             $("#mask-over").css("display", "block");
                         }
                     },

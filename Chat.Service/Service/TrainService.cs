@@ -12,7 +12,7 @@ namespace Chat.Service.Service
 {
     public class TrainService : ITrainService
     {
-        public long AddNew(string title, string img, string address, DateTime? startTime, DateTime? endTime, decimal entryFee, long upToOne, string description)
+        public long AddNew(string title, string img, string address, DateTime? startTime, DateTime? endTime, decimal entryFee, long upToOne, string description,bool isDisplayed)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -25,6 +25,7 @@ namespace Chat.Service.Service
                 train.StartTime = (DateTime)startTime;
                 train.UpToOne = upToOne;
                 train.Title = title;
+                train.IsDisplayed = isDisplayed;
                 if(train.StartTime>DateTime.Now)
                 {
                     train.StatusId = 34;
@@ -43,7 +44,7 @@ namespace Chat.Service.Service
             }
         }
 
-        public bool Update(long id, string title, string img, string address, DateTime? startTime, DateTime? endTime, decimal entryFee, long upToOne, string description)
+        public bool Update(long id, string title, string img, string address, DateTime? startTime, DateTime? endTime, decimal entryFee, long upToOne, string description, bool isDisplayed)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -61,6 +62,7 @@ namespace Chat.Service.Service
                 train.StartTime = (DateTime)startTime;
                 train.UpToOne = upToOne;
                 train.Title = title;
+                train.IsDisplayed = isDisplayed;
                 if (train.StartTime > DateTime.Now)
                 {
                     train.StatusId = 34;
@@ -118,6 +120,31 @@ namespace Chat.Service.Service
                 return cs.GetAll().Include(t => t.Status).Include(t => t.Entries).OrderByDescending(t => t.CreateDateTime).ToList().Select(t => ToDTO(t)).ToArray();
             }
         }        
+
+        public TrainDTO[] GetDisplay()
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<TrainEntity> cs = new CommonService<TrainEntity>(dbc);
+                foreach (var train in cs.GetAll())
+                {
+                    if (train.StartTime > DateTime.Now)
+                    {
+                        train.StatusId = 34;
+                    }
+                    else if (train.StartTime <= DateTime.Now && train.EndTime >= DateTime.Now)
+                    {
+                        train.StatusId = 35;
+                    }
+                    else if (train.EndTime < DateTime.Now)
+                    {
+                        train.StatusId = 36;
+                    }
+                }
+                dbc.SaveChanges();
+                return cs.GetAll().Where(t=>t.IsDisplayed).Include(t => t.Status).Include(t => t.Entries).OrderByDescending(t => t.CreateDateTime).ToList().Select(t => ToDTO(t)).ToArray();
+            }
+        }
 
         public TrainDTO[] GetByUserId(string mobile)
         {
@@ -256,6 +283,7 @@ namespace Chat.Service.Service
             dto.UpToOne = entity.UpToOne;
             dto.EntryCount = entity.EntryCount;
             dto.VisitCount = entity.VisitCount;
+            dto.IsDisplayed = entity.IsDisplayed;
             return dto;
         }
     }

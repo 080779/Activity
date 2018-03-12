@@ -65,8 +65,14 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">培训详情:</label>
-                        <div class="col-sm-9">
-                            <textarea id="description" placeholder="" class="form-control" rows="10">@Html.Raw(Model.Description)</textarea>
+                        <div id="description" class="col-sm-9">
+                            @Html.Raw(Model.Description)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">是否显示:</label>
+                        <div class="input-group">
+                            <input type="radio" name="isDisplayed" value="false" checked="@(Model.IsDisplayed==false)" />隐藏<input type="radio" name="isDisplayed" value="true" checked="@(Model.IsDisplayed==true)" />显示
                         </div>
                     </div>
                 </div>
@@ -83,11 +89,18 @@
     </section>
 @section FooterScript
 {
+    <script src="~/Scripts/wangEditor.min.js"></script>
     <script type="text/javascript">
         $(function () {
 
             //编辑器
-            jQuery('#description').wysihtml5({ color: true, html: true });
+            var E = window.wangEditor
+            var editor = new E('#description')
+            editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
+            editor.customConfig.uploadImgMaxLength = 1
+            editor.customConfig.uploadFileName = 'file'
+            editor.customConfig.uploadImgServer = '/train/uploaddescpic'
+            editor.create()
 
             uploadpic("#train_pic", "#train_img");
             function uploadpic(fileid, img) {
@@ -109,18 +122,17 @@
                 var endTime = $("#endTime").val();
                 var entryFee = $("#entryFee").val();
                 var upToOne = $("#upToOne").val();
-                var description = $("#description").val();
+                var description = editor.txt.html();
+                var isDisplayed = $('input[name="isDisplayed"]:checked').val();
                 $.ajax({
-                    url: "/train/edit", type: "post", data: { id:id, title: title,img:img,address:address,startTime:startTime,endTime:endTime,entryFee:entryFee,upToOne:upToOne,description:description },
+                    url: "/train/edit", type: "post", data: { id: id, title: title, img: img, address: address, startTime: startTime, endTime: endTime, entryFee: entryFee, upToOne: upToOne, description: description, isDisplayed: isDisplayed },
                     success: function (result) {
-                        if (result.status == "0")
-                        {
+                        if (result.status == "0") {
                             alert(result.errorMsg);
                         }
-                        else if (result.status == "1")
-                        {
+                        else if (result.status == "1") {
                             alert("培训编辑成功！");
-                            window.location.href =result.data;
+                            window.location.href = result.data;
                         }
                         else {
                             alert("未知错误");

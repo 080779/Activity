@@ -23,12 +23,12 @@ namespace Chat.Service.ModelConfig
             HasRequired(e => e.Pays).WithMany().HasForeignKey(e => e.PayId).WillCascadeOnDelete(false);
             HasRequired(e => e.EntryChannels).WithMany().HasForeignKey(e => e.EntryChannelId).WillCascadeOnDelete(false);
             HasRequired(e => e.Cities).WithMany().HasForeignKey(e => e.CityId).WillCascadeOnDelete(false);
-            Property(e => e.InvoiceUp).HasMaxLength(20).IsRequired();
-            Property(e => e.Ein).HasMaxLength(30).IsRequired().IsUnicode();
-            Property(e => e.Address).HasMaxLength(150).IsRequired();
-            Property(e => e.Contact).HasMaxLength(20).IsRequired();
-            Property(e => e.OpenBank).HasMaxLength(10).IsRequired();
-            Property(e => e.BankAccount).HasMaxLength(30).IsRequired().IsUnicode();
+            Property(e => e.InvoiceUp).HasMaxLength(20);
+            Property(e => e.Ein).HasMaxLength(30).IsUnicode();
+            Property(e => e.Address).HasMaxLength(1024);
+            Property(e => e.Contact).HasMaxLength(20);
+            Property(e => e.OpenBank).HasMaxLength(10);
+            Property(e => e.BankAccount).HasMaxLength(30).IsUnicode();
             HasMany(e => e.Trains).WithMany(t => t.Entries).Map(m => m.ToTable("T_EntriesTrains").MapLeftKey("EntryId").MapRightKey("TrainId"));
         }
     }

@@ -19,7 +19,7 @@ namespace Chat.Service.ModelConfig
             Property(u => u.NickName).HasMaxLength(100).IsRequired();
             Property(u => u.PhotoUrl).HasMaxLength(1024).IsRequired();
             Property(u => u.Mobile).HasMaxLength(100).IsRequired().IsUnicode(false);
-            Property(u => u.Address).HasMaxLength(1024).IsRequired();
+            Property(u => u.Address).HasMaxLength(1024);
             HasMany(a => a.Activities).WithMany(u => u.Users).Map(m => m.ToTable("T_UserActivities").MapLeftKey("UserId").MapRightKey("ActivityId"));
             Property(u => u.PasswordHash).HasMaxLength(100).IsRequired();
             Property(u => u.PasswordSalt).HasMaxLength(20).IsRequired();

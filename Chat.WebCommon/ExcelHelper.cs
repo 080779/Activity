@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,63 @@ namespace Chat.WebCommon
 {
     public class ExcelHelper
     {
+        #region 导出excel
+        public NpoiMemoryStream ExportExcel<T>(List<T> lists, string name)
+        {
+            IWorkbook wb = new XSSFWorkbook();
+
+            ICellStyle style1 = wb.CreateCellStyle();//样式
+            IFont font1 = wb.CreateFont();//字体
+            font1.FontName = "楷体";
+            font1.Boldweight = (short)FontBoldWeight.Normal;//字体加粗样式
+            style1.SetFont(font1);//样式里的字体设置具体的字体样式
+            style1.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;//文字水平对齐方式
+            style1.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;//文字垂直对齐方式
+            //设置边框
+            style1.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+            style1.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+            style1.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+            style1.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+
+            ISheet sheet = wb.CreateSheet(name);
+            IRow row;
+            ICell cell;
+
+            Type t1 = typeof(T);
+            PropertyInfo[] props = t1.GetProperties();
+
+            row = sheet.CreateRow(0);
+            for (int j = 0; j < props.Count(); j++)
+            {
+                cell = row.CreateCell(j);//创建第j列
+                cell.CellStyle = style1;
+                ExcelHelper.SetCellValue(cell, props[j].CustomAttributes.First().ToString().Split('"')[1]);
+                sheet.AutoSizeColumn(0);
+            }
+            int rowIndex = 1;
+            foreach (var list in lists)
+            {
+                row = sheet.CreateRow(rowIndex);//创建第j列
+                for (int i = 0; i < props.Count(); i++)
+                {
+                    cell = row.CreateCell(i);
+                    cell.CellStyle = style1;
+                    ExcelHelper.SetCellValue(cell, props[i].GetValue(list));
+                    sheet.AutoSizeColumn(i);
+                }
+                rowIndex++;
+            }
+
+            var ms = new NpoiMemoryStream();
+            ms.AllowClose = false;
+            wb.Write(ms);
+            ms.Flush();
+            ms.Seek(0, SeekOrigin.Begin);
+            ms.AllowClose = true;
+            return ms;
+        }
+        #endregion
+
         public class x2003
         {
             #region Excel2003
@@ -51,21 +109,15 @@ namespace Chat.WebCommon
                         row = sheet.GetRow(i);
                         if (row != null)
                         {
-                            DataRow dr = dt.NewRow();
+                            DataRow dr = dt.NewRow();                           
                             bool hasValue = false;
                             foreach (int j in columns)
                             {
-                                if (row.GetCell(j) == null)
+                                //dr[j] = GetValueTypeForXLSX(row.GetCell(j) as XSSFCell);
+                                dr[j] = GetValueTypeForXLS(row.GetCell(j) as HSSFCell);
+                                if (dr[j] != null && dr[j].ToString() != string.Empty)
                                 {
                                     hasValue = true;
-                                }
-                                else
-                                {
-                                    dr[j] = GetValueTypeForXLS(row.GetCell(j) as HSSFCell);
-                                    if (dr[j] != null && dr[j].ToString() != string.Empty)
-                                    {
-                                        hasValue = true;
-                                    }
                                 }
                             }
                             if (hasValue)

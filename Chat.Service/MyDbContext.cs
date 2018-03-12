@@ -19,7 +19,7 @@ namespace Chat.Service
 
         public MyDbContext() : base("name=connStr") //“connStr”数据库连接字符串
         {
-            //Database.SetInitializer<MyDbContext>(null);
+            Database.SetInitializer<MyDbContext>(null);
             this.Database.Log = sql => log.DebugFormat("EF执行SQL：{0}", sql);//用log4NET记录数据操作日志
         }
 

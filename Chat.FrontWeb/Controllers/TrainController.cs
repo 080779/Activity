@@ -23,7 +23,7 @@ namespace Chat.FrontWeb.Controllers
         public ActionResult List()
         {
             TrainListViewModel model = new TrainListViewModel();
-            model.Trains= trainService.GetAll();
+            model.Trains= trainService.GetDisplay();
             model.Link = settingService.GetValue("前端奖品图片地址");
             return View(model);
         }
@@ -31,6 +31,14 @@ namespace Chat.FrontWeb.Controllers
         {
             JoinInDetailsViewModel model = new JoinInDetailsViewModel();
             model.Train= trainService.GetById(id);
+            if(model.Train==null)
+            {
+                return Redirect("/train/list");
+            }
+            if(model.Train.IsDisplayed==false)
+            {
+                return Redirect("/train/list");
+            }
             model.Link = settingService.GetValue("前端奖品图片地址");
             trainService.SetVisitCount(id);//增加访问次数
             return View(model);
@@ -121,30 +129,30 @@ namespace Chat.FrontWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "请选择支付方式" });
             }
-            if (string.IsNullOrEmpty(model.InvoiceUp))
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "发票不能为空" });
-            }
-            if (string.IsNullOrEmpty(model.Ein))
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "税号不能为空" });
-            }
-            if (string.IsNullOrEmpty(model.Address))
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "详细地址不能为空" });
-            }
-            if (string.IsNullOrEmpty(model.Contact))
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "联系方式不能为空" });
-            }
-            if (string.IsNullOrEmpty(model.OpenBank))
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "开户行不能为空" });
-            }
-            if (string.IsNullOrEmpty(model.BankAccount))
-            {
-                return Json(new AjaxResult { Status = "0", ErrorMsg = "银行账号不能为空" });
-            }
+            //if (string.IsNullOrEmpty(model.InvoiceUp))
+            //{
+            //    return Json(new AjaxResult { Status = "0", ErrorMsg = "发票不能为空" });
+            //}
+            //if (string.IsNullOrEmpty(model.Ein))
+            //{
+            //    return Json(new AjaxResult { Status = "0", ErrorMsg = "税号不能为空" });
+            //}
+            //if (string.IsNullOrEmpty(model.Address))
+            //{
+            //    return Json(new AjaxResult { Status = "0", ErrorMsg = "详细地址不能为空" });
+            //}
+            //if (string.IsNullOrEmpty(model.Contact))
+            //{
+            //    return Json(new AjaxResult { Status = "0", ErrorMsg = "联系方式不能为空" });
+            //}
+            //if (string.IsNullOrEmpty(model.OpenBank))
+            //{
+            //    return Json(new AjaxResult { Status = "0", ErrorMsg = "开户行不能为空" });
+            //}
+            //if (string.IsNullOrEmpty(model.BankAccount))
+            //{
+            //    return Json(new AjaxResult { Status = "0", ErrorMsg = "银行账号不能为空" });
+            //}
             #endregion
 
             #region 报名添加数据

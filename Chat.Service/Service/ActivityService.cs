@@ -251,6 +251,20 @@ namespace Chat.Service.Service
             }
         }
 
+        public bool IsCurrentAct(long id)
+        {
+            using (MyDbContext dbc = new MyDbContext())
+            {
+                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
+                var act=cs.GetAll().SingleOrDefault(a=>a.Id==id);
+                if(act==null)
+                {
+                    return false;
+                }
+                return act.IsCurrent;
+            }
+        }
+
         /// <summary>
         /// 判断活动id 的活动是否存在
         /// </summary>
@@ -262,21 +276,6 @@ namespace Chat.Service.Service
             {
                 CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
                 return cs.GetAll().Any(a=>a.Id==id);
-            }
-        }
-
-        public bool IsCurrentAct(long id)
-        {
-            using (MyDbContext dbc = new MyDbContext())
-            {
-                CommonService<ActivityEntity> cs = new CommonService<ActivityEntity>(dbc);
-                var act = cs.GetAll().SingleOrDefault(a=>a.Id==id);
-                if(act==null)
-                {
-                    return false;
-                }
-                return act.IsCurrent;
-                //return cs.GetAll().Any(a => a.Id == id && a.IsCurrent == true);
             }
         }
 

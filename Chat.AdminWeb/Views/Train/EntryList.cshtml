@@ -106,26 +106,30 @@
                         </tr>
                     </thead>
                     <tbody id="paperList">
-                        @foreach (var entry in Model.Entries)
+                    @{
+                        long num = 1;
+                        foreach (var entry in Model.Entries)
                         {
-                            <tr>
-                                <td data-attr="编号">@entry.Id</td>
-                                <td data-attr="工作地">@entry.CityName</td>
-                                <td data-attr="姓名">@entry.Name</td>
-                                <td data-attr="性别">@(entry.Gender?"男":"女")</td>
-                                <td data-attr="工作单位">@entry.WorkUnits</td>
-                                <td data-attr="职务">@entry.Duty</td>
-                                <td data-attr="联系方式">@entry.Mobile</td>
-                                <td data-attr="住宿要求">@entry.StayName</td>
-                                <td data-attr="报名录入时间">@entry.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                                <td data-attr="支付方式">@entry.PayName</td>
-                                <td data-attr="报名渠道">@entry.EntryChannelName</td>
-                                <td data-attr="操作">
-                                    <a href="~/train/entryedit?id=@entry.Id&trainId=@Model.TrainId" class="btn btn-primary btn-sm">编辑</a>
-                                    <button data-toggle="modal" data-target="#myModal" value="@entry.Id" class="btn btn-danger btn-sm Jsdel">删除</button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td data-attr="编号">@num</td>
+                            <td data-attr="工作地">@entry.CityName</td>
+                            <td data-attr="姓名">@entry.Name</td>
+                            <td data-attr="性别">@(entry.Gender ? "男" : "女")</td>
+                            <td data-attr="工作单位">@entry.WorkUnits</td>
+                            <td data-attr="职务">@entry.Duty</td>
+                            <td data-attr="联系方式">@entry.Mobile</td>
+                            <td data-attr="住宿要求">@entry.StayName</td>
+                            <td data-attr="报名录入时间">@entry.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td data-attr="支付方式">@entry.PayName</td>
+                            <td data-attr="报名渠道">@entry.EntryChannelName</td>
+                            <td data-attr="操作">
+                                <a href="~/train/entryedit?id=@entry.Id&trainId=@Model.TrainId" class="btn btn-primary btn-sm">编辑</a>
+                                <button data-toggle="modal" data-target="#myModal" value="@entry.Id" class="btn btn-danger btn-sm Jsdel">删除</button>
+                            </td>
+                        </tr>
+                        num++;
                         }
+                    }
                     </tbody>
                 </table>
                 <div id="pager">@Html.Raw(Model.Page)</div>

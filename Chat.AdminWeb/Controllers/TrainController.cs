@@ -23,6 +23,7 @@ namespace Chat.AdminWeb.Controllers
         public IEntryService entryService { get; set; }
         public IAdminUserService userService { get; set; }
         public IRoleService roleService { get; set; }
+        public ISettingService settingService { get; set; }
 
         [Permission("train")]
         [ActDescription("培训活动列表")]
@@ -140,7 +141,7 @@ namespace Chat.AdminWeb.Controllers
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "培训详情不能为空" });
             }
-            if(trainService.AddNew(model.Title, SaveImg(imgBytes, ext),model.Address, model.StartTime, model.EndTime, model.EntryFee, model.UpToOne, model.Description)<0)
+            if(trainService.AddNew(model.Title, SaveImg(imgBytes, ext),model.Address, model.StartTime, model.EndTime, model.EntryFee, model.UpToOne, model.Description,model.IsDisplayed)<0)
             {
                 return Json(new AjaxResult { Status = "0", ErrorMsg = "培训添加失败" });
             }
@@ -226,7 +227,7 @@ namespace Chat.AdminWeb.Controllers
             }
             if(model.Img.Contains("/upload/"))
             {
-                if (!trainService.Update(model.Id,model.Title,model.Img, model.Address, model.StartTime, model.EndTime, model.EntryFee, model.UpToOne, model.Description))
+                if (!trainService.Update(model.Id,model.Title,model.Img, model.Address, model.StartTime, model.EndTime, model.EntryFee, model.UpToOne, model.Description,model.IsDisplayed))
                 {
                     return Json(new AjaxResult { Status = "0", ErrorMsg = "培训编辑失败" });
                 }
@@ -237,12 +238,32 @@ namespace Chat.AdminWeb.Controllers
             }
             else
             {
-                if (!trainService.Update(model.Id, model.Title, SaveImg(imgBytes, ext), model.Address, model.StartTime, model.EndTime, model.EntryFee, model.UpToOne, model.Description))
+                if (!trainService.Update(model.Id, model.Title, SaveImg(imgBytes, ext), model.Address, model.StartTime, model.EndTime, model.EntryFee, model.UpToOne, model.Description,model.IsDisplayed))
                 {
                     return Json(new AjaxResult { Status = "0", ErrorMsg = "培训编辑失败" });
                 }
             }            
             return Json(new AjaxResult { Status = "1", Data = "/train/list" });
+        }
+
+        [Permission("train")]
+        public ActionResult UploadDescPic(HttpPostedFileBase file)
+        {
+            string url=settingService.GetValue("前端奖品图片地址");
+            string md5 = CommonHelper.GetMD5(file.InputStream);
+            string ext = Path.GetExtension(file.FileName);
+            string path = "/upload/" + DateTime.Now.ToString("yyyy/MM/dd") + "/" + md5 + ext;
+            string fullPath = HttpContext.Server.MapPath("~" + path);
+            new FileInfo(fullPath).Directory.Create();
+            //file.SaveAs(fullPath);
+            //缩略图
+            file.InputStream.Position = 0;
+            ImageProcessingJob jobNormal = new ImageProcessingJob();
+            jobNormal.Filters.Add(new FixedResizeConstraint(750, 1334));//限制图片的大小，避免生成
+            jobNormal.SaveProcessedImageToFileSystem(file.InputStream, fullPath);
+            string[] paths = { url+path };
+
+            return Json(new { errno ="0",Data=paths});
         }
 
         [Permission("train")]
@@ -740,7 +761,7 @@ namespace Chat.AdminWeb.Controllers
         [Permission("entry")]
         [ActDescription("导出培训活动所有报名用户")]
         public ActionResult ExportExcel(long id)
-        {            
+        {
             IWorkbook wb = new XSSFWorkbook();
 
             ICellStyle style1 = wb.CreateCellStyle();//样式
@@ -786,7 +807,7 @@ namespace Chat.AdminWeb.Controllers
                         row = sheet.CreateRow(rowCount);
                         cell = row.CreateCell(0);
                         cell.CellStyle = style1;
-                        ExcelHelper.SetCellValue(cell, entry.Id);
+                        ExcelHelper.SetCellValue(cell, rowCount);
                         sheet.AutoSizeColumn(0);
                         cell = row.CreateCell(1);
                         cell.CellStyle = style1;
@@ -840,6 +861,7 @@ namespace Chat.AdminWeb.Controllers
                         cell.CellStyle = style1;
                         ExcelHelper.SetCellValue(cell, entry.BankAccount);
                         sheet.AutoSizeColumn(13);
+                        rowCount++;
                     }
                 }
             }

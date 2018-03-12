@@ -15,7 +15,6 @@ namespace Chat.IService.Interface
         ActivityDTO GetNew();
         ActivityDTO GetById(long id);
         bool ExistActivity(long id);
-        bool IsCurrentAct(long id);
         ActivityDTO GetByStatus(string statusName);
         bool Update(long id, string name, string description, string imgUrl, DateTime? startTime, DateTime? examEndTime, DateTime? rewardTime, long paperId, string prizeName, string prizeImgUrl);
         ActivityDTO[] Search(long? statusId, DateTime? startTime, DateTime? endTime, string keyWord);
@@ -27,6 +26,7 @@ namespace Chat.IService.Interface
         bool SetCurrent(long id);
         bool ResetCurrent(long id);
         ActivityDTO GetIsCurrent();
+        bool IsCurrentAct(long id);
         long GetTotalCount();
         long CheckByStatusId(long id, long statusId);
         long CheckByStatusId(long statusId);

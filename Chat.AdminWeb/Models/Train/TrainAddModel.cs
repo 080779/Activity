@@ -35,5 +35,9 @@ namespace Chat.AdminWeb.Models.Train
         /// 培训详情
         /// </summary>
         public string Description { get; set; }//培训详情
+        /// <summary>
+        /// 是否显示
+        /// </summary>
+        public bool IsDisplayed { get; set; }
     }
 }

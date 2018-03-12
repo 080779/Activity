@@ -24,5 +24,7 @@ namespace Chat.Service.Entities
         public long EntryCount { get; set; } = 0;
         public string Description { get; set; }//培训详情
         public virtual ICollection<EntryEntity> Entries { get; set; } = new List<EntryEntity>();
+
+        public bool IsDisplayed { get; set; } = false;
     }
 }

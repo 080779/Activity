@@ -21,7 +21,7 @@
                 <li><span>培训状态</span><div><font class="green">@Model.Train.StatusName</font> <!--<font class="red">已结束</font>--></div></li>
             </ul>
             <div class="prices">
-                <span>报名费用</span><div><span class="red">@if (Model.Train.EntryFee == 0) { <text>免费</text>} else { @Model.Train.EntryFee<text> 元 / 人 </text>}</span>已报名<font class="red">@if (Model.Train.UpToOne != 0) { @Model.Train.EntryCount<text>/</text>@Model.Train.UpToOne<text>人</text>} else {@Model.Train.EntryCount<text>人(不限人数)</text>}</font></div>
+                <span>报名费用</span><div><span class="red">详见文件</span>已报名<font class="red">@if (Model.Train.UpToOne != 0) { @Model.Train.EntryCount<text>/</text>@Model.Train.UpToOne<text>人</text>} else {@Model.Train.EntryCount<text>人(不限人数)</text>}</font></div>
             </div>
         </div>
         <div class="articleinfo">

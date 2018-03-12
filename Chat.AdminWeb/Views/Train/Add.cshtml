@@ -32,14 +32,14 @@
                     </div>
 
                     @*培训主题：<input type="text" id="title" /><br />
-                    培训头图：<input type="file" id="train_pic" /><p>请上传750*1334图片，支持格式“png、jpg、jpeg、bmp”</p>
-                    <img src="" id="train_img" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
-                    培训地点：<input type="text" id="address" />
-                    开始时间：<input type="text" id="startTime" />
-                    结束时间：<input type="text" id="endTime" />
-                    报名费用：<input type="text" id="entryFee" />
-                    最多可报名：<input type="text" id="upToOne" />
-                    培训详情：<input type="text" id="description" />*@
+                        培训头图：<input type="file" id="train_pic" /><p>请上传750*1334图片，支持格式“png、jpg、jpeg、bmp”</p>
+                        <img src="" id="train_img" alt="" style="margin-top: 10px; max-width: 100px; max-height: 400px;" />
+                        培训地点：<input type="text" id="address" />
+                        开始时间：<input type="text" id="startTime" />
+                        结束时间：<input type="text" id="endTime" />
+                        报名费用：<input type="text" id="entryFee" />
+                        最多可报名：<input type="text" id="upToOne" />
+                        培训详情：<input type="text" id="description" />*@
 
                     <div class="form-group">
                         <label class="col-sm-3 control-label">开始时间:</label>
@@ -75,10 +75,18 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">培训详情:</label>
-                        <div class="col-sm-9">
-                            <textarea id="description" placeholder="" class="form-control" rows="10"></textarea>
+                        <div id="description" class="col-sm-9">
                         </div>
+                        @*<div class="col-sm-9">
+                                <textarea id="description" placeholder="" class="form-control" rows="10"></textarea>
+                            </div>*@
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">是否显示:</label>
+                        <div class="input-group">
+                            <input type="radio" name="isDisplayed" value="false" checked="checked" />隐藏<input type="radio" name="isDisplayed" value="true" />显示
+                        </div>
+                    </div>                        
                 </div>
             </div>
             <div class="panel-footer" style="text-align:center">
@@ -93,11 +101,19 @@
     </section>
 @section FooterScript
 {
+    <script src="~/Scripts/wangEditor.min.js"></script>
     <script type="text/javascript">
         $(function () {
 
             //编辑器
-            jQuery('#description').wysihtml5({ color: true, html: true });
+            //jQuery('#description').wysihtml5({ color: true, html: true });这个编辑器不能本地上传图片
+            var E = window.wangEditor
+            var editor = new E('#description')
+            editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
+            editor.customConfig.uploadImgMaxLength = 1
+            editor.customConfig.uploadFileName = 'file'
+            editor.customConfig.uploadImgServer = '/train/uploaddescpic'
+            editor.create()
 
             uploadpic("#train_pic", "#train_img");
             function uploadpic(fileid, img) {
@@ -110,7 +126,7 @@
                 });
             }
 
-            $("#btnSave").live("click", function () {
+            $("#btnSave").click(function () {
                 var title = $("#title").val();
                 var img = $("#train_img").attr("src");
                 var address = $("#address").val();
@@ -118,16 +134,15 @@
                 var endTime = $("#endTime").val();
                 var entryFee = $("#entryFee").val();
                 var upToOne = $("#upToOne").val();
-                var description = $("#description").val();
+                var description = editor.txt.html();
+                var isDisplayed = $('input[name="isDisplayed"]:checked').val();
                 $.ajax({
-                    url: "/train/add", type: "post", data: { title: title,img:img,address:address,startTime:startTime,endTime:endTime,entryFee:entryFee,upToOne:upToOne,description:description },
+                    url: "/train/add", type: "post", data: { title: title, img: img, address: address, startTime: startTime, endTime: endTime, entryFee: entryFee, upToOne: upToOne, description: description, isDisplayed: isDisplayed},
                     success: function (result) {
-                        if (result.status == "0")
-                        {
+                        if (result.status == "0") {
                             alert(result.errorMsg);
                         }
-                        else if (result.status == "1")
-                        {
+                        else if (result.status == "1") {
                             alert("培训添加成功！");
                             window.location.href = result.data;
                         }

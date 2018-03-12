@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -210,6 +211,9 @@
     <Content Include="Scripts\modernizr.min.js" />
     <Content Include="Scripts\pace.min.js" />
     <Content Include="Scripts\retina.min.js" />
+    <Content Include="Scripts\template.js" />
+    <Content Include="Scripts\wangEditor.js" />
+    <Content Include="Scripts\wangEditor.min.js" />
     <Content Include="Scripts\wysihtml5-0.3.0.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -218,6 +222,7 @@
   <ItemGroup>
     <Compile Include="App_Start\ActDescriptionAttribute.cs" />
     <Compile Include="App_Start\ActionLogFilter.cs" />
+    <Compile Include="App_Start\ExportExcelNameAttribute.cs" />
     <Compile Include="App_Start\PermissionAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SYSAuthorizationFilter.cs" />
@@ -240,7 +245,6 @@
     <Compile Include="Models\AddExercisesModel.cs" />
     <Compile Include="Models\AdminManager\AddAdminUserViewModel.cs" />
     <Compile Include="Models\AdminUserLoginModel.cs" />
-    <Compile Include="Models\AdminUserRegisterModel.cs" />
     <Compile Include="Models\AtivityAddModel.cs" />
     <Compile Include="Models\AtivityEditModel.cs" />
     <Compile Include="Models\Home\AdminLogsViewModel.cs" />
